@@ -5,21 +5,24 @@ export const state = {
   stuffs: [],
   rsv_contents: [],
   menus: [],
+  menu_details: [],
   jobs: [],
   categories: [],
   prefs: [],
   specialities: [],
+  selected_menus: [],
 }
 
 // getters
 export const getters = {
-  rsv_contents: state => state.rsv_contents,
+  rsv_contents: state => state.rsv_contents,  
   jobs: state => state.jobs,
   stuffs: state => state.stuffs,
   menus: state => state.menus,
   specialities: state => state.specialities,
   categories: state => state.categories,
   prefs: state => state.prefs,
+  menu_details: state => state.menu_details,
 }
 
 // mutations
@@ -65,6 +68,14 @@ export const mutations = {
   [types.SAVE_PREFS] (state, { prefs }) {
     state.prefs = prefs
   },
+
+  [types.SAVE_MENU_DETAILS] (state, { menu_details }) {
+    state.menu_details = menu_details
+  },
+
+  [types.ADD_MENU_DETAILS] (state, { data }) {
+    state.selected_menus = data
+  },
 }
 
 // actions
@@ -81,13 +92,17 @@ export const actions = {
     commit(types.SAVE_RSV_CONTENTS, payload)
   },
 
+  saveMenuDetails({ commit }, payload) {
+    commit(types.SAVE_MENU_DETAILS, payload)
+  },
+
   saveMenus ({ commit }, payload) {
     commit(types.SAVE_MENUS, payload)
   },
 
   addMenu({commit}, payload) {
     commit(types.ADD_MENU, payload)
-  },
+  },  
 
   saveJobs ({ commit }, payload) {
     commit(types.SAVE_JOBS, payload)
@@ -103,5 +118,10 @@ export const actions = {
 
   savePrefs ({ commit }, payload) {
     commit(types.SAVE_PREFS, payload)
+  },
+
+  addMenuDetails({ commit }, payload) {
+    
+    commit(types.ADD_MENU_DETAILS, payload)
   },
 }

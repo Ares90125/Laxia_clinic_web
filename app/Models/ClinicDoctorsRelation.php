@@ -88,7 +88,6 @@ class ClinicDoctorsRelation extends Model
     return $job ? $job->name : null;
   }
 
-
   public function speciality0()
   {
     return $this->belongsTo(Speciality::class, 'spec0');
@@ -100,7 +99,6 @@ class ClinicDoctorsRelation extends Model
     return $speciality ? $speciality->name : null;
   }
 
-
   public function speciality1()
   {
     return $this->belongsTo(Speciality::class, 'spec1');
@@ -111,7 +109,6 @@ class ClinicDoctorsRelation extends Model
     $speciality = $this->speciality1()->where('id', $this->spec1)->first();
     return $speciality ? $speciality->name : null;
   }
-
 
   public function speciality2()
   {

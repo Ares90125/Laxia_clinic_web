@@ -19,8 +19,9 @@ class MenuService
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
     $query = Menu::query()
       ->with([
-        'category',
-        'clinic'
+        'categories',
+        'clinic',
+        'images'
       ]);
 
     if (isset($search['clinic_id'])) {
@@ -33,44 +34,20 @@ class MenuService
       $query->where('status', '1');
     }
 
-    if (isset($search['category_id'])) {
-      if (is_array($search['category_id'])) {
-        if (!empty(array_filter($search['category_id']))) {
-          $query->whereIn('category_id', $search['category_id']);
-        }
-      } else if ($search['category_id'] != '-1') {
-        $category = Category::find($search['category_id']);
-        $ids = $category->descendantsAndSelf()->pluck('id');
-        $query->whereIn('category_id', $ids);
-      }
-    }
+    // if (isset($search['category_id'])) {
+    //   if (is_array($search['category_id'])) {
+    //     if (!empty(array_filter($search['category_id']))) {
+    //       $query->whereIn('category_id', $search['category_id']);
+    //     }
+    //   } else if ($search['category_id'] != '-1') {
+    //     $category = Category::find($search['category_id']);
+    //     $ids = $category->descendantsAndSelf()->pluck('id');
+    //     $query->whereIn('category_id', $ids);
+    //   }
+    // }
 
-    if (isset($search['favorite']) && $search['favorite'] == 1)
-    {
-      $currentUser = auth()->guard('patient')->user();
-      if (isset($currentUser) && isset($currentUser->patient)) {
-        $patient_id = $currentUser->patient->id;
-        $query->whereIn('id', function($subquery) use ($patient_id) {
-          $subquery->select('favoriable_id')
-            ->from('favorites')
-            ->where('favoriable_type', 'App\Models\Menu')
-            ->where('patient_id', $patient_id);
-        });
-      }
-    }
-
-    if (isset($search['pref_id'])) {
-      $pref_id = $search['pref_id'];
-      $query->whereHas('clinic', function($subquery) use ($pref_id) {
-        $subquery->where('pref_id', $pref_id);
-      });
-    }
-
-    if (isset($search['city'])) {
-      $city = $search['city'];
-      $query->whereHas('clinic', function($subquery) use ($city) {
-        $subquery->where('addr01', $city);
-      }); 
+    if (isset($search['category_id']) && $search['category_id'] != '-1') {
+      $query->where('category_id', $search['category_id']);
     }
 
     $query->orderby('created_at', 'desc');
@@ -90,16 +67,44 @@ class MenuService
       ->toArray();
   }
 
+  public function toArrayDetail($params)
+  {
+    $query = Menu::query()
+      ->public();
+    if (isset($params['clinic_id'])) {
+      $query->where('clinic_id', $params['clinic_id']);
+    }
+    $query->orderby('created_at', 'desc');
+    return $query->get(['id','name','price']);
+  }
+
   public function get($id)
   {
-    return Menu::findOrFail($id);
+    return Menu::with([
+      'images',
+      'category'
+    ])
+    ->findOrFail($id);
   }
 
   public function store($attributes, $addtional = [])
   {
     $menuAttrs = Arr::get($attributes, 'menus');
     $data = array_merge($menuAttrs, $addtional);
-    return Menu::create($data);
+    $menu =  Menu::create($data);
+
+    $menuPhotos = Arr::get($attributes, 'menuPhotos');
+    $menu->images()->delete();
+    foreach ($menuPhotos as $photo) {
+      $menu->images()->create([
+        'path' => $photo
+      ]);
+    }
+
+    $categoryAttrs = Arr::get($attributes, 'categories');
+    $menu->categories()->sync($categoryAttrs);
+
+    return $menu;
   }
 
   public function update($attributes, $where)
@@ -107,6 +112,18 @@ class MenuService
     $menuAttrs = Arr::get($attributes, 'menus');
     $menu = Menu::where($where)->firstOrFail();
     $menu->update($menuAttrs);
+
+    $menuPhotos = Arr::get($attributes, 'menuPhotos');
+    $menu->images()->delete();
+    foreach ($menuPhotos as $photo) {
+      $menu->images()->create([
+        'path' => $photo
+      ]);
+    }
+
+    $categoryAttrs = Arr::get($attributes, 'categories');
+    $menu->categories()->sync($categoryAttrs);
+    // $menu->images()->sync($menuPhotos);
     return $menu;
   }
 }

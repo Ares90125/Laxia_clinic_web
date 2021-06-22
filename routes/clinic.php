@@ -43,6 +43,8 @@ Route::group(['middleware' => ['auth.clinic']], function() {
   Route::post('/stuffs', 'StuffController@store');
   Route::post('/stuffs/{id}', 'StuffController@update');
   Route::get('/stuffs', 'StuffController@index');
+  Route::get('/stuffs/get', 'StuffController@getAll');
+  Route::delete('/stuffs/{id}', 'StuffController@delete');
 
   Route::post('/cases/photoupload', 'CaseController@uploadPhoto');
   Route::post('/cases', 'CaseController@store');

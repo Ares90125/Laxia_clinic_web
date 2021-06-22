@@ -79,28 +79,27 @@ class CaseController extends Controller
     public function uploadPhoto(Request $request)
     {
         // dd($request->file);
-        var_dump("asdff");
+        // var_dump("asdff");
 //        $path = $this->mediaUploadWithThumb('/clinic/cases', $request->file, 150);
 //        var_dump($path);
 //        return response()->json([
 //            'photo' => $path[1]
 //        ], 200);
-
+    
         $uploadedFile = $request->file;
-        $request->validate([
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+        // $request->validate([
+        //     'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        // ]);
 
         $disk = 'public';
         $filename = null;
         $name = !is_null($filename) ? $filename : Str::random(25);
         $file = $uploadedFile->storeAs('/clinic/cases', $name.'.'.$uploadedFile->getClientOriginalExtension(), $disk);
-        var_dump($file);
-//
-//        return response()->json([
-//            'status' => 1,
-//            'photo' => $file,
-//        ]);
+
+       return response()->json([
+           'status' => 1,
+           'photo' => $file,
+       ]);
     }
 
 }

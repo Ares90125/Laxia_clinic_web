@@ -6,6 +6,7 @@ import Checkbox from './Checkbox'
 import Pagination from './Pagination'
 import FormModal from './FormModal'
 import FileUpload from './FileUpload'
+import MenuDetail from './MenuDetail'
 import { HasError, AlertError, AlertSuccess } from 'vform'
 
 // Components that are registered globaly.
@@ -20,6 +21,7 @@ import { HasError, AlertError, AlertSuccess } from 'vform'
   Pagination,
   FormModal,
   FileUpload,
+  MenuDetail,
 ].forEach(Component => {
   Vue.component(Component.name, Component)
 })

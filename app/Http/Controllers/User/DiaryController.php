@@ -150,7 +150,7 @@ class DiaryController extends Controller
             'diaries' => 'required|array',
             'diaries.clinic_id' => 'required|integer|exists:clinics,id',
             'diaries.treat_date' => 'required|date',
-            'diaries.doctor_id' => 'required|integer|exists:stuffs,id',
+            'diaries.doctor_id' => 'required|integer|exists:s,id',
             'categories' => 'required|array',
             'medias' => 'nullable|array',
             'diary_tqs' => 'required|array',

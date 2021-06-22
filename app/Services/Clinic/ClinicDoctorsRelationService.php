@@ -48,10 +48,9 @@ class ClinicDoctorsRelationService
     return $query;
   }
 
-  public function getMemberCount($status, $clinic_id) {
+  public function getMemberCount($clinic_id) {
     $query = ClinicDoctorsRelation::where('clinic_id', $clinic_id)
       ->join('doctors', 'doctors.doctor_id', '=', 'clinic_doctors_relation.doctor_id')
-      ->where('doctors.job_id', '=', $status)
       ->get()->count();
     return $query;
   }

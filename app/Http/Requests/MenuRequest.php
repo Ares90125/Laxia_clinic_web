@@ -26,7 +26,8 @@ class MenuRequest extends FormRequest
         return [
             'menus' => ['required', 'array'],
             'menus.name' => 'required|string|max:255',
-            'menus.category_id' => 'required|integer|exists:mtb_part_categories,id',
+            'categories' => ['required', 'array'],
+            // 'menus.category_id' => 'required|integer|exists:mtb_part_categories,id',
             'menus.price' => 'required|integer',
             'menus.description' => 'required',
             'menus.risk' => 'required',
@@ -56,6 +57,7 @@ class MenuRequest extends FormRequest
     {
         return [
             'menus.name' => 'メニュー名',
+            'categories' => 'カテゴリー',
             'menus.category_id' => 'カテゴリー',
             'menus.price' => '料金',
             'menus.description' => 'メニューの説明',

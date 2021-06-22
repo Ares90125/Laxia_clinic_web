@@ -34,15 +34,17 @@ class StuffController extends Controller
         ], 200);
     }
 
-    // public function getAll(Request $request)
-    // {
-    //     $params = $request->all();
-    //     $params['clinic_id'] = auth()->guard('clinic')->user()->clinic->id;
-    //     $stuffs = $this->service->getList($params);
-    //     return response()->json([
-    //         'stuffs' => $stuffs
-    //     ], 200);
-    // }
+    public function getAll(Request $request)
+    {
+        $params = $request->all();
+        $params['clinic_id'] = auth()->guard('clinic')->user()->clinic->id;
+        $stuffs = $this->service->getList($params);
+        $cnt_g = $this->service->getMemberCount($params['clinic_id']);
+        return response()->json([
+            'stuffs' => $stuffs,
+            'cnt_mg' => $cnt_g
+        ], 200);
+    }
 
     public function store(StuffRequest $request)
     {
@@ -93,6 +95,15 @@ class StuffController extends Controller
         return response()->json([
             'stuff' => $stuff
         ], 200);
+    }
+
+    public function delete($id) {
+        $stuff = Stuff::where('id', $id)->firstOrFail();
+        $stuff->specialities()->delete();
+        $stuffInfo = Stuff::where('id', $id);
+        $stuffInfo->delete();
+        
+        return true;
     }
 
     public function uploadPhoto(Request $request)

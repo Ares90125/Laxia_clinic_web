@@ -62,6 +62,17 @@ class Menu extends Model
     return $this->belongsTo(Category::class, 'category_id', 'id');
   }
 
+  public function categories()
+  {
+      return $this->belongsToMany(Category::class, 'menu_categories', 'menu_id', 'category_id');
+  }
+
+  public function images()
+  {
+      // return $this->belongsToMany(Menu::class, 'menu_photos', 'menu_id');
+      return $this->morphMany(Attachment::class, 'attachable');
+  }
+
   public function scopePublic($query)
   {
     return $query->where('status', 1);

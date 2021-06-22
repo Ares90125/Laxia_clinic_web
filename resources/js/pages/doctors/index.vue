@@ -4,7 +4,7 @@
       <button class="btn3 add-stuff-btn mr-3" @click="handleInviteDoctor" ><img src="/img/plus.svg"> {{ $t('ドクターを招待') }}</button>
       <button class="btn3 add-stuff-btn" @click="handleNewStuffForm"><img src="/img/plus.svg"> {{ $t('新規スタッフを追加') }}</button>
     </div>
-    <div class="main-content">      
+    <div class="main-content">
       <div class="staff-header staff-doctor-header mb-2">
         <p>
           <!-- <select class="staff-sort">
@@ -20,14 +20,15 @@
         <div class="search-panel">
           <span><i class="bi bi-search"></i></span>
           <input type="text" placeholder="メンバーの名前を検索" @keyup='add_todo_keyup' />
-        </div>  
+        </div>
       </div>
-      <div v-if="doctors.length" class="staff-list" style="margin-top: 4rem !important;">
+      <div v-if="doctors.length && (query.status == 0 || query.status == 1)" class="staff-list" style="margin-top: 4rem !important;">
         <div v-for="(item, index) in doctors" :key="index" class="staff-one" @click="handleShowDoctor(item.doctor_id)">
           <div class="photo-item">
             <!-- <p class="staff-job">{{ item.job && item.job_name }}</p> -->
             <p class="staff-img">
-              <img :src="item.photo || '/img/menu-img.png'" />
+              <img v-if="item.photo" :src="'/storage/' + item.photo" />
+              <img v-else :src="'/img/menu-img.png'">
             </p>
           </div>
           <div class="job-item">
@@ -36,11 +37,27 @@
           </div>
         </div>
       </div>
-      <pagination
+
+      <div v-if="stuff_datas.length && (query.status == 0 || query.status == 2)" class="staff-list" :style="query.status == 2 ? 'margin-top: 4rem !important;' : 'margin-top: 25px !important;'">
+        <div v-for="(item, index) in stuff_datas" :key="index" class="staff-one" @click="handleShowStuff(item.id)">
+          <div class="photo-item">
+            <!-- <p class="staff-job">{{ item.job && item.job_name }}</p> -->
+            <p class="staff-img">
+              <img v-if="item.photo" :src="'/storage/' + item.photo" />
+              <img v-else :src="'/img/menu-img.png'">
+            </p>
+          </div>
+          <div class="job-item">
+            <p class="staff-hira">{{ item.name }} {{ item.kana }}</p>
+            <p class="staff-name">{{ item.job && item.job_name }}</p>
+          </div>
+        </div>
+      </div>
+      <!-- <pagination
         v-if="pageInfo"
         :page="query.page"
         :page-count="pageInfo.last_page"
-        :click-handler="handlePaginate" />
+        :click-handler="handlePaginate" /> -->
     </div>
     <form-modal
       ref="modal"
@@ -56,7 +73,7 @@
               <file-upload
                 ref="fileUploadComponent"
                 uploadUrl="/api/clinic/stuffs/photoupload"
-                :photo="form.photo"
+                :photo="form.stuffs.photo"
                 @file-upload-success="handleFileSaved"
                 @file-removed="hanleFileRemove"
                 @file-added="handleFileAdded"
@@ -67,22 +84,21 @@
         <div class="row my-5 px-5">
           <div class="col-6">
             <span class="label-title">名前(漢字)</span>
-            <input type="text" class="form-control" v-model="form.hira_name" placeholder="例：田中太郎"/>
+            <input type="text" class="form-control" v-model="form.stuffs.name" placeholder="例：田中太郎"/>
           </div>
           <div class="col-6">
             <span class="label-title">名前(カタカナ)</span>
-            <input type="text" class="form-control" v-model="form.kata_name" placeholder="例：タナカタロウ"/>
+            <input type="text" class="form-control" v-model="form.stuffs.kana" placeholder="例：タナカタロウ"/>
           </div>
         </div>
 
         <div class="row mt-5">
           <div class="col-12 d-flex justify-content-center">
-            <button type="button" class="btn btn-primary" @click="handleUpdateDoctor">{{ modalInfo.confirmBtnTitle }}</button>
+            <button type="button" class="btn btn-primary" @click="handleUpdateStuff">{{ modalInfo.confirmBtnTitle }}</button>
           </div>
         </div>
       </div>
-
-      <div v-if="isCreateProfile">
+      <!-- <div v-if="isCreateProfile">
         <div class="row d-flex justify-content-center my-5">
           <div class="col-3">
             <div>
@@ -108,26 +124,27 @@
             <button type="button" class="btn btn-primary" @click="handleUpdateStuff">プロフィールを修正</button>
           </div>
         </div>
-      </div>
+      </div> -->
     </form-modal>
     <form-modal
       ref="stuffViewModal"
       id="stuff-view-modal"
       :title="modalInfo.title"
       >
-      <div v-if="isEditing && form">
+      <div v-if="isStuffDetail && form">
         <div class="row d-flex justify-content-center">
-            <img class="md-doctor-avatar-img" :src="form.photo || '/img/menu-img.png'" />
+            <img class="md-doctor-avatar-img" v-if="form.stuffs.photo" :src="'/storage/' + form.stuffs.photo" />
+            <img class="md-doctor-avatar-img" v-else :src="'/img/menu-img.png'">
         </div>
         <div class="row d-flex flex-column align-items-center mt-5">
-          <p class="detail-title">タナカアオイ{{form.hira_name}}</p>
-          <p class="detail-content">田中葵{{form.kata_name}}</p>
+          <p class="detail-title">{{form.stuffs.kana}}</p>
+          <p class="detail-content">{{form.stuffs.name}}</p>
         </div>
 
         <div class="row mt-5">
           <div class="col-12 d-flex justify-content-around">
             <button type="button" class="btn btn-danger" @click="handleDeleteConfirmDoctor(0)">{{ modalInfo.delBtnTitle }}</button>
-            <button type="button" class="btn btn-primary" @click="handleNewStuffForm">{{ modalInfo.confirmBtnTitle }}</button>
+            <button type="button" class="btn btn-primary" @click="handleShowEditStuff">{{ modalInfo.confirmBtnTitle }}</button>
           </div>
         </div>
       </div>
@@ -251,7 +268,8 @@
             <div class="row mt-4">
               <div class="col-12 d-flex justify-content-around">
                 <button type="button" class="btn btn-cancel" @click="cancelModal()">{{ modalInfo.confirmBtnTitle}}</button>
-                <button type="button" class="btn btn-danger" @click="handleDeleteDoctor(doctorItem.doctor_id)">{{ modalInfo.delBtnTitle }}</button>
+                <!-- <button type="button" class="btn btn-danger" @click="handleDeleteDoctor(doctorItem.doctor_id)">{{ modalInfo.delBtnTitle }}</button> -->
+                <button type="button" class="btn btn-danger" @click="handleDelete">{{ modalInfo.delBtnTitle }}</button>
               </div>
             </div>
           </div>
@@ -270,11 +288,13 @@ export default {
   data() {
     return {
       doctors: [],
+      stuff_datas: [],
       isInviteDoctor: false,
       findDoctor: false,
       successFindDoctor: false,
       form: undefined,
       doctorItem: undefined,
+      stuffItem: undefined,
       errors: undefined,
       doctorId:'',
       doctor: undefined,
@@ -284,16 +304,17 @@ export default {
       isEditing: false,
       completeDoctor: undefined,
       isDoctorDetail: false,
+      isStuffDetail: false,
       tmp: {
         fileChanged: false,
         stuffs: {
           name: '',
           kana: '',
-          duty: '',
-          job_id: '',
-          experience_year: '',
-          career: '',
-          profile: '',
+          duty: 'aaa',
+          job_id: '2',
+          experience_year: '0',
+          career: 'aaa',
+          profile: 'aaa',
           photo: '',
         },
         specialities: {
@@ -344,19 +365,32 @@ export default {
     getData() {
       this.$store.dispatch('state/setIsLoading')
       const qs = this.$utils.getQueryString(this.query)
-      axios.get(`/api/clinic/doctors?${qs}`)
-        .then(res => {
-          this.doctors = res.data.data;
-          this.doctor_cnt = res.data.cnt_mh;
-          this.staff_cnt = res.data.cnt_mg;
-          // this.pageInfo = {
-          //   last_page: res.data.stuffs.last_page,
-          // }
+      // axios.get(`/api/clinic/doctors?${qs}`)
+      //   .then(res => {
+      //     this.doctors = res.data.data;
+      //     this.doctor_cnt = res.data.cnt_mh;
+      //     this.staff_cnt = res.data.cnt_mg;
+      //     // this.pageInfo = {
+      //     //   last_page: res.data.stuffs.last_page,
+      //     // }
+      //     this.$store.dispatch('state/removeIsLoading')
+      //   })
+      //   .catch(error => {
+      //     this.$store.dispatch('state/removeIsLoading')
+      //   })
+
+      Promise.all([
+        axios.get(`/api/clinic/doctors?${qs}`),
+        axios.get(`/api/clinic/stuffs/get?${qs}`)
+      ]).then(([res1, res2]) => {
+          this.doctors = res1.data.data;
+          this.doctor_cnt = res1.data.cnt_mh;
+          this.stuff_datas = res2.data.stuffs;
+          this.staff_cnt = res2.data.cnt_mg;
           this.$store.dispatch('state/removeIsLoading')
-        })
-        .catch(error => {
-          this.$store.dispatch('state/removeIsLoading')
-        })
+      }).catch(error => {
+        this.$store.dispatch('state/removeIsLoading')
+      })
     },
 
     handleInviteDoctor() {
@@ -401,7 +435,6 @@ export default {
 
     handleShowDoctor(id) {
       let selected = this.doctors.find(el => el.doctor_id == id);
-      console.log(selected)
       this.doctorItem = {
          ...selected
       }
@@ -413,14 +446,49 @@ export default {
       this.$refs.doctorDetailModal.show()
     },
 
-    handleUpdateDoctor(){
-      this.$refs.modal.hide()
-      this.$refs.stuffViewModal.show()
+    handleShowStuff(id) {
+      let selected = this.stuff_datas.find(el => el.id == id);      
+      this.form = {
+        fileChanged: false,
+        stuffs: {
+          id: selected.id,
+          name: selected.name,
+          kana: selected.kana,
+          duty: selected.duty,
+          job_id: selected.job_id,
+          experience_year: selected.experience_year,
+          career: selected.career,
+          profile: selected.profile,
+          photo: selected.photo,
+        }
+      }
+      this.isStuffDetail = true
       this.modalInfo = {
         title: 'スタッフの詳細',
         confirmBtnTitle: 'プロフィールを修正',
         delBtnTitle: 'スタッフ情報を削除'
       }
+      this.$refs.stuffViewModal.show()
+    },
+
+    handleShowEditStuff(){
+      this.modalInfo = {
+        title: '新規スタッフを追加',
+        confirmBtnTitle: 'プロフィールを作成'
+      }
+      this.isEditing = true
+      this.$refs.stuffViewModal.hide();
+      this.$refs.modal.show();
+    },
+
+    handleUpdateDoctor(){
+      this.$refs.modal.hide()
+      // this.$refs.stuffViewModal.show()
+      // this.modalInfo = {
+      //   title: 'スタッフの詳細',
+      //   confirmBtnTitle: 'プロフィールを修正',
+      //   delBtnTitle: 'スタッフ情報を削除'
+      // }
       // this.handleShowDoctor()
     },
 
@@ -436,13 +504,40 @@ export default {
 
     cancelModal(){
       this.$refs.delConfirmModal.hide()
-      this.$refs.stuffViewModal.hide()
+      // this.$refs.stuffViewModal.hide()      
+    },
+
+    handleDelete(){
       if(this.cancel_status == 0)
-        this.$refs.modal.show()
+        this.handleDeleteStuff(this.form.stuffs.id);
+      else
+        this.handleDeleteDoctor(this.doctorItem.doctor_id);
+
+      this.$refs.delConfirmModal.hide()
+    },
+
+    handleDeleteStuff(stuffId){
+      this.$refs.delConfirmModal.hide()
+      let url = '/api/clinic/stuffs/' + stuffId
+      axios.delete(url)
+        .then(res => {
+          this.$refs.stuffViewModal.hide()
+          this.getData();
+          this.$swal({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            title: '削除。',
+            icon: 'success',
+          })
+        })
+        .catch(error => {
+          this.$store.dispatch('state/removeIsLoading')
+        })
     },
 
     handleDeleteDoctor(doctorId){
-      console.log(doctorId);
       this.$refs.delConfirmModal.hide()
       let url = '/api/clinic/doctors/' + doctorId
       axios.delete(url)
@@ -451,7 +546,6 @@ export default {
             return ele.doctor_id !== doctorId;
           })
           this.doctorDetailModal = false;
-          console.log(this.doctors);
           this.$refs.doctorDetailModal.hide()
 
           this.$swal({
@@ -474,7 +568,7 @@ export default {
         page: 1,
         status: status
       }
-      this.getData()
+      // this.getData()
     },
 
     handlePaginate(pageNum) {
@@ -502,11 +596,10 @@ export default {
     },
 
     handleUpdateStuff() {
-      if (!this.isEditing) {
-        this.isEditing = true
-        return
-      }
-      this.$store.dispatch('state/setIsLoading')
+      // if (!this.isEditing) {
+      //   this.isEditing = true
+      //   return
+      // }
       if (this.form.fileChanged) {
         this.$refs.fileUploadComponent.processQueue();
       } else {
@@ -518,6 +611,10 @@ export default {
       let url = '/api/clinic/stuffs';
       if (this.form.stuffs.id) {
         url += `/${this.form.stuffs.id}`
+      }
+      this.form = {
+        ...this.form,
+        specialities: { ...this.tmp.specialities }
       }
       axios.post(url, this.form)
         .then(res => {

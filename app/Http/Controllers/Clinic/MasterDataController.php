@@ -138,6 +138,7 @@ class MasterDataController extends Controller
         $prefs = $this->prefService->toArray();
         $stuffs = $this->stuffService->toArray($params);
         $menus = $this->menuService->toArray($params);
+        $menuDetails = $this->menuService->toArrayDetail($params);
 
         return response()->json([
             'jobs' => $jobs,
@@ -146,7 +147,8 @@ class MasterDataController extends Controller
             'categories' => $categories,
             'prefs' => $prefs,
             'stuffs' => $stuffs,
-            'menus' => $menus
+            'menus' => $menus,
+            'menuDetails' => $menuDetails
         ], 200);
     }
 

@@ -25,6 +25,26 @@ class StuffService
     return $query->paginate($per_page);
   }
 
+  public function getList($search)
+  {
+    $query = Stuff::query()
+      ->with(['job', 'specialities']);
+    if (isset($search['clinic_id'])) {
+      $query->where('clinic_id', $search['clinic_id']);
+    }
+    if (isset($search['q'])) {
+      $query->where('name', 'LIKE', "%{$search['q']}%")
+            ->orWhere('kana', 'LIKE', "%{$search['q']}%");
+    }
+    $query->orderby('created_at', 'desc');
+    return $query->get();
+  }
+
+  public function getMemberCount($clinic_id){
+    $query = Stuff::query();
+    return $query->get()->count();
+  }
+
   public function toArray($params)
   {
     $query = Stuff::query();

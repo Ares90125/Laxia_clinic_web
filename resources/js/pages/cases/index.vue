@@ -12,13 +12,19 @@
           </select> -->
           <button class="btn btn-primary my-1" @click="handleNewCase"><img src="/img/plus.svg" class="img_plus"> {{ $t('新規症例を追加') }}</button>
       </div>
-      <div class="staff-content">
+      <div class="staff-content case-sub-content">
         <div class="case-list">
           <div v-for="(item, index) in cases" :key="index" class="case-one">
             <div class="case-one-in" @click="handleShowCase(item.id)">
               <div class="case-img">
-                <p class="before"><img :src="item.before_photo || '/img/menu-img.png'"></p>
-                <p class="after"><img :src="item.after_photo || '/img/menu-img.png'"></p>
+                <p class="before">
+                  <img v-if="item.before_photo" :src="'/storage/'+item.before_photo">
+                  <img v-else :src="'/img/menu-img.png'">
+                </p>
+                <p class="after">
+                  <img v-if="item.after_photo" :src="'/storage/'+item.after_photo">
+                  <img v-else :src="'/img/menu-img.png'">
+                </p>
               </div>
               <div class="case-info">
                  <template v-for="(item, key) in item.categories" :value="key">
@@ -27,7 +33,7 @@
                   </p>
                 </template>
                 <p class="case-ttl">{{item.name}}</p>
-                <p class="case-name"><!--<i class="fas fa-clipboard-list"></i>--><img src="/img/clip_book.svg" style="margin-top: -2px; margin-right:4px;">  {{ item.menu && item.menu.name }}</p>
+                <p class="case-name"><!--<i class="fas fa-clipboard-list"></i>--><img src="/img/clip_book.svg" style="margin-top: -2px; margin-right:4px;">  <template v-if="item.menus.length">{{ item.menus[0].name}}</template></p>
               </div>
             </div>
           </div>
@@ -59,14 +65,40 @@
             <div class="col-4">
               <small class="text-center">{{ $t('Before画像') }}</small>
               <file-upload
+                v-if="form.cases.before_photo"
                 ref="beforeFileUploadComponent"
                 uploadUrl="/api/clinic/profile/photoupload"
                 name="before_photo"
+                :photo="'/storage/'+form.cases.before_photo"
+                @file-upload-success="handleFileSaved"
+                @file-removed="hanleFileRemove"
+                @file-added="handleFileAdded"
+              />
+              <file-upload
+                v-else
+                ref="beforeFileUploadComponent"
+                uploadUrl="/api/clinic/profile/photoupload"
+                name="before_photo"
+                :photo="form.cases.before_photo"
+                @file-upload-success="handleFileSaved"
+                @file-removed="hanleFileRemove"
+                @file-added="handleFileAdded"
               />
             </div>
             <div class="col-4">
               <small class="text-center">{{ $t('After画像') }}</small>
               <file-upload
+                v-if="form.cases.after_photo"
+                ref="afterFileUploadComponent"
+                uploadUrl="/api/clinic/cases/photoupload"
+                name="after_photo"
+                :photo="'/storage/'+form.cases.after_photo"
+                @file-upload-success="handleFileSaved"
+                @file-removed="hanleFileRemove"
+                @file-added="handleFileAdded"
+              />
+              <file-upload
+                v-else
                 ref="afterFileUploadComponent"
                 uploadUrl="/api/clinic/cases/photoupload"
                 name="after_photo"
@@ -80,12 +112,29 @@
           <div class="form-group row">
             <div class="col-12">
               <small>{{ $t('メニュー') }}</small>
-              <select v-model="form.cases.menu_id" :class="{'is-invalid' : errors && errors['cases.menu_id'] }">
+              <select v-model="form.cases.menu_id" :class="{'is-invalid' : errors && errors['cases.menu_id'] }" @change="handleMenuChange($event)">
                 <option></option>
-                <option v-for="(name, id) in menus" :key="id" :value="id">{{ name }}</option>
+                <option v-for="(name, id) in menus" :key="id" :value="id" >{{ name }}</option>
               </select>
               <div v-if="errors && errors['cases.menu_id']" class="error invalid-feedback">{{ errors['cases.menu_id'][0] }}</div>
             </div>
+          </div>
+          <div class="form-group" v-if="menu_detail_data.length">
+            <div class="row">
+              <div class="col-7">
+                <small>{{ $t('メニュー名') }}</small>
+              </div>
+              <div class="col-3">
+                <small>{{ $t('料金') }}</small>
+              </div>
+              <div class="col-2 text-center">
+                <small>{{ $t('削除') }}</small>
+              </div>
+            </div>
+            <!-- <template v-for="(item, id) in menu_detail_data" :value="id">
+              <MenuDetail :m_menu_data="item" :m_idx="id" :key="id"/>
+            </template> -->
+            <MenuDetail />
           </div>
           <div class="form-group row">
             <div class="col-12">              
@@ -108,7 +157,7 @@
                 ></multiselect>
                 <div v-if="errors && errors['categories']" class="error invalid-feedback d-block">{{ errors['categories'][0] }}</div>
             </div>
-          </div>
+          </div>          
           
           <!-- <div class="form-group row">
             <div class="col-12">
@@ -125,7 +174,7 @@
                 <small>{{ $t('年齢') }}</small>
                 <select v-model="form.cases.patient_age" :class="{'is-invalid' : errors && errors['cases.patient_age'] }">
                   <option></option>
-                  <option v-for="i in 31" :key="i" :value="i + 9">{{ i + 9 }}{{ $t('才') }}</option>
+                  <option v-for="i in 7" :key="i" :value="i * 10">{{ i * 10 }}{{ $t('才') }}</option>
                 </select>
                 <div v-if="errors && errors['cases.patient_age']" class="error invalid-feedback">{{ errors['cases.patient_age'][0] }}</div>
             </div>
@@ -177,10 +226,10 @@
           <div class="col">
             <small>{{ $t('Before画像') }}</small>
             <div class="view-img-panel">
-              <img src="/img/photo16.png">
+              <img v-if="form.cases.before_photo" :src="'/storage/'+form.cases.before_photo">
+              <!-- <img src="/img/shopify_b.jpg">
               <img src="/img/shopify_b.jpg">
-              <img src="/img/shopify_b.jpg">
-              <img src="/img/shopify_b.jpg">
+              <img src="/img/shopify_b.jpg"> -->
             </div>
           </div>
         </div>
@@ -188,36 +237,28 @@
           <div class="col">
             <small>{{ $t('After画像') }}</small>
             <div class="view-img-panel">
-              <img src="/img/photo16.png">
+              <img v-if="form.cases.after_photo" :src="'/storage/'+form.cases.after_photo">
+              <!-- <img src="/img/shopify_b.jpg">
               <img src="/img/shopify_b.jpg">
-              <img src="/img/shopify_b.jpg">
-              <img src="/img/shopify_b.jpg">
+              <img src="/img/shopify_b.jpg"> -->
             </div>
           </div>
         </div>
         <div class="form-group">
           <div class="row">
-            <div class="col-8">
+            <div class="col-9">
               <small>{{ $t('メニュー名') }}</small>
             </div>
-            <div class="col-4">
+            <div class="col-3">
               <small>{{ $t('料金') }}</small>
             </div>
           </div>
-          <div class="row">
-            <div class="col-8">
-              <p>埋没法ダブル</p>
+          <div class="row mb-2" v-for="(item, idx) in selected_menu_details" :key="idx">
+            <div class="col-9">
+              <p>{{item.name}}</p>
             </div>
-            <div class="col-4">
-              <p>1,145,000</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-8">
-              <p>埋没法ダブル</p>
-            </div>
-            <div class="col-4">
-              <p>45,000</p>
+            <div class="col-3">
+              <p>{{item.price}}</p>
             </div>
           </div>
         </div>
@@ -230,8 +271,6 @@
                   {{item.name}}
                 </p>
               </template>
-              <!-- <p>{{ $t('二重 / ヒアルロン酸注射') }}</p>
-              <p>{{ $t('二重 / ヒアルロン酸注射') }}</p> -->
             </div>
           </div>
         </div>
@@ -320,6 +359,7 @@ export default {
       pageInfo: undefined,
       fileUploadCount: 0,
       selected_categories: [],
+      selected_menu_details: [],
     }
   },
 
@@ -330,6 +370,7 @@ export default {
       categories: 'data/categories',
       stuffs: 'data/stuffs',
       menus: 'data/menus',
+      menu_details: 'data/menu_details',
       genders: 'constant/gender_types'
     }),
     category_options() {
@@ -345,6 +386,9 @@ export default {
         };
       });
     },
+    menu_detail_data() {
+      return this.$store.state.data.selected_menus;
+    },
   },
 
   mounted() {
@@ -352,13 +396,24 @@ export default {
   },
 
   methods: {
+    handleMenuChange(e){
+      this.menu_details.forEach(item => {
+        if(item.id == e.target.value){
+          this.selected_menu_details.push({
+            id: item.id,
+            name: item.name,
+            price: item.price
+          })
+        }
+      })
+      this.$store.dispatch('data/addMenuDetails', { data : this.selected_menu_details })
+    },
     getData() {
       this.$store.dispatch('state/setIsLoading')
       const qs = this.$utils.getQueryString(this.query)
       axios.get(`/api/clinic/cases?${qs}`)
         .then(res => {
           this.cases = res.data.cases.data;
-          console.log(this.cases);
           this.pageInfo = {
             last_page: res.data.cases.last_page,
           }
@@ -386,13 +441,24 @@ export default {
           }
         })
       })
+
+      this.selected_menu_details = [];
+      this.menu_details.forEach(item => {
+      if(selected.menus.map(item => item.id).includes(item.id)){
+          this.selected_menu_details.push({
+            id: item.id,
+            name: item.name,
+            price: item.price
+          })
+        }
+      })
+      this.$store.dispatch('data/addMenuDetails', { data : this.selected_menu_details })
+
       this.errors = undefined
       this.modalInfo = {
         title: '症例の詳細',
         confirmBtnTitle: '症例内容を編集する'
       }
-      console.log(this.form.cases);
-      console.log(this.selected_categories);
       this.$refs.viewModal.show()
     },
 
@@ -410,6 +476,9 @@ export default {
         ...this.tmp,
         cases: { ...this.tmp.cases }
       }
+      this.selected_categories = [];
+      this.selected_menu_details = [];
+      this.$store.dispatch('data/addMenuDetails', { data : this.selected_menu_details })
       this.modalInfo = {
         title: '症例を追加する',
         confirmBtnTitle: '症例を追加する'
@@ -446,8 +515,10 @@ export default {
       }
       this.form = {
         ...this.form,
-        categories: this.selected_categories.map(el => el.id)
+        categories: this.selected_categories.map(el => el.id),
+        menus: this.menu_detail_data.map(el => el.id)
       }
+
       axios.post(url, this.form)
         .then(res => {
           this.$store.dispatch('state/removeIsLoading')
@@ -571,13 +642,5 @@ div.create-menu-content{
   margin-top: 4rem;
   display: flex;
   justify-content: center;
-}
-.view-cate-panel{
-  display: block;
-}
-.view-cate-panel p{
-    display: inline-block;
-    width: auto;
-    margin: 2px 7px 5px 0;
 }
 </style>

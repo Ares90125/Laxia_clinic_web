@@ -32,12 +32,11 @@ class ClinicDoctorsRelationController extends Controller
     {
         $user_id = auth()->guard('clinic')->user()->id;
         $doctors = $this->service->get($request, $user_id);
-        $cnt_h = $this->service->getMemberCount(1, $user_id);
-        $cnt_g = $this->service->getMemberCount(2, $user_id);
+        $cnt_h = $this->service->getMemberCount($user_id);
+        $cnt_g = $this->service->getMemberCount($user_id);
         return response()->json([
             'status' => 1,
             'cnt_mh' => $cnt_h,
-            'cnt_mg' => $cnt_g,
             'data' => $doctors
         ], 200);
     }

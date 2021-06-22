@@ -17,7 +17,7 @@ class CaseService
   {
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
     $query = TreatCase::query()
-      ->with(['categories', 'menu', 'stuff']);
+      ->with(['categories', 'menus', 'stuff']);
 
     if (isset($search['clinic_id'])) {
       $query->where('clinic_id', $search['clinic_id']);
@@ -50,6 +50,9 @@ class CaseService
     $categoryAttrs = Arr::get($attributes, 'categories');
     $case->categories()->sync($categoryAttrs);
 
+    $menuAttrs = Arr::get($attributes, 'menus');
+    $case->menus()->sync($menuAttrs);
+
     return $case;
   }
 
@@ -63,6 +66,9 @@ class CaseService
 
     $categoryAttrs = Arr::get($attributes, 'categories');
     $case->categories()->sync($categoryAttrs);
+
+    $menuAttrs = Arr::get($attributes, 'menus');
+    $case->menus()->sync($menuAttrs);
 
     return $case;
   }

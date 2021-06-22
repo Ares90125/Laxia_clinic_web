@@ -67,7 +67,7 @@
           <div class="row my-3 d-flex justify-content-center">
             <div class="col-md-10 col-12">
               <span>{{ $t('新しいメールアドレス') }}</span>
-              <input class="form-control mt-2" type="text" v-model="form.email" />
+              <input class="form-control mt-2" type="text" v-model="form.email" @keyup="add_todo_keyup" />
             </div>
           </div>
           <div class="row" style="margin-top: 5rem;">
@@ -75,7 +75,7 @@
               <button class="btn btn-notify-secondary btn-sm"  @click="handleCancelEmail">キャンセル</button>
             </div>
             <div class="col-md-6 col-12 mt-sm-0 mt-2">
-              <button class="btn btn-notify-primary btn-sm"  @click="handleUpdateEmail">メールアドレスを変更</button>
+              <button class="btn btn-notify-primary btn-sm" :class="(isChangeEmail) ? 'btn-notify-primary-enable' : ''"  @click="handleUpdateEmail">メールアドレスを変更</button>
             </div>
           </div>
         </div>
@@ -149,12 +149,11 @@ export default {
   computed: {
     ...mapGetters({
       user: 'auth/user',
-    }),
+    })
   },
 
   mounted () {
     this.getData();
-
   },
 
   data() {
@@ -162,6 +161,7 @@ export default {
       isloadingPage: false,
       isEmailModal: false,
       isPasswordModal: false,
+      isChangeEmail: false,
       clinic: undefined,
       modalInfo: {
         title: '',
@@ -203,7 +203,6 @@ export default {
         confirmBtnTitle: '検索'
       }
       this.form = {...this.clinic}
-      console.log(this.form);
 
       this.isEmailModal = true
       this.$refs.emailModal.show();
@@ -270,6 +269,15 @@ export default {
       }
       const toggleNewPassword = document.querySelector('#toggleNewPassword');
       toggleNewPassword.classList.toggle('bi-eye-slash');
+    },
+    add_todo_keyup(e){
+      // if (e.key == 'Enter') {
+      // }
+      if(e.target.value.length > 0){
+        this.isChangeEmail = true;
+      }else{
+        this.isChangeEmail = false;
+      }
     }
   }
 }

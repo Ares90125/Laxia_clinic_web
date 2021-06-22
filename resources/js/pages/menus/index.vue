@@ -18,7 +18,8 @@
           <div v-for="(item, index) in menus" :key="index" class="menu-one col-md-6 col-12">
             <div class="menu-one-in" @click="handleShowMenu(item.id)">
               <div class="menu-img">
-                <img :src="item.photo || '/img/menu-img.png'">
+                <img v-if="item.images.length" :src="'/storage/'+item.images[0].path || '/img/menu-img.png'">
+                <img v-else :src="'/img/menu-img.png'">
               </div>
               <div class="menu-info">
                 <!-- <template v-if="index <= 5"></template> -->
@@ -54,7 +55,7 @@
               :width="90"
               :height="30"
               :font-size="12" />
-          </div>
+          </div>          
         </div>
         <div class="form-group row">
           <div class="col-md-8">
@@ -72,7 +73,7 @@
         <div class="form-group row">
           <div class="col-md-12">
             <small>{{ $t('カテゴリー') }}</small>
-            <!-- <multiselect
+            <multiselect
                 v-model="selected_categories"
                 :options="category_options"
                 :multiple="true"
@@ -87,30 +88,38 @@
                 selectedLabel="選択済み"
                 deselectLabel="削除"
                 deselectGroupLabel="削除"
-              ></multiselect> -->
-            <select v-model="form.menus.category_id" :class="{'is-invalid' : errors && errors['menus.category_id'] }">
+              ></multiselect>
+              <div v-if="errors && errors['categories']" class="error invalid-feedback d-block">{{ errors['categories'][0] }}</div>
+            <!-- <select v-model="form.menus.category_id" :class="{'is-invalid' : errors && errors['menus.category_id'] }">
               <option></option>
               <optgroup v-for="(parent, id) in categories" :key="id" :label="parent.name">
                 <option v-for="(cate, j) in parent.all_children" :key="j" :value="cate.id">{{ cate.name }}</option>
               </optgroup>
             </select>
-            <div v-if="errors && errors['menus.category_id']" class="error invalid-feedback">{{ errors['menus.category_id'][0] }}</div>
+            <div v-if="errors && errors['menus.category_id']" class="error invalid-feedback">{{ errors['menus.category_id'][0] }}</div> -->
           </div>
         </div>
-        <div class="form-group row">
+        <div class="form-group row companu-content--edit">
           <div class="col-md-12">
             <small>{{ $t('メニュー画像') }}</small>
             <file-upload
-              ref="fileUploadComponent"
+              ref="multiFilesUploadComponent"
               uploadUrl="/api/clinic/menus/photoupload"
               :maxFiles="10"
-              name="company-images"
-              :photo="form.menus.photo"
-              @file-upload-success="handleFileSaved"
-              @file-removed="hanleFileRemove"
-              @file-added="handleFileAdded"
+              name="menu-images"
+              @file-upload-success="handleMultiFileSaved"
+              @file-removed="hanleMultiFileRemove"
+              @file-added="handleMultiFileAdded"
+              @queue-complete="handleMultiFilesQueueComplete"
             />
-            <!-- @queue-complete="handleMultiFilesQueueComplete" -->
+            <div v-if="form.menuPhotos.length" class="company-profile-img-list">
+              <div v-for="(img, index) in form.menuPhotos" class="company-image--edit" :key="index">
+                <span class="remove-btn" @click="handleRemoveFile(index)"></span>
+                <div class="over-hidden">
+                  <img :src="'/storage/'+img" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="create-menu-desc">
@@ -239,7 +248,7 @@
         <div class="form-group row">
           <div class="col">
             <small>{{ $t('掲載ステータス') }}</small>
-            <p v-if="form.menus.status">{{ $t('掲載') }}</p>
+            <p v-if="form.menus.status">{{ $t('掲載中') }}</p>
             <p v-else>{{ $t('停止') }}</p>
           </div>
         </div>
@@ -257,19 +266,25 @@
           <div class="col">
             <small>{{ $t('カテゴリー') }}</small>
             <div class="view-cate-panel">
-            <p>{{ $t('二重 / ヒアルロン酸注射') }}</p>
-            <p>{{ $t('二重 / ヒアルロン酸注射') }}</p>
+              <template v-for="(item, idx) in selected_categories" :value="id">
+                <p :key="idx">
+                  {{item.name}}
+                </p>
+              </template>
             </div>
           </div>
         </div>
         <div class="form-group row">
           <div class="col">
             <small>{{ $t('メニュー画像') }}</small>
-            <div class="view-img-panel">
-              <img src="/img/photo16.png">
-              <img src="/img/shopify_b.jpg">
-              <img src="/img/shopify_b.jpg">
-              <img src="/img/shopify_b.jpg">
+            <div class="companu-content--edit">
+                <div v-if="form.menuPhotos.length" class="company-profile-img-list">
+                  <div v-for="(img, index) in form.menuPhotos" class="company-image--edit" :key="index">
+                    <div class="over-hidden">
+                      <img :src="'/storage/'+img" />
+                    </div>
+                  </div>
+                </div>
             </div>
           </div>
         </div>
@@ -446,6 +461,7 @@ export default {
           photo: '',
         },
         fileChanged: false,
+        menuPhotos: [],
       },
       query: {
         per_page: 10,
@@ -494,6 +510,9 @@ export default {
         };
       });
     },
+    menu_data(){
+      return this.form.menuPhotos;
+    }
   },
 
   mounted() {
@@ -501,6 +520,7 @@ export default {
   },
 
   methods: {
+   
     getData() {
       this.$store.dispatch('state/setIsLoading')
       const qs = this.$utils.getQueryString(this.query)
@@ -547,12 +567,16 @@ export default {
           sport_impossible: selected.sport_impossible,
           status: selected.status == 1,
           photo: selected.photo,
-        }
+        },
+        menuPhotos: 
+          selected.images.map(el => el.path)
+        ,
       }
+      
       this.selected_categories = []
       this.categories.forEach(item => {
         item.all_children.forEach(child => {
-          if (this.categories.map(item => item.id).includes(child.id)) {
+          if (selected.categories.map(item => item.id).includes(child.id)) {
             this.selected_categories.push({
               id: child.id,
               name: child.name
@@ -565,7 +589,7 @@ export default {
       //   confirmBtnTitle: 'メニューの編集を完了'
       // }
       // this.$refs.modal.show();
-
+      this.errors = undefined
       this.modalInfo = {
         title: 'メニューの詳細',
         confirmBtnTitle: 'メニューを編集',
@@ -590,13 +614,17 @@ export default {
       this.modalInfo = {
         title: '新規メニューを追加',
         confirmBtnTitle: '新規メニューを追加'
-      }     
+      }
+      this.form.menuPhotos = [];
+      this.selected_categories = [];
       this.$refs.modal.show();
-    },
+    },   
 
-    handleUpdateMenu() { //pstar         
+    handleUpdateMenu() { //pstar
+      let flg = false;
       if (this.form.fileChanged) {
-        this.$refs.fileUploadComponent.processQueue();
+        flg = true
+        this.$refs.multiFilesUploadComponent.processQueue();
       } else {
         this.handleSaveMenu();
         // this.modalInfo = {
@@ -632,6 +660,10 @@ export default {
       if (this.form.menus.id) {
         url += `/${this.form.menus.id}`
       }
+      this.form = {
+        ...this.form,
+        categories: this.selected_categories.map(el => el.id)
+      }
       axios.post(url, this.form)
         .then(res => {
           let menu = res.data.menu
@@ -660,13 +692,12 @@ export default {
             title: '登録できません。',
             icon: 'error',
           })
-          this.errors = { ...error.response.data.errors }
+          this.errors = { ...error.response.data.errors }          
           this.$store.dispatch('state/removeIsLoading')
         })
     },
 
     handleDeleteMenu(){
-      console.log(this.form.menus.id);
       this.$refs.viewModal.hide();
       let url = '/api/clinic/menus';
       if (this.form.menus.id) {
@@ -690,22 +721,50 @@ export default {
     },
 
     handleModalClose() {
-      this.$refs.fileUploadComponent.removeAllFiles()
+      this.$refs.multiFilesUploadComponent.removeAllFiles()
     },
 
-    handleFileSaved(fileUrl) {
-      this.form.menus.photo = fileUrl
-      this.form.fileChanged = false
-      this.handleSaveMenu()
+    // handleFileSaved(fileUrl) {
+    //   this.selected_photos.push(fileUrl); 
+    //   this.form.menus.photo = fileUrl
+    //   this.form.fileChanged = false
+    //   this.handleSaveMenu()
+    // },
+
+    // hanleFileRemove() {
+    //   this.form.fileChanged = false;
+    //   this.form.menus.photo = '';
+    // },
+
+    // handleFileAdded(flg) {
+    //   this.form.fileChanged = flg;
+    // },
+
+    handleMultiFileSaved(fileUrl) {
+      this.form.menuPhotos.push(fileUrl)
     },
 
-    hanleFileRemove() {
-      this.form.fileChanged = false;
-      this.form.menus.photo = '';
+    hanleMultiFileRemove(id) {
+      console.log("remove", id);
+      let length = this.$refs.multiFilesUploadComponent.getQueuedFiles();
+      if (!length) {
+        this.form.fileChanged = false;
+      }
     },
 
-    handleFileAdded(flg) {
+    handleMultiFileAdded(flg) {
       this.form.fileChanged = flg;
+    },
+
+    handleMultiFilesQueueComplete() {
+      this.form.fileChanged = false
+      // if (!this.form.avatarFileChanged) {
+        this.handleSaveMenu()
+      // }
+    },
+
+    handleRemoveFile(index) {      
+      this.form.menuPhotos.splice(index, 1)
     },
 
     handleCategoryChange(e) {
@@ -742,20 +801,16 @@ div.create-menu-content{
 * >>> .vue-dropzone>.dz-preview .dz-image{
   width: 170px;
 }
-/* .view-cate-panel{
-  display: flex;
-  flex-direction: row;
-}
-.view-cate-panel p{
-    font-size: 12px;
-    color: #5CA3F6;
-    background: #E2F0FF;
-    padding: 5px 10px;
-    margin-right: 5px;
-} */
+
 .view-modal-footer{
   margin-top: 4rem;
   display: flex;
   justify-content: center;
+}
+.company-profile-img-list{
+  margin: 20px 0px;
+}
+.company-profile-img-list > div{
+      padding: 10px 5px;
 }
 </style>

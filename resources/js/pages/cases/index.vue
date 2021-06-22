@@ -181,7 +181,7 @@
             <div class="col-6">
               <small>{{ $t('性別') }}</small>
               <select v-model="form.cases.patient_gender" :class="{'is-invalid' : errors && errors['cases.patient_gender'] }">
-                <option></option>
+                <!-- <option></option> -->
                 <option v-for="(name, id) in genders" :key="id" :value="id">{{ name }}</option>
               </select>
               <div v-if="errors && errors['cases.patient_gender']" class="error invalid-feedback">{{ errors['cases.patient_gender'][0] }}</div>

@@ -6,6 +6,7 @@
 @import 'elements/navbar';
 @import 'elements/buttons';
 @import 'elements/transitions';
+@import 'elements/toggle';
 
 @import '~vue2-dropzone/dist/vue2Dropzone.min.css';
 @import '~sweetalert2/dist/sweetalert2.min.css';
@@ -2128,6 +2129,7 @@ select.is-invalid {
 }
 .dropzone-wrapper .dropzone-in > div div {
 	margin-bottom: 12px;
+	margin-top: 45px;
 }
 .sinlge-file-uploader {
 	&.vue-dropzone {

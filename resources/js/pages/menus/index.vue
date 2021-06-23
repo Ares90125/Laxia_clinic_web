@@ -3,7 +3,7 @@
     <div class="main-content">
       <div class="staff-header">
         <p><a href="#" :class="{'active': query.status == 1}" @click="handleStatusChange(1)">{{ $t('掲載中') }}</a>
-          <a href="#" :class="{'active': query.status == 0}" @click="handleStatusChange(0)">{{ $t('掲載停止') }}</a>          
+          <a href="#" :class="{'active': query.status == 0}" @click="handleStatusChange(0)">{{ $t('掲載停止') }}</a>
         </p>
       </div>
       <div class="staff-sub-header">
@@ -47,15 +47,17 @@
         <div class="form-group">
           <small>{{ $t('掲載ステータス') }}</small>
           <div class="row mx-0">
-            <toggle-button
+            <!-- <toggle-button
               v-model="form.menus.status"
               :sync="true"
               :labels="{checked: '掲載', unchecked: '停止'}"
               :color="{checked: '#5CA3F6'}"
               :width="90"
               :height="30"
-              :font-size="12" />
-          </div>          
+              :font-size="12" /> -->
+              <Toggle :defaultState="form.menus.status == 0 ? true:false" @change="triggerEvent"/>
+          </div>
+          
         </div>
         <div class="form-group row">
           <div class="col-md-8">
@@ -772,6 +774,12 @@ export default {
       this.query.category_id = e.target.value
       this.getData()      
     },
+    triggerEvent(value){      
+      if(value)
+        this.form.menus.status = 0;
+      else
+        this.form.menus.status = 1;
+    }
   }
 }
 </script>

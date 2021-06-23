@@ -7,6 +7,7 @@ import Pagination from './Pagination'
 import FormModal from './FormModal'
 import FileUpload from './FileUpload'
 import MenuDetail from './MenuDetail'
+import Toggle from './Toggle'
 import { HasError, AlertError, AlertSuccess } from 'vform'
 
 // Components that are registered globaly.
@@ -22,6 +23,7 @@ import { HasError, AlertError, AlertSuccess } from 'vform'
   FormModal,
   FileUpload,
   MenuDetail,
+  Toggle,
 ].forEach(Component => {
   Vue.component(Component.name, Component)
 })

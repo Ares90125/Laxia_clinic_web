@@ -23,6 +23,7 @@
       </div>
     </div>
   </vue-dropzone>
+  
 </template>
 
 <script>

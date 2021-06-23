@@ -28,11 +28,11 @@ class MenuService
       $query->where('clinic_id', $search['clinic_id']);
     }
 
-    if (isset($search['status'])) {
-      $query->where('status', $search['status']);
-    } else {
-      $query->where('status', '1');
-    }
+    // if (isset($search['status'])) {
+    //   $query->where('status', $search['status']);
+    // } else {
+    //   $query->where('status', '1');
+    // }
 
     // if (isset($search['category_id'])) {
     //   if (is_array($search['category_id'])) {

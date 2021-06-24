@@ -121,7 +121,6 @@ export const actions = {
   },
 
   addMenuDetails({ commit }, payload) {
-    
     commit(types.ADD_MENU_DETAILS, payload)
   },
 }

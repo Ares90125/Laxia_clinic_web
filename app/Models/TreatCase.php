@@ -61,6 +61,11 @@ class TreatCase extends Model
         return $this->belongsToMany(Menu::class, 'case_menus', 'case_id', 'menu_id');
     }
 
+    public function images()
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
+    }
+
     public function stuff()
     {
         return $this->belongsTo(Stuff::class);

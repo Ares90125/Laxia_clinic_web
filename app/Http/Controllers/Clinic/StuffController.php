@@ -8,6 +8,7 @@ use App\Services\StuffService;
 use App\Http\Requests\StuffRequest;
 use App\Models\Stuff;
 use App\Traits\MediaUpload;
+use Illuminate\Support\Str;
 
 class StuffController extends Controller
 {
@@ -108,10 +109,18 @@ class StuffController extends Controller
 
     public function uploadPhoto(Request $request)
     {
-        $path = $this->mediaUploadWithThumb('/clinic/stuffs', $request->file, 150);
-        return response()->json([
-            'photo' => $path[1]
-        ], 200);
+        $uploadedFile = $request->file;
+        // $request->validate([
+        //     'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        // ]);
+        $disk = 'public';
+        $filename = null;
+        $name = !is_null($filename) ? $filename : Str::random(25);
+        $file = $uploadedFile->storeAs('/clinic/stuffs', $name.'.'.$uploadedFile->getClientOriginalExtension(), $disk);
+
+       return response()->json([
+           'photo' => $file,
+       ], 200);
     }
     
 }

@@ -76,7 +76,7 @@ class CaseController extends Controller
         ], 200);
     }
 
-    public function uploadPhoto(Request $request)
+    public function uploadBeforePhoto(Request $request)
     {
         // dd($request->file);
         // var_dump("asdff");
@@ -94,7 +94,24 @@ class CaseController extends Controller
         $disk = 'public';
         $filename = null;
         $name = !is_null($filename) ? $filename : Str::random(25);
-        $file = $uploadedFile->storeAs('/clinic/cases', $name.'.'.$uploadedFile->getClientOriginalExtension(), $disk);
+        $file = $uploadedFile->storeAs('/clinic/cases/before', $name.'.'.$uploadedFile->getClientOriginalExtension(), $disk);
+
+       return response()->json([
+           'status' => 1,
+           'photo' => $file,
+       ]);
+    }
+
+    public function uploadAfterPhoto(Request $request)
+    {    
+        $uploadedFile = $request->file;
+        // $request->validate([
+        //     'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        // ]);
+        $disk = 'public';
+        $filename = null;
+        $name = !is_null($filename) ? $filename : Str::random(25);
+        $file = $uploadedFile->storeAs('/clinic/cases/after', $name.'.'.$uploadedFile->getClientOriginalExtension(), $disk);
 
        return response()->json([
            'status' => 1,

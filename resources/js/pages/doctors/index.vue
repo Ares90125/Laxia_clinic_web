@@ -4,7 +4,7 @@
       <button class="btn3 add-stuff-btn mr-3" @click="handleInviteDoctor" ><img src="/img/plus.svg"> {{ $t('ドクターを招待') }}</button>
       <button class="btn3 add-stuff-btn" @click="handleNewStuffForm"><img src="/img/plus.svg"> {{ $t('新規スタッフを追加') }}</button>
     </div>
-    <div class="main-content">
+    <div class="main-content main-dev-content">
       <div class="staff-header staff-doctor-header mb-2">
         <p>
           <!-- <select class="staff-sort">
@@ -69,11 +69,11 @@
         <span class="label-title px-5">写真</span>
         <div class="row d-flex justify-content-center">          
           <div class="col-md-3 col-5">
-            <div>              
+            <div>
               <file-upload
                 ref="fileUploadComponent"
                 uploadUrl="/api/clinic/stuffs/photoupload"
-                :photo="form.stuffs.photo"
+                :photo="'/storage/'+form.stuffs.photo"
                 @file-upload-success="handleFileSaved"
                 @file-removed="hanleFileRemove"
                 @file-added="handleFileAdded"
@@ -591,6 +591,7 @@ export default {
       }
       this.isEditing = true
       // this.isCreateProfile = true
+      this.form.stuffs.photo = "";
       this.$refs.stuffViewModal.hide();
       this.$refs.modal.show();
     },
@@ -600,11 +601,12 @@ export default {
       //   this.isEditing = true
       //   return
       // }
-      if (this.form.fileChanged) {
-        this.$refs.fileUploadComponent.processQueue();
-      } else {
-        this.handleSaveStuff();
-      }
+      // if (this.form.fileChanged) {
+      //   this.$refs.fileUploadComponent.processQueue();
+      // } else {
+        
+      // }
+      this.handleSaveStuff();
     },
 
     handleSaveStuff() {
@@ -644,13 +646,13 @@ export default {
     },
 
     handleModalClose() {
-      // this.$refs.fileUploadComponent.removeAllFiles()
+      this.$refs.fileUploadComponent.removeAllFiles()
     },
 
     handleFileSaved(fileUrl) {
       this.form.stuffs.photo = fileUrl
       this.form.fileChanged = false
-      this.handleSaveStuff()
+      // this.handleSaveStuff()
     },
 
     hanleFileRemove() {

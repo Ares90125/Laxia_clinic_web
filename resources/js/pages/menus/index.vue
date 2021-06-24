@@ -1,6 +1,6 @@
 <template>
   <div v-if="is_master_loaded" class="main-in">
-    <div class="main-content">
+    <div class="main-content main-dev-content">
       <div class="staff-header">
         <p><a href="#" :class="{'active': query.status == 1}" @click="handleStatusChange(1)">{{ $t('掲載中') }}</a>
           <a href="#" :class="{'active': query.status == 0}" @click="handleStatusChange(0)">{{ $t('掲載停止') }}</a>
@@ -18,14 +18,18 @@
           <div v-for="(item, index) in menus" :key="index" class="menu-one col-md-6 col-12">
             <div class="menu-one-in" @click="handleShowMenu(item.id)">
               <div class="menu-img">
-                <img v-if="item.images.length" :src="'/storage/'+item.images[0].path || '/img/menu-img.png'">
-                <img v-else :src="'/img/menu-img.png'">
+                <img v-if="item.images.length" :src="'/storage/'+item.images[0].path">
+                <!-- <img v-else :src="'/img/menu-img.png'"> -->
               </div>
               <div class="menu-info">
-                <!-- <template v-if="index <= 5"></template> -->
-                <p v-if="item.category" class="menu-cat">{{ item.category.name }}</p>
+                <template v-for="(item, key) in item.categories" :value="key">
+                  <p class="menu-cat" :key="key">
+                    {{ item.name }}
+                  </p>
+                </template>
+                <!-- <p v-if="item.category" class="menu-cat">{{ item.category.name }}</p> -->
                 <p class="menu-ttl">{{ item.name }}</p>
-                <p class="menu-price">{{ item.price | currency }}({{ $t('税込') }})</p>
+                <p class="menu-price">{{ item.price | currency }} <span style="font-size: 14px;">({{ $t('税込') }})</span ></p>
               </div>
             </div>
           </div>
@@ -56,8 +60,7 @@
               :height="30"
               :font-size="12" /> -->
               <Toggle :defaultState="form.menus.status == 0 ? true:false" @change="triggerEvent"/>
-          </div>
-          
+          </div>          
         </div>
         <div class="form-group row">
           <div class="col-md-8">
@@ -529,6 +532,7 @@ export default {
       axios.get(`/api/clinic/menus?${qs}`)
         .then(res => {
           this.menus = res.data.menus.data;
+          console.log(this.menus);
           this.query = {
             ...this.query,
             per_page: res.data.menus.per_page
@@ -619,6 +623,7 @@ export default {
       }
       this.form.menuPhotos = [];
       this.selected_categories = [];
+      this.errors = undefined;
       this.$refs.modal.show();
     },   
 

@@ -14,14 +14,15 @@
     @vdropzone-complete="handleUploadComplete"
     @vdropzone-complete-multiple="handleMultipleUploadComplete"
     >
-      <div class="dropzone-wrapper">
-        <div class="dropzone-in">
-          <div class="dropzone-title">
-            <div><img src="/img/file.png"/></div>
-            <p>写真をドラック & ドロップ</p>
-          </div>
+    <div class="dropzone-wrapper">
+      <div class="dropzone-in">
+        <div class="dropzone-title">
+          <div><img src="/img/file.png"/></div>
+          <p>{{ $t('写真をドラック & ドロップ') }}</p>
+        </div>
       </div>
     </div>
+    <button v-if="autoStatus" class="btn btn-file-upload mt-2"><i class="fas fa-upload"></i> {{ $t('写真をアップロード') }}</button>
   </vue-dropzone>
   
 </template>
@@ -57,6 +58,10 @@
       maxFiles: {
         type: Number,
         default: 1,
+      },
+      autoStatus: {
+        type: Boolean,
+        default: false,
       }
     },
     
@@ -84,7 +89,7 @@
         url: this.uploadUrl,
         maxFilesize: 15,
         maxFiles: this.maxFiles,
-        autoProcessQueue: false,
+        autoProcessQueue: this.autoStatus,
         headers: {
           "Authorization": `Bearer ${this.token}`
         },
@@ -117,7 +122,7 @@
         this.$emit('file-removed', this.name)
       },
 
-      handleFileAdded(file) {
+      handleFileAdded(file, response) {
         this.$emit('file-added', !file.manuallyAdded, this.name)
       },
 
@@ -158,4 +163,5 @@
 </script>
 
 <style lang="scss" scoped>
+
 </style>

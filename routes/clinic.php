@@ -46,7 +46,8 @@ Route::group(['middleware' => ['auth.clinic']], function() {
   Route::get('/stuffs/get', 'StuffController@getAll');
   Route::delete('/stuffs/{id}', 'StuffController@delete');
 
-  Route::post('/cases/photoupload', 'CaseController@uploadPhoto');
+  Route::post('/cases/before/photoupload', 'CaseController@uploadBeforePhoto');
+  Route::post('/cases/after/photoupload', 'CaseController@uploadAfterPhoto');
   Route::post('/cases', 'CaseController@store');
   Route::post('/cases/{id}', 'CaseController@update');
   Route::get('/cases', 'CaseController@index');

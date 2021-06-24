@@ -17,7 +17,7 @@ class CaseService
   {
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
     $query = TreatCase::query()
-      ->with(['categories', 'menus', 'stuff']);
+      ->with(['categories', 'menus', 'stuff', 'images']);
 
     if (isset($search['clinic_id'])) {
       $query->where('clinic_id', $search['clinic_id']);
@@ -53,6 +53,20 @@ class CaseService
     $menuAttrs = Arr::get($attributes, 'menus');
     $case->menus()->sync($menuAttrs);
 
+    $beforePhotos = Arr::get($attributes, 'beforePhotos');
+    $afterPhotos = Arr::get($attributes, 'afterPhotos');
+    $case->images()->delete();
+    foreach ($beforePhotos as $photo) {
+      $case->images()->create([
+        'path' => $photo
+      ]);
+    }
+    foreach ($afterPhotos as $photo) {
+      $case->images()->create([
+        'img_type' => 1,
+        'path' => $photo
+      ]);
+    }
     return $case;
   }
 
@@ -69,6 +83,21 @@ class CaseService
 
     $menuAttrs = Arr::get($attributes, 'menus');
     $case->menus()->sync($menuAttrs);
+
+    $beforePhotos = Arr::get($attributes, 'beforePhotos');
+    $afterPhotos = Arr::get($attributes, 'afterPhotos');
+    $case->images()->delete();
+    foreach ($beforePhotos as $photo) {
+      $case->images()->create([
+        'path' => $photo
+      ]);
+    }
+    foreach ($afterPhotos as $photo) {
+      $case->images()->create([
+        'img_type' => 1,
+        'path' => $photo
+      ]);
+    }
 
     return $case;
   }

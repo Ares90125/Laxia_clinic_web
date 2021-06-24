@@ -21,6 +21,7 @@ class Attachment extends Model
   protected $fillable = [
     'attachable_type',
     'attachable_id',
+    'img_type',
     'path',
   ];
 }

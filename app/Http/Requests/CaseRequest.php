@@ -30,7 +30,7 @@ class CaseRequest extends FormRequest
     {
         return [
             'cases' => ['required', 'array'],
-            'cases.menu_id' => 'required|integer|exists:menus,id',
+            // 'cases.menu_id' => 'required|integer|exists:menus,id',
             // 'cases.stuff_id' => 'required|integer|exists:stuffs,id',
             'cases.name' => 'required',
             'cases.patient_age' => 'required|integer',

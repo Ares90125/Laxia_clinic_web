@@ -1,6 +1,6 @@
 <template>
   <div v-if="is_master_loaded" class="main-in">
-    <div class="main-content case-content">
+    <div class="main-content case-content main-dev-content">
       <div class="staff-header case-header">
           <select class="menu-sort my-1" @change="handleCategoryChange">
             <option value="-1">{{ $t('部位でソート') }}</option>
@@ -18,14 +18,20 @@
             <div class="case-one-in" @click="handleShowCase(item.id)">
               <div class="case-img">
                 <p class="before">
-                  <img v-if="item.before_photo" :src="'/storage/'+item.before_photo">
-                  <img v-else :src="'/img/menu-img.png'">
+                  <template v-for="(item, key) in item.images" :value="key">
+                    <img v-if="item.img_type == 0" :src="'/storage/'+item.path" :key="key">
+                  </template>
+                  <!-- <img v-else :src="'/img/menu-img.png'"> -->
                 </p>
                 <p class="after">
-                  <img v-if="item.after_photo" :src="'/storage/'+item.after_photo">
-                  <img v-else :src="'/img/menu-img.png'">
+                  <!-- <img v-if="tmp.afterPhotos.length" :src="'/storage/'+tmp.afterPhotos[0]"> -->
+                   <template v-for="(item, key) in item.images" :value="key">
+                    <img v-if="item.img_type == 1" :src="'/storage/'+item.path" :key="key">
+                  </template>
+                  <!-- <img v-else :src="'/img/menu-img.png'"> -->
+                  <!-- <img v-else class="menu-blank-img"> -->
                 </p>
-              </div>
+              </div> 
               <div class="case-info">
                  <template v-for="(item, key) in item.categories" :value="key">
                   <p class="case-cat" v-if="key <= 3" :key="key">
@@ -61,55 +67,62 @@
               <div v-if="errors && errors['cases.name']" class="error invalid-feedback">{{ errors['cases.name'][0] }}</div>
             </div>
           </div>
-          <div class="form-group row justify-content-center">
+          <div class="form-group row justify-content-center case-file-upload">
             <div class="col-4">
               <small class="text-center">{{ $t('Before画像') }}</small>
               <file-upload
-                v-if="form.cases.before_photo"
                 ref="beforeFileUploadComponent"
-                uploadUrl="/api/clinic/profile/photoupload"
-                name="before_photo"
-                :photo="'/storage/'+form.cases.before_photo"
-                @file-upload-success="handleFileSaved"
-                @file-removed="hanleFileRemove"
-                @file-added="handleFileAdded"
+                uploadUrl="/api/clinic/cases/before/photoupload"
+                :maxFiles="10"
+                :autoStatus="true"
+                name="menu-images"
+                @file-upload-success="handleMultiFileSaved"
+                @file-removed="hanleMultiFileRemove"
+                @file-added="handleMultiFileAdded"
+                @queue-complete="handleMultiFilesQueueComplete"
               />
-              <file-upload
-                v-else
-                ref="beforeFileUploadComponent"
-                uploadUrl="/api/clinic/profile/photoupload"
-                name="before_photo"
-                :photo="form.cases.before_photo"
-                @file-upload-success="handleFileSaved"
-                @file-removed="hanleFileRemove"
-                @file-added="handleFileAdded"
-              />
+
             </div>
             <div class="col-4">
               <small class="text-center">{{ $t('After画像') }}</small>
               <file-upload
-                v-if="form.cases.after_photo"
                 ref="afterFileUploadComponent"
-                uploadUrl="/api/clinic/cases/photoupload"
-                name="after_photo"
-                :photo="'/storage/'+form.cases.after_photo"
-                @file-upload-success="handleFileSaved"
-                @file-removed="hanleFileRemove"
-                @file-added="handleFileAdded"
-              />
-              <file-upload
-                v-else
-                ref="afterFileUploadComponent"
-                uploadUrl="/api/clinic/cases/photoupload"
-                name="after_photo"
-                :photo="form.cases.after_photo"
-                @file-upload-success="handleFileSaved"
-                @file-removed="hanleFileRemove"
-                @file-added="handleFileAdded"
+                uploadUrl="/api/clinic/cases/after/photoupload"
+                :maxFiles="10"
+                :autoStatus="true"
+                name="menu-images"
+                @file-upload-success="handleAfterMultiFileSaved"
+                @file-removed="hanleAfterMultiFileRemove"
+                @file-added="handleAfterMultiFileAdded"
+                @queue-complete="handleAfterMultiFilesQueueComplete"
               />
             </div>
           </div>
-          <div class="form-group row">
+          <div class="form-group row case-photo-content">
+            <div class="col-12">
+              <small class="mb-0">{{ $t('Before画像') }}</small>
+              <div v-if="form.beforePhotos.length" class="company-profile-img-list">
+                <div v-for="(img, index) in form.beforePhotos" class="company-image--edit" :key="index">
+                  <span class="remove-btn" @click="handleBeforeRemoveFile(index)"></span>
+                  <div class="over-hidden">
+                    <img :src="'/storage/'+img" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 mt-2">
+              <small class="mb-0">{{ $t('After画像') }}</small>
+              <div v-if="form.afterPhotos.length" class="company-profile-img-list">
+                <div v-for="(img, index) in form.afterPhotos" class="company-image--edit" :key="index">
+                  <span class="remove-btn" @click="handleAfterRemoveFile(index)"></span>
+                  <div class="over-hidden">
+                    <img :src="'/storage/'+img" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row mt-2">
             <div class="col-12">
               <small>{{ $t('メニュー') }}</small>
               <select v-model="form.cases.menu_id" :class="{'is-invalid' : errors && errors['cases.menu_id'] }" @change="handleMenuChange($event)">
@@ -137,7 +150,7 @@
             <MenuDetail />
           </div>
           <div class="form-group row">
-            <div class="col-12">              
+            <div class="col-12">
               <small>{{ $t('カテゴリー') }}</small>
                 <multiselect
                   v-model="selected_categories"
@@ -157,7 +170,7 @@
                 ></multiselect>
                 <div v-if="errors && errors['categories']" class="error invalid-feedback d-block">{{ errors['categories'][0] }}</div>
             </div>
-          </div>          
+          </div>
           
           <!-- <div class="form-group row">
             <div class="col-12">
@@ -226,10 +239,9 @@
           <div class="col">
             <small>{{ $t('Before画像') }}</small>
             <div class="view-img-panel">
-              <img v-if="form.cases.before_photo" :src="'/storage/'+form.cases.before_photo">
-              <!-- <img src="/img/shopify_b.jpg">
-              <img src="/img/shopify_b.jpg">
-              <img src="/img/shopify_b.jpg"> -->
+              <template v-for="(item, id) in form.beforePhotos" :value="id">
+                <img :src="'/storage/'+item" :key="id">
+              </template>
             </div>
           </div>
         </div>
@@ -237,10 +249,9 @@
           <div class="col">
             <small>{{ $t('After画像') }}</small>
             <div class="view-img-panel">
-              <img v-if="form.cases.after_photo" :src="'/storage/'+form.cases.after_photo">
-              <!-- <img src="/img/shopify_b.jpg">
-              <img src="/img/shopify_b.jpg">
-              <img src="/img/shopify_b.jpg"> -->
+              <template v-for="(item, id) in form.afterPhotos" :value="id">
+                <img :src="'/storage/'+item" :key="id">
+              </template>
             </div>
           </div>
         </div>
@@ -345,6 +356,8 @@ export default {
           after_photo: '',
         },
         categoires: null,
+        afterPhotos: [],
+        beforePhotos: [],
       },
       query: {
         per_page: 12,
@@ -397,6 +410,9 @@ export default {
 
   methods: {
     handleMenuChange(e){
+      let menuOpts = e.target.children;
+      this.form.cases.menu_id = menuOpts[0].value;
+      console.log(this.form.cases.menu_id);
       this.menu_details.forEach(item => {
         if(item.id == e.target.value){
           this.selected_menu_details.push({
@@ -429,6 +445,7 @@ export default {
       this.form = {
         ...this.tmp,
         cases: { ...selected },
+        // beforePhotos : selected.images.map(el => el.path),
       }
       this.selected_categories = []
       this.categories.forEach(item => {
@@ -440,6 +457,16 @@ export default {
             })
           }
         })
+      })
+
+      this.form.beforePhotos = [];
+      this.form.afterPhotos = [];
+      selected.images.forEach(child => {
+        if (child.img_type == 1) {
+          this.form.afterPhotos.push(child.path)
+        }else{
+          this.form.beforePhotos.push(child.path)
+        }
       })
 
       this.selected_menu_details = [];
@@ -464,8 +491,8 @@ export default {
 
     handleShowEditMenu(){
       this.modalInfo = {
-        title: '症例を追加する',
-        confirmBtnTitle: '症例を追加する'
+        title: '症例を編集',
+        confirmBtnTitle: '症例の編集を完了'
       }
       this.$refs.viewModal.hide();
       this.$refs.modal.show();
@@ -478,25 +505,28 @@ export default {
       }
       this.selected_categories = [];
       this.selected_menu_details = [];
+      this.form.beforePhotos = [];
+      this.form.afterPhotos = [];
+      this.errors = undefined;
       this.$store.dispatch('data/addMenuDetails', { data : this.selected_menu_details })
       this.modalInfo = {
         title: '症例を追加する',
         confirmBtnTitle: '症例を追加する'
-      }
+      }      
       this.$refs.modal.show();
     },
 
     handleUpdateCase() {
       this.$store.dispatch('state/setIsLoading')
       let flg = false;
-      if (this.form.beforeFileChanged) {
-        flg = true
-        this.$refs.beforeFileUploadComponent.processQueue();
-      }
-      if (this.form.afterFileChanged) {
-        flg = true
-        this.$refs.afterFileUploadComponent.processQueue();
-      }
+      // if (this.form.beforeFileChanged) {
+      //   flg = true
+      //   this.$refs.beforeFileUploadComponent.processQueue();
+      // }
+      // if (this.form.afterFileChanged) {
+      //   flg = true
+      //   this.$refs.afterFileUploadComponent.processQueue();
+      // }
       if (!flg) {
         this.handleSaveCase();
       }
@@ -602,6 +632,62 @@ export default {
       this.form[changeKey] = flg;
     },
 
+    handleMultiFileSaved(fileUrl) {
+      this.form.beforePhotos.push(fileUrl)
+    },
+
+    hanleMultiFileRemove(id) {
+      console.log("remove", id);
+      let length = this.$refs.beforeFileUploadComponent.getQueuedFiles();
+      if (!length) {
+        this.form.beforeFileChanged = false;
+      }
+    },
+
+    handleMultiFileAdded(flg) {
+      this.form.beforeFileChanged = flg;
+      // this.$refs.beforeFileUploadComponent.processQueue();
+    },
+
+    handleMultiFilesQueueComplete() {
+      this.form.beforeFileChanged = false
+      console.log(this.form.beforePhotos)
+      // this.handleSaveCase()
+    },
+    handleMultipleUploadComplete(url){
+      console.log(url);
+    },
+
+    handleAfterMultiFileSaved(fileUrl) {
+      this.form.afterPhotos.push(fileUrl)
+    },
+
+    hanleAfterMultiFileRemove(id) {
+      console.log("remove", id);
+      let length = this.$refs.beforeFileUploadComponent.getQueuedFiles();
+      if (!length) {
+        this.form.afterFileChanged = false;
+      }
+    },
+
+    handleAfterMultiFileAdded(flg) {
+      this.form.afterFileChanged = flg;
+      // this.$refs.beforeFileUploadComponent.processQueue();
+    },
+
+    handleAfterMultiFilesQueueComplete() {
+      this.form.afterFileChanged = false
+      // this.handleSaveCase()
+    },
+
+    handleBeforeRemoveFile(index) {      
+      this.form.beforePhotos.splice(index, 1)
+    },
+
+    handleAfterRemoveFile(index) {      
+      this.form.afterPhotos.splice(index, 1)
+    },
+
     handleCategoryChange(e) {
       e.preventDefault();
       this.query.category_id = e.target.value
@@ -642,5 +728,8 @@ div.create-menu-content{
   margin-top: 4rem;
   display: flex;
   justify-content: center;
+}
+.vue-dropzone:hover {
+  background-color: #fff !important; 
 }
 </style>

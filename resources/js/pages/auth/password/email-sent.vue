@@ -1,8 +1,8 @@
 <template>
   <div class="bg-blue-gray auth-wrapper login-wrapper">
     <div class="auth--wrapper">
-        <div class="auth-form">
-          <h2 class="auth-title mb-6" >メールを送信しました</h2>
+        <div class="auth-form sent-form">
+          <h2 class="auth-title sent-title" >メールを送信しました</h2>
           <!-- Email -->
           <span class="auth-title-tip">
             <strong>xxx@example.com</strong> にメールを送信しましたので、新しいパスワードを設定してください。

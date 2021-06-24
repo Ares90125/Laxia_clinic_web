@@ -1,0 +1,88 @@
+.auth--wrapper {
+    max-width: 800px;
+    height: 500px;
+
+    .auth-form {
+        padding: 70px 0 0;
+
+        .auth-title {
+            margin-bottom: 45px;
+
+            &.reset-title {
+                margin-bottom: 80px;
+            }
+
+            &.sent-title {
+                margin-bottom: 70px;
+            }
+
+            &.pass-changed {
+                margin-bottom: 55px;
+            }
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .auth-btn--wrapper {
+            margin-top: 50px;
+
+            .btn {
+                font-size: 18px;
+                padding: 5px 30px;
+                min-width: unset;
+                line-height: 1.75;
+            }
+
+            &.register-wrapper {
+                margin-top: 75px;
+            }
+
+            &.reset-btn {
+                margin-top: 80px;
+            }
+
+            &.newpass-btn {
+                margin-top: 65px;
+            }
+        }
+
+        i {
+            margin-top: -33px;
+        }
+
+        .auth-title-tip {
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 1.75;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        &.sent-form {
+            max-width: 477px;
+        }
+
+        &.newpass-form {
+            max-width: 445px;
+        }
+    }
+
+    .sent-btn-panel {
+        margin-top: 66px;
+        margin-bottom: 0;
+
+        button {
+            font-size: 18px;
+            line-height: 1.75;
+            padding: 5px 30px;
+        }
+    }
+
+    .auth-btn--wrapper.pass-changed {
+        margin-top: 55px;
+        text-align: center;
+    }
+}

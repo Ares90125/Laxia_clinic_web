@@ -41,7 +41,7 @@
             </div>
           </div> -->
 
-          <div class="auth-btn--wrapper">
+          <div class="auth-btn--wrapper register-wrapper">
             <v-button :loading="form.busy">{{ $t('アカウントを作成') }}</v-button>
           </div>
         </form>

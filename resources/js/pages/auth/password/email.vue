@@ -3,10 +3,10 @@
     <div class="auth--wrapper">
       <div class="auth-form">
         <form @submit.prevent="send" @keydown="form.onKeydown($event)">
-          <h2 class="auth-title mb-6" >パスワードをリセット</h2>
+          <h2 class="auth-title reset-title" >パスワードをリセット</h2>
           <!-- Email -->
           <span class="auth-title-tip">登録したメールアドレスを入力してください。</span>
-          <div class="form-group mt-2 mb-6">
+          <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('メールアドレス') }}</label>
             <div>
               <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" type="email" name="email" placeholder="例：XXX@example.com or ID">
@@ -14,7 +14,7 @@
             </div>
           </div>
 
-          <div class="auth-btn--wrapper">
+          <div class="auth-btn--wrapper reset-btn">
             <router-link :to="{name: 'password.sent'}">
               <v-button :loading="form.busy">{{ $t('パスワードリセットのメールを送信') }}</v-button>
             </router-link>

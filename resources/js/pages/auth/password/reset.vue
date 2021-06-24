@@ -1,9 +1,9 @@
 <template>
   <div class="bg-blue-gray auth-wrapper login-wrapper">
     <div class="auth--wrapper">
-      <h2 class="auth-title">新しいパスワードを設定してください</h2>
-      <div class="auth-form">
-        <form @submit.prevent="login" @keydown="form.onKeydown($event)">          
+      <div class="auth-form newpass-form">
+        <form @submit.prevent="login" @keydown="form.onKeydown($event)">
+          <h2 class="auth-title">新しいパスワードを設定してください</h2>       
           <!-- Email -->
           <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('新しいパスワード') }}</label>
@@ -24,7 +24,7 @@
             </div>
           </div>
           
-          <div class="auth-btn--wrapper mt-5">
+          <div class="auth-btn--wrapper newpass-btn">
             <button class="btn btn-primary" @click="showModal">{{ $t('パスワードを変更') }}</button>
           </div>
         </form>
@@ -39,13 +39,13 @@
         <div class="main-modal">
           <div class="auth--wrapper">
             <div class="auth-form">
-              <h2 class="auth-title mb-6 mt-2" >パスワードを更新しました！</h2>
+              <h2 class="auth-title pass-changed">パスワードを更新しました！</h2>
               <span class="auth-title-tip">
                 正常にあなたのパスワードが更新されました。<br>
                 下のボタンからログイン画面に移動してログインしてください。
               </span>
             </div>
-            <div class="auth-btn--wrapper sent-btn-panel mb-2">
+            <div class="auth-btn--wrapper pass-changed">
               <button class="btn btn-primary" @click="hideModal">{{ $t('ログイン画面からログインする') }}</button>
             </div>
           </div>
@@ -117,23 +117,18 @@ export default {
   }
 }
 </script>
-
 <style scoped>
-.auth-title {
-    font-size: 24px;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 3rem;
-    margin-top: 5rem;
-}
-.auth--wrapper .auth-form {
-    padding: 0 0 50px;
-}
-.modal{
-  align-items: center;
-  top: 0;
-}
-* >>> .form-modal-header{
-  display: none !important;
-}
+  .modal{
+    align-items: center;
+    top: 0;
+  }
+  * >>> .form-modal-header{
+    display: none !important;
+  }
+  * >>> .form-modal-body{
+    padding: 0 !important;
+  }
+  * >>> .form-modal-body .auth--wrapper {
+    height: 404px;
+  }
 </style>>

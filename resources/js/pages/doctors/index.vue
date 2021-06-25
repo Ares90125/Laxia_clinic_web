@@ -70,20 +70,11 @@
         <div class="row d-flex justify-content-center">          
           <div class="col-md-3 col-5">
             <div>
-              <!-- <file-upload
-                v-if="form.stuffs.photo"
-                ref="fileUploadComponent"
-                uploadUrl="/api/clinic/stuffs/photoupload"
-                :photo="'/storage/'+form.stuffs.photo"
-                @file-upload-success="handleFileSaved"
-                @file-removed="hanleFileRemove"
-                @file-added="handleFileAdded"
-              /> -->
               <file-upload
                 v-if="form.stuffs.photo"
                 ref="fileUploadComponent"
                 uploadUrl="/api/clinic/stuffs/photoupload"
-                :photo="form.stuffs.photo"
+                :photo="'/storage/'+form.stuffs.photo"
                 @file-upload-success="handleFileSaved"
                 @file-removed="hanleFileRemove"
                 @file-added="handleFileAdded"

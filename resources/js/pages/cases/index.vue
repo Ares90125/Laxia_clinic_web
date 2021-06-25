@@ -63,7 +63,9 @@
           <div class="form-group row mt-0">
             <div class="col-12">
               <small>{{ $t('タイトル') }}</small>
-              <input type="text" v-model="form.cases.name" placeholder="例：奥二重の方の二重切開" :class="{'is-invalid' : errors && errors['cases.name'] }" />
+              <input type="text" id="case_name" v-model="form.cases.name" placeholder="例：奥二重の方の二重切開" :class="{'is-invalid' : errors && errors['cases.name'], 'is-valid' : errors && !errors['cases.name'] && showstatus }"  @keyup="inputValid" />
+              <i v-if="errors && errors['cases.name'] && showstatus" class="i-text-invalid bi bi-exclamation-triangle-fill"></i>
+              <i v-if="errors && !errors['cases.name'] && showstatus" class="i-text-valid bi bi-check-circle-fill"></i>
               <div v-if="errors && errors['cases.name']" class="error invalid-feedback">{{ errors['cases.name'][0] }}</div>
             </div>
           </div>
@@ -152,23 +154,31 @@
           <div class="form-group row">
             <div class="col-12">
               <small>{{ $t('カテゴリー') }}</small>
-                <multiselect
-                  v-model="selected_categories"
-                  :options="category_options"
-                  :multiple="true"
-                  group-values="children"
-                  group-label="group_name"
-                  :group-select="true"
-                  track-by="name"
-                  label="name"
-                  selectLabel=""
-                  selectGroupLabel=""
-                  placeholder=""
-                  selectedLabel="選択済み"
-                  deselectLabel="削除"
-                  deselectGroupLabel="削除"
-                ></multiselect>
-                <div v-if="errors && errors['categories']" class="error invalid-feedback d-block">{{ errors['categories'][0] }}</div>
+              <multiselect
+                :options="category_options"
+                :multiple="false"
+                group-values="children"
+                group-label="group_name"
+                :group-select="true"
+                track-by="name"
+                label="name"
+                selectLabel=""
+                selectGroupLabel=""
+                placeholder=""
+                selectedLabel="選択済み"
+                deselectLabel="削除"
+                deselectGroupLabel="削除"
+                @select="handleCateChange"
+              ></multiselect>
+              <div v-if="errors && errors['categories']" class="error invalid-feedback d-block">{{ errors['categories'][0] }}</div>
+              <div class="view-cate-panel mt-2">
+                <template v-for="(item, idx) in selected_categories" :value="id">
+                  <p :key="idx">
+                    {{item.group}} / {{item.name}}
+                    <i class="bi bi-x" @click="removeCategory(idx)"></i>
+                  </p>
+                </template>
+              </div>
             </div>
           </div>
           
@@ -373,6 +383,7 @@ export default {
       fileUploadCount: 0,
       selected_categories: [],
       selected_menu_details: [],
+      showstatus: false,
     }
   },
 
@@ -424,6 +435,33 @@ export default {
       })
       this.$store.dispatch('data/addMenuDetails', { data : this.selected_menu_details })
     },
+    handleCateChange(option){
+      let opt_groud_name = "";
+      this.category_options.forEach(item => {
+        opt_groud_name = item.group_name;
+          item.children.forEach(child => {
+            if (option.id == child.id) {
+              if (!this.selected_categories.map(item => item.id).includes(child.id)) {
+                this.selected_categories.push({
+                  id: child.id,
+                  name: child.name,
+                  group:opt_groud_name
+                })
+              }
+            }
+          })
+        })
+    },
+    removeCategory(idx) {
+      this.selected_categories.splice(idx, 1);
+    },
+    inputValid(e){
+      console.log(e.target.id);
+      this.errors['cases.name'] = '';
+      this.showstatus = false;
+      // const objName = document.querySelector('#case_name');
+      // objName.classList.remove('is-valid');
+    },
     getData() {
       this.$store.dispatch('state/setIsLoading')
       const qs = this.$utils.getQueryString(this.query)
@@ -448,12 +486,15 @@ export default {
         // beforePhotos : selected.images.map(el => el.path),
       }
       this.selected_categories = []
-      this.categories.forEach(item => {
-        item.all_children.forEach(child => {
+      let opt_groud_name;
+      this.category_options.forEach(item => {
+        opt_groud_name = item.group_name;
+        item.children.forEach(child => {
           if (selected.categories.map(item => item.id).includes(child.id)) {
             this.selected_categories.push({
               id: child.id,
-              name: child.name
+              name: child.name,
+              group:opt_groud_name
             })
           }
         })
@@ -537,6 +578,7 @@ export default {
     },
 
     handleSaveCase() {
+      this.showstatus = true;
       let isCreate = true
       let url = '/api/clinic/cases';
       if (this.form.cases.id) {

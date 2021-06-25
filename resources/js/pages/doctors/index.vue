@@ -71,9 +71,18 @@
           <div class="col-md-3 col-5">
             <div>
               <file-upload
+                v-if="form.stuffs.photo"
                 ref="fileUploadComponent"
                 uploadUrl="/api/clinic/stuffs/photoupload"
                 :photo="'/storage/'+form.stuffs.photo"
+                @file-upload-success="handleFileSaved"
+                @file-removed="hanleFileRemove"
+                @file-added="handleFileAdded"
+              />
+              <file-upload
+                v-else
+                ref="fileUploadComponent"
+                uploadUrl="/api/clinic/stuffs/photoupload"
                 @file-upload-success="handleFileSaved"
                 @file-removed="hanleFileRemove"
                 @file-added="handleFileAdded"
@@ -523,6 +532,7 @@ export default {
         .then(res => {
           this.$refs.stuffViewModal.hide()
           this.getData();
+          this.form.stuffs.photo = '';
           this.$swal({
             toast: true,
             position: 'top-end',
@@ -591,7 +601,6 @@ export default {
       }
       this.isEditing = true
       // this.isCreateProfile = true
-      this.form.stuffs.photo = "";
       this.$refs.stuffViewModal.hide();
       this.$refs.modal.show();
     },
@@ -601,12 +610,12 @@ export default {
       //   this.isEditing = true
       //   return
       // }
-      // if (this.form.fileChanged) {
-      //   this.$refs.fileUploadComponent.processQueue();
-      // } else {
-        
-      // }
-      this.handleSaveStuff();
+      if (this.form.fileChanged) {
+        this.$refs.fileUploadComponent.processQueue();
+      } else {
+        this.handleSaveStuff();
+      }
+      // this.handleSaveStuff();
     },
 
     handleSaveStuff() {
@@ -652,11 +661,10 @@ export default {
     handleFileSaved(fileUrl) {
       this.form.stuffs.photo = fileUrl
       this.form.fileChanged = false
-      // this.handleSaveStuff()
+      this.handleSaveStuff()
     },
 
     hanleFileRemove() {
-      console.log(this.form);
       this.form.fileChanged = false;
       this.form.stuffs.photo = '';
     },

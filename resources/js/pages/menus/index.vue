@@ -23,7 +23,7 @@
               </div>
               <div class="menu-info">
                 <template v-for="(item, key) in item.categories" :value="key">
-                  <p class="menu-cat" :key="key">
+                  <p class="menu-cat" :key="key" >
                     {{ item.name }}
                   </p>
                 </template>
@@ -65,12 +65,16 @@
         <div class="form-group row">
           <div class="col-md-8">
             <small>{{ $t('メニュー名') }}</small>
-            <input type="text" v-model="form.menus.name" :class="{'is-invalid' : errors && errors['menus.name'] }" placeholder="例：二重切開">
+            <input type="text" v-model="form.menus.name" :class="{'is-invalid' : errors && errors['menus.name']}" placeholder="例：二重切開">
+            <!-- <i v-if="errors && errors['menus.name']" class="i-text-invalid bi bi-exclamation-triangle-fill"></i>, 'is-valid' : errors && !errors['menus.name'] 
+            <i v-if="errors && !errors['menus.name']" class="i-text-valid bi bi-check-circle-fill"></i> -->
             <div v-if="errors && errors['menus.name']" class="error invalid-feedback">{{ errors['menus.name'][0] }}</div>
           </div>
           <div class="col-md-4">
             <small>{{ $t('料金') }}</small>
-            <input type="number" v-model="form.menus.price" :class="{'is-invalid' : errors && errors['menus.price'] }" placeholder="例：250000円">
+            <input type="number" v-model="form.menus.price" :class="{'is-invalid' : errors && errors['menus.price']}" placeholder="例：250000円">
+            <!-- <i v-if="errors && errors['menus.price']" class="i-text-invalid bi bi-exclamation-triangle-fill"></i> , 'is-valid' : errors && !errors['menus.price']
+            <i v-if="errors && !errors['menus.price']" class="i-text-valid bi bi-check-circle-fill"></i> -->
             <div v-if="errors && errors['menus.price']" class="error invalid-feedback">{{ errors['menus.price'][0] }}</div>
           </div>
         </div>
@@ -78,10 +82,10 @@
         <div class="form-group row">
           <div class="col-md-12">
             <small>{{ $t('カテゴリー') }}</small>
+            <!-- v-model="selected_categories" -->
             <multiselect
-                v-model="selected_categories"
                 :options="category_options"
-                :multiple="true"
+                :multiple="false"
                 group-values="children"
                 group-label="group_name"
                 :group-select="true"
@@ -93,8 +97,17 @@
                 selectedLabel="選択済み"
                 deselectLabel="削除"
                 deselectGroupLabel="削除"
+                @select="handleCateChange"
               ></multiselect>
               <div v-if="errors && errors['categories']" class="error invalid-feedback d-block">{{ errors['categories'][0] }}</div>
+              <div class="view-cate-panel mt-2">
+                <template v-for="(item, idx) in selected_categories" :value="id">
+                  <p :key="idx">
+                    {{item.group}} / {{item.name}}
+                    <i class="bi bi-x" @click="removeCategory(idx)"></i>
+                  </p>
+                </template>
+              </div>
             <!-- <select v-model="form.menus.category_id" :class="{'is-invalid' : errors && errors['menus.category_id'] }">
               <option></option>
               <optgroup v-for="(parent, id) in categories" :key="id" :label="parent.name">
@@ -104,13 +117,14 @@
             <div v-if="errors && errors['menus.category_id']" class="error invalid-feedback">{{ errors['menus.category_id'][0] }}</div> -->
           </div>
         </div>
-        <div class="form-group row companu-content--edit">
+        <div class="form-group row companu-content--edit menu-file-upload">
           <div class="col-md-12">
             <small>{{ $t('メニュー画像') }}</small>
             <file-upload
               ref="multiFilesUploadComponent"
               uploadUrl="/api/clinic/menus/photoupload"
               :maxFiles="10"
+              :autoStatus="true"
               name="menu-images"
               @file-upload-success="handleMultiFileSaved"
               @file-removed="hanleMultiFileRemove"
@@ -525,7 +539,27 @@ export default {
   },
 
   methods: {
-   
+    handleCateChange(option){
+      let opt_groud_name = "";
+      this.category_options.forEach(item => {
+        opt_groud_name = item.group_name;
+          item.children.forEach(child => {
+            if (option.id == child.id) {
+              if (!this.selected_categories.map(item => item.id).includes(child.id)) {
+                this.selected_categories.push({
+                  id: child.id,
+                  name: child.name,
+                  group:opt_groud_name
+                })
+              }
+            }
+          })
+        })
+      console.log(this.selected_categories);
+    },
+    removeCategory(idx) {
+      this.selected_categories.splice(idx, 1);
+    },
     getData() {
       this.$store.dispatch('state/setIsLoading')
       const qs = this.$utils.getQueryString(this.query)
@@ -580,16 +614,36 @@ export default {
       }
       
       this.selected_categories = []
-      this.categories.forEach(item => {
-        item.all_children.forEach(child => {
+      let opt_groud_name;
+      this.category_options.forEach(item => {
+        opt_groud_name = item.group_name;
+        item.children.forEach(child => {
           if (selected.categories.map(item => item.id).includes(child.id)) {
             this.selected_categories.push({
               id: child.id,
-              name: child.name
+              name: child.name,
+              group:opt_groud_name
             })
           }
         })
       })
+
+      // let opt_groud_name;
+      // this.category_options.forEach(item => {
+      //   opt_groud_name = item.group_name;
+      //     item.children.forEach(child => {
+      //       if (option.id == child.id) {
+      //         if (!this.selected_categories.map(item => item.id).includes(child.id)) {
+      //           this.selected_categories.push({
+      //             id: child.id,
+      //             name: child.name,
+      //             group:opt_groud_name
+      //           })
+      //         }
+      //       }
+      //     })
+      //   })
+
       // this.modalInfo = {
       //   title: 'メニューを編集',
       //   confirmBtnTitle: 'メニューの編集を完了'
@@ -752,7 +806,6 @@ export default {
     },
 
     hanleMultiFileRemove(id) {
-      console.log("remove", id);
       let length = this.$refs.multiFilesUploadComponent.getQueuedFiles();
       if (!length) {
         this.form.fileChanged = false;
@@ -766,7 +819,8 @@ export default {
     handleMultiFilesQueueComplete() {
       this.form.fileChanged = false
       // if (!this.form.avatarFileChanged) {
-        this.handleSaveMenu()
+      console.log(this.form.beforePhotos)
+        // this.handleSaveMenu()
       // }
     },
 
@@ -821,9 +875,17 @@ div.create-menu-content{
   justify-content: center;
 }
 .company-profile-img-list{
-  margin: 20px 0px;
+  margin: 20px 0 0 0;
 }
 .company-profile-img-list > div{
       padding: 10px 5px;
+}
+.vue-dropzone:hover {
+  background-color: #fff !important; 
+}
+.btn-file-upload{
+    width: 200px;
+    min-width: 200px;
+    font-size: 14px;
 }
 </style>

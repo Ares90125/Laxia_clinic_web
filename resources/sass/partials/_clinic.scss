@@ -66,7 +66,9 @@ select:active {
 }
 textarea:focus,
 textarea:active{
-	border: 2px solid #5CA3F6;
+	border: 1px solid #5CA3F6;
+	box-sizing: border-box;
+	box-shadow: 0px 0px 8px rgba(92, 163, 246, 0.4);
 	outline: none;
 }
 .form-group{
@@ -74,12 +76,21 @@ textarea:active{
 	input:active,
 	textarea:focus,
 	textarea:active{
-		border: 2px solid #5CA3F6;
+		border: 1px solid #5CA3F6;
+		box-sizing: border-box;
+		box-shadow: 0px 0px 8px rgba(92, 163, 246, 0.4);
 		outline: none;
 	}
 	.multiselect input{
 		border: none !important;
+		box-shadow: none !important;
 	}
+}
+.valid-normal{
+	border: 1px solid #5CA3F6 !important;
+	box-sizing: border-box;
+	box-shadow: 0px 0px 8px rgba(92, 163, 246, 0.4) !important;
+	outline: none;
 }
 .form-group select {
 	-webkit-appearance: none; 
@@ -1427,7 +1438,7 @@ button:focus {
 .menu-one:hover>div{
 	// box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.1);
 	background: #E6E6E6;
-	border: 1px solid #E6E6E6;
+	// border: 1px solid #E6E6E6;
 }
 .menu-img img{
 	width: 138px;
@@ -1442,7 +1453,7 @@ div.menu-img{
 }
 .menu-info{
 	width: calc(100% - 138px);
-	padding: 10px 24px 10px 10px;
+	padding: 10px 24px 7px 10px;
 }
 .menu-cat{
 	border: 1px solid #5CA3F6;
@@ -2079,7 +2090,7 @@ span.switcher.switcher-1 input:not(:checked) + label {
 		i{
 			font-size: 16px;
 			float: right;
-			margin-top: -1.7rem;
+			margin-top: -1.8rem !important;
 			margin-right: 10px;
 			cursor: pointer;
 		}		
@@ -2125,6 +2136,36 @@ input.is-invalid,
 textarea.is-invalid,
 select.is-invalid {
 	border-color: #dc3545;
+}
+input.is-valid,
+textarea.is-valid,
+select.is-valid,
+input.is-login-valid {
+	border-color: #13BD38;
+}
+i.i-text-invalid{
+	position: absolute;
+	color: #FF3654;	
+    right: 25px;
+    top: 33px;
+}
+i.i-text-valid{
+	position: absolute;
+	color: #13BD38;	
+    right: 25px;
+    top: 33px;
+}
+i.i-login-invalid{
+	color: #FF3654;
+	&.passwd-invalid{
+		margin-right: 35px;
+	}	
+}
+i.i-login-valid{
+	color: #13BD38;
+	&.passwd-valid{
+		margin-right: 35px;
+	}
 }
 .create-menu-content textarea {
 	display: block;
@@ -2281,12 +2322,20 @@ select.is-invalid {
 	}
 }
 
-.case-file-upload .multi-files-uploader{
+.case-file-upload .multi-files-uploader, 
+.menu-file-upload .multi-files-uploader{
 	.dz-message{
 		display: block !important;
 	}
 	.dz-preview.dz-image-preview{
 		display: none !important;
+	}	
+}
+.menu-file-upload{
+	.btn-file-upload{
+		width: 200px;
+		min-width: 200px;
+		font-size: 14px;
 	}
 }
 
@@ -2703,6 +2752,12 @@ select.is-invalid {
 }
 .view-cate-panel{
 	display: block;
+	i{
+		font-size: 17px;
+		font-weight: 700;
+		cursor: pointer;
+		margin-left: 4px;
+	}
 }
 .view-cate-panel p{
 	font-size: 12px;

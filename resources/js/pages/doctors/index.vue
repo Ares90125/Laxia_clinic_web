@@ -265,7 +265,7 @@
     <form-modal
       ref="delConfirmModal"
       id="del-confirm-modal"
-      :title="modalInfo.title"
+      :title="delModalInfo.title"
       >
         <div class="main-modal">
           <div class="auth--wrapper">
@@ -291,9 +291,9 @@
             </div>
             <div class="row mt-4">
               <div class="col-12 d-flex justify-content-around">
-                <button type="button" class="btn btn-cancel" @click="cancelModal()">{{ modalInfo.confirmBtnTitle}}</button>
+                <button type="button" class="btn btn-cancel" @click="cancelModal()">{{ delModalInfo.confirmBtnTitle}}</button>
                 <!-- <button type="button" class="btn btn-danger" @click="handleDeleteDoctor(doctorItem.doctor_id)">{{ modalInfo.delBtnTitle }}</button> -->
-                <button type="button" class="btn btn-danger" @click="handleDelete">{{ modalInfo.delBtnTitle }}</button>
+                <button type="button" class="btn btn-danger" @click="handleDelete">{{ delModalInfo.delBtnTitle }}</button>
               </div>
             </div>
           </div>
@@ -353,6 +353,10 @@ export default {
         status: 0,
       },
       modalInfo: {
+        title: '',
+        confirmBtnTitle: '',
+      },
+      delModalInfo: {
         title: '',
         confirmBtnTitle: '',
       },
@@ -519,7 +523,7 @@ export default {
     handleDeleteConfirmDoctor(p_status){
       this.cancel_status = p_status;
       this.$refs.delConfirmModal.show()      
-      this.modalInfo = {
+      this.delModalInfo = {
         confirmBtnTitle: 'キャンセル',
         delBtnTitle: '削除する'
       }

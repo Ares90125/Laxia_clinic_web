@@ -14,7 +14,7 @@
     @vdropzone-complete="handleUploadComplete"
     @vdropzone-complete-multiple="handleMultipleUploadComplete"
     >
-    <div class="dropzone-wrapper">
+    <div v-if="!avatar" class="dropzone-wrapper">
       <div class="dropzone-in">
         <div class="dropzone-title">
           <div><img src="/img/file.png"/></div>
@@ -23,6 +23,10 @@
       </div>
     </div>
     <button v-if="autoStatus" class="btn btn-file-upload mt-2"><i class="fas fa-upload"></i> {{ $t('写真をアップロード') }}</button>
+    <div v-if="avatar" class="avatar-wrapper">
+      <div><img src="/img/avatar-100.png"/></div>
+      <button class="btn btn-file-upload mt-3"><i class="far fa-file-image"></i> {{ $t('アップロード') }}</button>
+    </div>
   </vue-dropzone>
   
 </template>
@@ -60,6 +64,10 @@
         default: 1,
       },
       autoStatus: {
+        type: Boolean,
+        default: false,
+      },
+      avatar: {
         type: Boolean,
         default: false,
       }

@@ -470,6 +470,11 @@ button:focus {
 .btn-file-upload:hover{
 	color: #5CA3F6;	
 }
+.avatar-wrapper .btn{
+	font-size: 18px !important;
+	width: 183px;
+    margin-left: -11px;
+}
 
 .btn-danger{
 	background-color: #FF3654;
@@ -1440,6 +1445,9 @@ button:focus {
 	background: #E6E6E6;
 	// border: 1px solid #E6E6E6;
 }
+.menu-one:hover img{
+    filter: opacity(0.5) !important;
+}
 .menu-img img{
 	width: 138px;
 	height: 125px;
@@ -1449,7 +1457,9 @@ button:focus {
 div.menu-img{
 	width: 138px;
 	height: 125px;
-    background: #BFBFBF;
+    // background: #BFBFBF;
+    // background: #FFFFFF;
+	// border-right: 1px solid #c4c4c4;
 }
 .menu-info{
 	width: calc(100% - 138px);
@@ -2469,30 +2479,30 @@ i.i-login-valid{
 		& > div{
 			border-radius: 7%;
 		}
-		.remove-btn {
-			display: inline-block;
-			position: absolute;
-			top: 6px;
-    		right: 2px;
-			width: 12px;
-			height: 12px;
-			cursor: pointer;
-			z-index: 10;
-			&:before {
-				content: '';
-				position: absolute;
-				left: 0;
-				top: 0;
-				width: 100%;
-				height: 100%;
-				background: url(/img/img-x1.png) no-repeat center;
-				background-size: cover;
-			}
-			&:hover + div img {
-				transform: scale(1.05, 1.05);
-				filter: blur(8px);
-			}
-		}
+		// .remove-btn {
+		// 	display: inline-block;
+		// 	position: absolute;
+		// 	top: 6px;
+    	// 	right: 2px;
+		// 	width: 12px;
+		// 	height: 12px;
+		// 	cursor: pointer;
+		// 	z-index: 10;
+		// 	&:before {
+		// 		content: '';
+		// 		position: absolute;
+		// 		left: 0;
+		// 		top: 0;
+		// 		width: 100%;
+		// 		height: 100%;
+		// 		background: url(/img/img-x1.png) no-repeat center;
+		// 		background-size: cover;
+		// 	}
+		// 	&:hover + div img {
+		// 		transform: scale(1.05, 1.05);
+		// 		filter: blur(8px);
+		// 	}
+		// }
 	}
 }
 .case-photo-content {
@@ -2510,31 +2520,20 @@ i.i-login-valid{
 		& > div{
 			border-radius: 0;
 			filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.25));
-		}
-		.remove-btn {
-			display: inline-block;
-			position: absolute;
-			top: 5px;
-    		right: -1px;
-			width: 12px;
-			height: 12px;
-			cursor: pointer;
-			z-index: 10;
-			&:before {
-				content: '';
-				position: absolute;
-				left: 0;
-				top: 0;
-				width: 100%;
-				height: 100%;
-				background: url(/img/img-x1.png) no-repeat center;
-				background-size: cover;
-			}
-			&:hover + div img {
-				transform: scale(1.05, 1.05);
-				filter: blur(8px);
-			}
-		}
+		}		
+	}
+}
+.remove-btn {
+	i{
+		position: absolute;
+		top: 0px;
+		right: -3px;
+		z-index: 10;
+		cursor: pointer;
+	}
+	&:hover + div img {
+		transform: scale(1.05, 1.05);
+		filter: blur(8px);
 	}
 }
 .clinic-info--address-block {

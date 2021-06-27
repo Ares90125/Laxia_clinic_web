@@ -75,6 +75,7 @@
                 ref="fileUploadComponent"
                 uploadUrl="/api/clinic/stuffs/photoupload"
                 :photo="'/storage/'+form.stuffs.photo"
+                :avatar="true"
                 @file-upload-success="handleFileSaved"
                 @file-removed="hanleFileRemove"
                 @file-added="handleFileAdded"
@@ -83,6 +84,7 @@
                 v-else
                 ref="fileUploadComponent"
                 uploadUrl="/api/clinic/stuffs/photoupload"
+                :avatar="true"
                 @file-upload-success="handleFileSaved"
                 @file-removed="hanleFileRemove"
                 @file-added="handleFileAdded"
@@ -222,39 +224,39 @@
         </div>
         <div class="row my-4">
           <div class="col-5">
-            <p class="detail-title">ID名</p>
+            <p class="detail-title">{{ $t('ID名') }}</p>
             <p class="detail-content">{{doctorItem.name}}</p>
           </div>
           <div class="col-3">
-            <p class="detail-title">役職</p>
+            <p class="detail-title">{{ $t('役職') }}</p>
             <p class="detail-content">{{doctorItem.job_name}}</p>
           </div>
           <div class="col-3">
-            <p class="detail-title">役職歴</p>
+            <p class="detail-title">{{ $t('役職歴') }}</p>
             <p class="detail-content">{{doctorItem.experience_year}}</p>
           </div>
         </div>
         <div class="row my-4">
           <div class="col-12">
-            <p class="detail-title">得意分野</p>
+            <p class="detail-title">{{ $t('得意分野') }}</p>
             <p class="detail-content"><span>{{doctorItem.spec0}}</span> <span>{{doctorItem.spec1}}</span> <span>{{doctorItem.spec2}}</span></p>
           </div>
         </div>
         <div class="row my-4">
           <div class="col-12">
-            <p class="detail-title">経歴</p>
+            <p class="detail-title">{{ $t('経歴') }}</p>
             <p class="detail-content">{{doctorItem.profile}}</p>
           </div>
         </div>
         <div class="row my-4">
           <div class="col-12">
-            <p class="detail-title">資格・実績</p>
+            <p class="detail-title">{{ $t('資格・実績') }}</p>
             <p class="detail-content">{{doctorItem.career}}</p>
           </div>
         </div>
         <div class="row my-4">
           <div class="col-12 d-flex justify-content-center">
-            <button type="button" class="btn btn-danger" @click="handleDeleteConfirmDoctor(1)">ドクター情報を削除</button>
+            <button type="button" class="btn btn-danger" @click="handleDeleteConfirmDoctor(1)">{{ $t('ドクター情報を削除') }}</button>
           </div>
         </div>
       </div>
@@ -268,7 +270,7 @@
         <div class="main-modal">
           <div class="auth--wrapper">
             <div class="auth-form">
-              <h2 class="auth-title mb-4 mt-2" >スタッフ情報を削除しますか？</h2>
+              <h2 class="auth-title mb-4 mt-2" >{{ $t('スタッフ情報を削除しますか？') }}</h2>
               <span class="auth-title-tip">
                 スタッフ情報を削除してよろしいでしょうか？<br>
                 削除すると復元することはできません。
@@ -482,8 +484,8 @@ export default {
 
     handleShowEditStuff(){
       this.modalInfo = {
-        title: '新規スタッフを追加',
-        confirmBtnTitle: 'プロフィールを作成'
+        title: 'スタッフ情報を変更',
+        confirmBtnTitle: '編集を保存'
       }
       this.isEditing = true
       this.$refs.stuffViewModal.hide();
@@ -713,4 +715,10 @@ export default {
   .auth--wrapper .auth-form{
     padding: 0;
   }
+  .main-modal .auth--wrapper{
+    height: auto;
+  }
+  .vue-dropzone:hover {
+    background-color: #fff !important; 
+  }  
 </style>

@@ -133,7 +133,7 @@
             />
             <div v-if="form.menuPhotos.length" class="company-profile-img-list">
               <div v-for="(img, index) in form.menuPhotos" class="company-image--edit" :key="index">
-                <span class="remove-btn" @click="handleRemoveFile(index)"></span>
+                <span class="remove-btn" @click="handleRemoveFile(index)"><i class="bi bi-x-circle-fill"></i></span>
                 <div class="over-hidden">
                   <img :src="'/storage/'+img" />
                 </div>

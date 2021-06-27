@@ -89,7 +89,6 @@ class CaseService
     $case->images()->delete();
     foreach ($beforePhotos as $photo) {
       $case->images()->create([
-        'img_type' => 0,
         'path' => $photo
       ]);
     }

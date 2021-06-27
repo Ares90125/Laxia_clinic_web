@@ -270,10 +270,23 @@
         <div class="main-modal">
           <div class="auth--wrapper">
             <div class="auth-form">
-              <h2 class="auth-title mb-4 mt-2" >{{ $t('スタッフ情報を削除しますか？') }}</h2>
+              <h2 class="auth-title mb-4 mt-2" >
+                <template v-if="cancel_status == 0">
+                {{ $t('スタッフ情報を削除しますか？') }}
+                </template>
+                <template v-else>
+                {{ $t('ドクター情報を削除しますか？') }}
+                </template>
+              </h2>
               <span class="auth-title-tip">
-                スタッフ情報を削除してよろしいでしょうか？<br>
-                削除すると復元することはできません。
+                <template v-if="cancel_status == 0">
+                  スタッフ情報を削除してよろしいでしょうか？<br>
+                  削除すると復元することはできません。
+                </template>
+                <template v-else>
+                  ドクター情報を削除してよろしいでしょうか？<br>
+                  削除すると復元することはできません。
+                </template>
               </span>
             </div>
             <div class="row mt-4">
@@ -504,13 +517,12 @@ export default {
     },
 
     handleDeleteConfirmDoctor(p_status){
-      this.$refs.delConfirmModal.show()
+      this.cancel_status = p_status;
+      this.$refs.delConfirmModal.show()      
       this.modalInfo = {
-        title: 'スタッフの詳細',
         confirmBtnTitle: 'キャンセル',
         delBtnTitle: '削除する'
       }
-      this.cancel_status = p_status;
     },
 
     cancelModal(){

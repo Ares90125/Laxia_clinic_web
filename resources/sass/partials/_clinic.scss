@@ -1206,9 +1206,10 @@ button:focus {
 		object-fit: cover;
 	}
 }
-.photo-item{
+.photo-svg-item{
+	padding: 24px 22% 0;
 	position: relative;
-	img, svg{
+	svg{
 		top: 0;
 		left: 0;
 		width: 100%;

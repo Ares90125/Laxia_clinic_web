@@ -1206,6 +1206,17 @@ button:focus {
 		object-fit: cover;
 	}
 }
+.photo-item{
+	position: relative;
+	img, svg{
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+}
 .stuff-detail--img-in img {
 	border-radius: 50%;
 }

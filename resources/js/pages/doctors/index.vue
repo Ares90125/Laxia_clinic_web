@@ -25,7 +25,6 @@
       <div v-if="doctors.length && (query.status == 0 || query.status == 1)" class="staff-list" style="margin-top: 4rem !important;">
         <div v-for="(item, index) in doctors" :key="index" class="staff-one" @click="handleShowDoctor(item.doctor_id)">
           <div class="photo-item">
-            <!-- <p class="staff-job">{{ item.job && item.job_name }}</p> -->
             <p class="staff-img">
               <img v-if="item.photo" :src="'/storage/' + item.photo" />
               <img v-else :src="'/img/menu-img.png'">

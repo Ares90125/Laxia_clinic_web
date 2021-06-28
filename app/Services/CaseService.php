@@ -85,8 +85,9 @@ class CaseService
     $case->menus()->sync($menuAttrs);
 
     $beforePhotos = Arr::get($attributes, 'beforePhotos');
-    $afterPhotos = Arr::get($attributes, 'afterPhotos');
+    $afterPhotos = Arr::get($attributes, 'afterPhotos');	
     $case->images()->delete();
+	
     foreach ($beforePhotos as $photo) {
       $case->images()->create([
         'path' => $photo

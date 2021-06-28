@@ -20,8 +20,8 @@ trait MediaUpload
     public function mediaUploadWithThumb($uploadPath, $file, $size = 500)
     {
         $filename = generateRandomString(6, 4);
-        $filepath = $uploadPath . "/{$filename}." . $file->getClientOriginalExtension();
-        Storage::disk('s3')->put($filepath, file_get_contents($file));
+        $filepath = $uploadPath . "/{$filename}." . $file->getClientOriginalExtension();	
+        Storage::disk('s3')->put($filepath, file_get_contents($file));		
 
         $mime = $file->getMimeType();
         $type = 1;
@@ -43,7 +43,7 @@ trait MediaUpload
             $image_resize = Image::make($file->getRealPath());              
         }
         Storage::disk('s3')->put($thumb, $this->resizeImage($image_resize, $size));
-
+		
         return [
             Storage::disk('s3')->url($filepath),
             Storage::disk('s3')->url($thumb), 

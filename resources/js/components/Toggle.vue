@@ -139,20 +139,22 @@ export default {
 }
 .toggle__text__before{
     position: relative;
-    top: 10px;
+    top: 9px;
     text-align: center;
     z-index: 10;
     width: 50%;
     font-size: 16px;
+    line-height: 23px;
     font-weight: 500;
 }
 .toggle__text__after{
     position: relative;
-    top: 10px;
+    top: 9px;
     z-index: 10;
     width: 50%;
     text-align: center;
     font-size: 16px;
+    line-height: 23px;
     font-weight: 500;
 }
 

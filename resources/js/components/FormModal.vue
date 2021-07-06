@@ -61,10 +61,9 @@ export default {
 .form-modal-wrapper {
 	transition-duration: .2s;
 	z-index: 1000;
-	position: fixed;
+	position: absolute;
 	top: 100px;
-	left: 0;
-	width: 100vw;
+	left: calc(50% - 425px);
 	height: 100vh;
 	display: flex;
 	justify-content: center;
@@ -91,7 +90,8 @@ export default {
 	.form-modal-content {
 		position: relative;
 		background-color: #fff;
-		width: 800px;
+		width: 850px;
+		height: unset;
 		z-index: 10;
 		background-color: #fff;
 		border-radius: 20px;
@@ -108,9 +108,10 @@ export default {
 			border-bottom: 1px solid #e5e5e5;
 
 			.form-modal-title {
-				font-size: 18px;
+				font-size: 24px;
     			color: #fff;
 				font-weight: bold;
+				letter-spacing: 0.1em;
 				h5 {
 					font-weight: bold;
 				}
@@ -132,8 +133,7 @@ export default {
 			}
 		}
 		.form-modal-body {
-      max-height: 610px;
-			padding: 38px 35px;
+			padding: 45px 125px;
 			overflow: auto;
 		}
 		.form-modal-footer {

@@ -37,7 +37,6 @@ class CaseController extends Controller
     public function store(CaseRequest $request)
     {
         $currentUser = auth()->guard('clinic')->user()->clinic;
-
         \DB::beginTransaction();
         try {
             $case = $this->service->store($request->all(), ['clinic_id' => $currentUser->id]);

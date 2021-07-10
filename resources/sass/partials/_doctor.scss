@@ -1,0 +1,243 @@
+.main-in {
+
+    .main-content.main-dev-content.doctors-content {
+        // padding: 25px 35px 40px 60px;
+        padding: 25px 60px 40px 60px;
+
+        .new-btn-header {
+            text-align: right;
+            // margin-right: 25px;
+
+            button {
+
+                &:first-child {
+                    margin-right: 30px;
+                }
+            }
+        }
+
+        .staff-header.staff-doctor-header {
+            // margin-right: 25px;
+        }
+
+        .search-content {
+            // margin-right: 25px;
+        }
+
+        .staff-list {
+            margin-top: 65px;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+
+            .staff-one {
+                width: 250px;
+                height: 300px;
+                // margin: 0 25px 25px 0;
+                margin: 0 0 25px 0;
+                padding: 35px 0 25px;
+
+                .photo-svg-item {
+                    padding: 0;
+                    max-width: 150px;
+                    margin: auto;
+                }
+
+                .photo-item {
+                    padding: 0;
+                    width: 150px;
+                    height: 150px;
+                    object-fit: cover;
+                    margin: auto;
+                }
+
+                .job-item {
+                    padding: 25px 0 0;
+
+                    p {
+                        line-height: 1.75;
+                        margin: 0;
+                    }
+                }
+
+                &:hover {
+                    background: rgba(0, 0, 0, 0.1);
+                }
+            }
+        }
+    }
+
+    #invite-doctor-modal {
+
+        .form-modal-content {
+            min-height: 500px;
+
+            .form-modal-body {
+                padding: 75px 125px 0;
+
+                .main-modal {
+
+                    .label {
+                        font-size: 18px;
+                        margin-bottom: 10px;
+                        color: #000;
+                    }
+
+                    .find-doctor-warning-msg {
+                        margin-top: 10px;
+                        font-size: 18px;
+                        color: #FF3654;
+                    }
+
+                    .find-con {
+                        display: flex;
+                        justify-content: space-between;
+
+                        button {
+                            padding: 10px 30px;
+                            font-size: 18px;
+                            margin-left: 30px;
+                        }
+
+                        .find-con-input {
+                            width: 100%;
+                        }
+                    }
+
+                    .doctor-result-con {
+                        display: flex;
+                        justify-content: space-between;
+                        margin-top: 60px;
+
+                        p {
+                            margin-left: 15px;
+                            font-size: 18px;
+                            color: #000;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #stuff-modal {
+
+        .form-modal-content {
+
+            .form-modal-body {
+                padding: 20px 125px 50px;
+
+                .label-title {
+                    font-size: 16px;
+                }
+
+                .upload-con {
+                    text-align: center;
+
+                    .btn-file-upload {
+                        min-width: auto;
+                        width: auto;
+                        padding: 5px 15px;
+                    }
+
+                    .dz-preview {
+                        width: 150px;
+                        margin: auto;
+
+                        .dz-image {
+                            width: 150px;
+                            height: 150px;
+                            border-radius: 50%;
+                            padding: 0;
+                        }
+                    }
+                }
+
+                .name-grp {
+                    display: flex;
+                    margin: 60px 0 100px;
+
+                    .name-item {
+                        width: 100%;
+
+                        &:first-child {
+                            margin-right: 10px;
+                        }
+                    }
+                }
+
+                .btn-con {
+                    text-align: center;
+                }
+            }
+        }
+    }
+
+    #doctor-detail-modal {
+        
+        .form-modal-content {
+
+            .form-modal-body {
+                padding: 50px 125px;
+            }
+        }
+    }
+
+    #del-confirm-modal {
+
+        .form-modal-content {
+            width: 600px;
+
+            .form-modal-body {
+                padding: 0;
+                
+                .main-modal {
+
+                    .auth--wrapper {
+                        min-height: auto;
+                        padding: 35px 0 30px;
+
+                        .auth-form {
+                            color: #000;
+                            padding: 0;
+                        }
+
+                        .btn-grp {
+                            margin-top: 30px;
+                            display: flex;
+                            justify-content: space-between;
+                            width: 100%;
+                            padding: 0 80px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #stuff-view-modal {
+
+        .form-modal-body {
+            padding: 70px 90px 50px;
+            text-align: center;
+
+            .img-con {
+                margin-bottom: 40px;
+            }
+    
+            .detail-con {
+                margin-bottom: 60px;
+    
+                .detail-content {
+                    margin: 0;
+                }
+            }
+    
+            .btn-grp {
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    }
+}

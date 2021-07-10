@@ -1,39 +1,14 @@
  <template>
   <div v-if="isloadingPage" class="main-in resetpw-in">
     <div class="main-content resetpw-content">
-      <div class="row my-4">
-        <div class="col-12">
-          <p class="page-title">アカウント設定</p>
-        </div>
-      </div>
+      <div class="page-title">アカウント設定</div>
+      <div class="page-notice-msg">アカウントID、メールアドレス、パスワードに関する情報はこちらで変更することができます。</div>
 
-      <div class="row my-4">
-        <div class="col-12">
-          <p class="page-notice-msg">アカウントID、メールアドレス、パスワードに関する情報はこちらで変更することができます。</p>
-        </div>
-      </div>
+      <div class="label-title">アカウントID</div>
+      <div class="p-content p-grp">{{ clinic.user_name }}</div>
 
-      <div class="divider"></div>
-
-      <div class="row my-3">
-        <div class="col-12">
-          <p class="label-title">アカウントID</p>
-        </div>
-      </div>
-
-      <div class="row mt-3 mb-4">
-        <div class="col-12">
-          <p class="p-content">{{ clinic.user_name }}</p>
-        </div>
-      </div>
-
-      <div class="row mt-4">
-        <div class="col-12">
-          <p class="label-title">メールアドレス</p>
-        </div>
-      </div>
-
-      <div class="row mb-3">
+      <div class="label-title">メールアドレス</div>
+      <div class="row p-grp">
         <div class="col-md-4 col-12 d-flex align-items-center">
           <p class="p-content">{{ clinic.email }}</p>
         </div>
@@ -42,13 +17,8 @@
         </div>
       </div>
 
-      <div class="row mt-4">
-        <div class="col-6">
-          <p class="label-title">パスワード</p>
-        </div>
-      </div>
-
-      <div class="row mb-3">
+      <div class="label-title">パスワード</div>
+      <div class="row p-grp">
         <div class="col-md-4 col-12 d-flex align-items-center">
           <p class="p-content">●●●●●●●</p>
         </div>
@@ -64,19 +34,13 @@
     >
       <div v-if="isEmailModal" class="main-modal">
         <div class="profile-dialog-container">
-          <div class="row my-3 d-flex justify-content-center">
-            <div class="col-md-10 col-12">
-              <span>{{ $t('新しいメールアドレス') }}</span>
-              <input class="form-control mt-2" type="text" v-model="form.email" @keyup="add_todo_keyup" />
-            </div>
+          <div class="input-con">
+            <label>{{ $t('新しいメールアドレス') }}</label>
+            <input class="form-control" type="text" v-model="form.email" @keyup="add_todo_keyup" />
           </div>
-          <div class="row" style="margin-top: 5rem;">
-            <div class="col-md-6 col-12">
+          <div class="btn-grp">
               <button class="btn btn-notify-secondary btn-sm"  @click="handleCancelEmail">キャンセル</button>
-            </div>
-            <div class="col-md-6 col-12 mt-sm-0 mt-2">
               <button class="btn btn-notify-primary btn-sm" :class="(isChangeEmail) ? 'btn-notify-primary-enable' : ''"  @click="handleUpdateEmail">メールアドレスを変更</button>
-            </div>
           </div>
         </div>
       </div>
@@ -89,48 +53,39 @@
     >
       <div v-if="isPasswordModal" class="main-modal">
         <div class="profile-dialog-container">
-          <div class="row my-3">
-            <div class="col-11">
-              <div class="d-flex justify-content-between">
-                <span class="label-title">{{ $t('現在のパスワード') }}</span>
-                <span class="label-sm-title">{{ $t('パスワードを忘れた場合') }}</span>
-              </div>
-              <div class="input-group mt-2">
-                <input  v-if="'text' === curPwType" type="text" class="form-control custom-pw-form-control" v-model="passwordForm.current_password"/>
-                <input v-else type="password" class="form-control custom-pw-form-control" v-model="passwordForm.current_password" />
-                <!-- <a @click="showCurPassword" class="icon-eye"></a> -->
-                <i class="bi bi-eye-fill" id="toggleCurPassword" @click="showCurPassword"></i>
-              </div>
-              <div v-if="errors && errors.current_password" class="error invalid-feedback-custom">{{ errors.current_password[0] }}</div>
+          
+          <div class="item-con">
+            <div class="label lable-grp">
+              <span class="label-title">{{ $t('現在のパスワード') }}</span>
+              <span class="label-sm-title">{{ $t('パスワードを忘れた場合') }}</span>
             </div>
-          </div>
-          <div class="row my-3">
-            <div class="col-11">
-              <span class="label-title">{{ $t('新しいパスワード') }}</span>
-              <div class="input-group mt-2">
-                <input  v-if="'text' === newPwType" type="text" class="form-control" v-model="passwordForm.new_password"/>
-                <input v-else type="password" class="form-control" v-model="passwordForm.new_password" />
-                <!-- <a @click="showNewPassword" class="icon-eye"></a> -->
-                <i class="bi bi-eye-fill" id="toggleNewPassword" @click="showNewPassword"></i>
-              </div>
-              <div v-if="errors && errors.new_password" class="error invalid-feedback-custom">{{ errors.new_password[0] }}</div>
+            <div class="input-group">
+              <input  v-if="'text' === curPwType" type="text" class="form-control custom-pw-form-control" v-model="passwordForm.current_password"/>
+              <input v-else type="password" class="form-control custom-pw-form-control" v-model="passwordForm.current_password" />
+              <i class="bi bi-eye-fill" id="toggleCurPassword" @click="showCurPassword"></i>
             </div>
-          </div>
-          <div class="row my-3">
-            <div class="col-11">
-              <span class="label-title">{{ $t('新しいパスワード(再入力)') }}</span>
-              <input class="form-control mt-2" type="password" v-model="passwordForm.new_password_confirmation" />
-              <div v-if="errors && errors.new_password_confirmation" class="error invalid-feedback-custom">{{ errors.new_password_confirmation[0] }}</div>
-            </div>
+            <div v-if="errors && errors.current_password" class="error invalid-feedback-custom">{{ errors.current_password[0] }}</div>
           </div>
 
-          <div class="row my-5">
-            <div class="col-md-6 col-12">
-              <button class="btn btn-notify-secondary btn-sm"  @click="handleCancelPassword">キャンセル</button>
+          <div class="item-con">
+            <span class="label label-title">{{ $t('新しいパスワード') }}</span>
+            <div class="input-group">
+              <input  v-if="'text' === newPwType" type="text" class="form-control" v-model="passwordForm.new_password"/>
+              <input v-else type="password" class="form-control" v-model="passwordForm.new_password" />
+              <i class="bi bi-eye-fill" id="toggleNewPassword" @click="showNewPassword"></i>
             </div>
-            <div class="col-md-6 col-12 mt-sm-0 mt-2">
-              <button class="btn btn-notify-primary btn-sm"  @click="handleUpdatePassword">メールアドレスを変更</button>
-            </div>
+            <div v-if="errors && errors.new_password" class="error invalid-feedback-custom">{{ errors.new_password[0] }}</div>
+          </div>
+
+          <div class="item-con">
+            <span class="label label-title">{{ $t('新しいパスワード(再入力)') }}</span>
+            <input class="form-control mt-2" type="password" v-model="passwordForm.new_password_confirmation" />
+            <div v-if="errors && errors.new_password_confirmation" class="error invalid-feedback-custom">{{ errors.new_password_confirmation[0] }}</div>
+          </div>
+
+          <div class="btn-grp">
+            <button class="btn btn-notify-secondary btn-sm"  @click="handleCancelPassword">キャンセル</button>
+            <button class="btn btn-notify-primary btn-sm"  @click="handleUpdatePassword">メールアドレスを変更</button>
           </div>
         </div>
       </div>
@@ -316,10 +271,6 @@ export default {
     margin-top: 0.25rem;
     font-size: 80%;
     color: #dc3545;
-  }
-  .resetpw-in{
-    padding: 40px 40px 0;
-    margin-top: 50px;
   }
   .resetpw-content{
     height: 87vh;

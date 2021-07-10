@@ -1,10 +1,10 @@
 <template>
   <div class="date-select--wrapper">
-    <select name="DOBYear">
+    <select class="form-control" name="DOBYear">
     </select>
-    <select name="DOBMonth">
+    <select class="form-control" name="DOBMonth">
     </select>
-    <select name="DOBDay">
+    <select class="form-control" name="DOBDay">
     </select>
   </div>
 </template>

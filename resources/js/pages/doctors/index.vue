@@ -1,13 +1,13 @@
 <template>
-  <div v-if="is_master_loaded" class="main-in">
-    <div class="row new-btn-header">
-      <button class="btn3 add-stuff-btn mr-3" @click="handleInviteDoctor" ><img src="/img/plus.svg"> {{ $t('ドクターを招待') }}</button>
-      <button class="btn3 add-stuff-btn" @click="handleNewStuffForm"><img src="/img/plus.svg"> {{ $t('新規スタッフを追加') }}</button>
-    </div>
-    <div class="main-content main-dev-content">
-      <div class="staff-header staff-doctor-header mb-2">
+  <div v-if="is_master_loaded" class="main-in pd-0">
+    <div class="main-content main-dev-content doctors-content">
+      <div class="new-btn-header">
+        <button class="btn3 add-stuff-btn" @click="handleInviteDoctor" ><img src="/img/plus.svg"> {{ $t('ドクターを招待') }}</button>
+        <button class="btn3 add-stuff-btn" @click="handleNewStuffForm"><img src="/img/plus.svg"> {{ $t('新規スタッフを追加') }}</button>
+      </div>
+      <div class="staff-header staff-doctor-header tab-con mb-2">
         <p>
-          <!-- <select class="staff-sort">
+          <!-- <select class="staff-sort" class="form-control">
             <option>{{ $t('職種でソート') }}</option>
             <option v-for="(name, id) in jobs" :key="id" :value="id">{{ name }}</option>
           </select> -->
@@ -22,8 +22,8 @@
           <input type="text" placeholder="メンバーの名前を検索" @keyup='add_todo_keyup' />
         </div>
       </div>
-      <div v-if="doctors.length && (query.status == 0 || query.status == 1)" class="staff-list" style="margin-top: 4rem !important;">
-        <div v-for="(item, index) in doctors" :key="index" class="staff-one" @click="handleShowDoctor(item.doctor_id)">
+      <div class="staff-list">
+        <div v-if="doctors.length && (query.status == 0 || query.status == 1)" v-for="(item, index) in doctors" :key="index" class="staff-one" @click="handleShowDoctor(item.doctor_id)">
           <div v-if="item.photo" class="photo-item">
             <p class="staff-img">
               <img :src="'/storage/' + item.photo" />
@@ -40,10 +40,8 @@
             <p class="staff-name">{{ item.job && item.job_name }}{{ $t('ドクター') }}</p>
           </div>
         </div>
-      </div>
-
-      <div v-if="stuff_datas.length && (query.status == 0 || query.status == 2)" class="staff-list" :style="query.status == 2 ? 'margin-top: 4rem !important;' : 'margin-top: 25px !important;'">
-        <div v-for="(item, index) in stuff_datas" :key="index" class="staff-one" @click="handleShowStuff(item.id)">
+      
+        <div v-if="stuff_datas.length && (query.status == 0 || query.status == 2)" v-for="(item, index) in stuff_datas" :key="index" class="staff-one" @click="handleShowStuff(item.id)">
           <div v-if="item.photo" class="photo-item">
             <p class="staff-img">
               <img :src="'/storage/' + item.photo" />
@@ -74,47 +72,43 @@
       @cancel="handleModalClose"
       >
       <div v-if="isEditing && form">
-        <span class="label-title px-5">写真</span>
-        <div class="row d-flex justify-content-center">          
-          <div class="col-md-3 col-5">
-            <div>
-              <file-upload
-                v-if="form.stuffs.photo"
-                ref="fileUploadComponent"
-                uploadUrl="/api/clinic/stuffs/photoupload"
-                :photo="'/storage/'+form.stuffs.photo"
-                :avatar="true"
-                @file-upload-success="handleFileSaved"
-                @file-removed="hanleFileRemove"
-                @file-added="handleFileAdded"
-              />
-              <file-upload
-                v-else
-                ref="fileUploadComponent"
-                uploadUrl="/api/clinic/stuffs/photoupload"
-                :avatar="true"
-                @file-upload-success="handleFileSaved"
-                @file-removed="hanleFileRemove"
-                @file-added="handleFileAdded"
-              />
-            </div>
-          </div>
+        <span class="label-title">写真</span>
+        
+        <div class="upload-con">
+          <file-upload
+            v-if="form.stuffs.photo"
+            ref="fileUploadComponent"
+            uploadUrl="/api/clinic/stuffs/photoupload"
+            :photo="'/storage/'+form.stuffs.photo"
+            :avatar="true"
+            @file-upload-success="handleFileSaved"
+            @file-removed="hanleFileRemove"
+            @file-added="handleFileAdded"
+          />
+          <file-upload
+            v-else
+            ref="fileUploadComponent"
+            uploadUrl="/api/clinic/stuffs/photoupload"
+            :avatar="true"
+            @file-upload-success="handleFileSaved"
+            @file-removed="hanleFileRemove"
+            @file-added="handleFileAdded"
+          />
         </div>
-        <div class="row my-5 px-5">
-          <div class="col-6">
+
+        <div class="name-grp">
+          <div class="name-item">
             <span class="label-title">名前(漢字)</span>
             <input type="text" class="form-control" v-model="form.stuffs.name" placeholder="例：田中太郎"/>
           </div>
-          <div class="col-6">
+          <div class="name-item">
             <span class="label-title">名前(カタカナ)</span>
             <input type="text" class="form-control" v-model="form.stuffs.kana" placeholder="例：タナカタロウ"/>
           </div>
         </div>
 
-        <div class="row mt-5">
-          <div class="col-12 d-flex justify-content-center">
-            <button type="button" class="btn btn-primary" @click="handleUpdateStuff">{{ modalInfo.confirmBtnTitle }}</button>
-          </div>
+        <div class="btn-con">
+          <button type="button" class="btn btn-primary" @click="handleUpdateStuff">{{ modalInfo.confirmBtnTitle }}</button>
         </div>
       </div>
       <!-- <div v-if="isCreateProfile">
@@ -151,24 +145,23 @@
       :title="modalInfo.title"
       >
       <div v-if="isStuffDetail && form">
-        <div class="row d-flex justify-content-center">
+        <div class="img-con">
             <img class="md-doctor-avatar-img" v-if="form.stuffs.photo" :src="'/storage/' + form.stuffs.photo" />
             <!-- <img class="md-doctor-avatar-img" v-else :src="'/img/menu-img.png'"> -->
             <svg v-else width="145" height="145" viewBox="0 0 145 145" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="72.5" cy="72.5" r="72.5" fill="#F5F5F5"/>
-            <path opacity="0.3" d="M99.1381 78.2378C97.3863 74.8907 95.3706 71.8751 93.3869 69.7364C95.8451 66.04 97.2864 61.6093 97.2864 56.8293C97.2829 43.9258 86.8115 33.464 73.8963 33.4604C60.981 33.464 50.5096 43.9258 50.5096 56.8293C50.5096 61.6022 51.951 66.04 54.4092 69.7364C52.422 71.8751 50.4097 74.8943 48.658 78.2378C46.8991 81.6276 45.4399 85.2598 44.8869 88.6782C44.7049 89.8153 44.6193 90.9238 44.6193 91.9968C44.605 95.5684 45.6361 98.7943 47.4449 101.396C50.1564 105.324 54.345 107.805 58.9688 109.352C63.6104 110.892 68.7908 111.534 73.8963 111.537C80.7071 111.52 87.6428 110.422 93.262 107.474C96.0663 105.995 98.553 104.013 100.351 101.396C102.153 98.7943 103.184 95.572 103.177 91.9968C103.177 90.9203 103.091 89.8153 102.906 88.6782C102.356 85.2598 100.897 81.6312 99.1381 78.2378ZM61.905 44.849C64.984 41.7729 69.2011 39.8837 73.8963 39.8837C78.5879 39.8837 82.8121 41.7729 85.8875 44.849C88.9593 47.9252 90.8573 52.142 90.8573 56.8293C90.8538 61.5167 88.9629 65.7299 85.8875 68.8097C82.8085 71.8787 78.5879 73.7714 73.8927 73.7714C69.2011 73.7679 64.9804 71.8787 61.9015 68.8097C58.8261 65.7335 56.9316 61.5202 56.9316 56.8293C56.9352 52.142 58.8296 47.9252 61.905 44.849ZM95.0495 97.7713C93.4511 100.113 90.5719 102.006 86.7865 103.264C83.019 104.522 78.4558 105.121 73.8927 105.114C67.8168 105.132 61.7267 104.034 57.531 101.796C55.4296 100.691 53.817 99.3325 52.7431 97.7641C51.6727 96.1886 51.0555 94.3921 51.0448 92.0003C51.0448 91.2874 51.1055 90.5104 51.2339 89.6798C51.5871 87.3843 52.8108 84.1549 54.3557 81.2106C55.7364 78.5514 57.3883 76.1062 58.7155 74.5842C62.8005 78.0774 68.0987 80.1982 73.8963 80.1982C79.6974 80.1982 84.992 78.0774 89.0806 74.5877C90.4042 76.1098 92.0597 78.5514 93.4404 81.2141C94.9852 84.1584 96.209 87.3879 96.5586 89.6834C96.6906 90.5139 96.7513 91.2839 96.7513 92.0039C96.737 94.3921 96.1234 96.1886 95.0495 97.7713Z" fill="#666E6E"/>
+              <circle cx="72.5" cy="72.5" r="72.5" fill="#F5F5F5"/>
+              <path opacity="0.3" d="M99.1381 78.2378C97.3863 74.8907 95.3706 71.8751 93.3869 69.7364C95.8451 66.04 97.2864 61.6093 97.2864 56.8293C97.2829 43.9258 86.8115 33.464 73.8963 33.4604C60.981 33.464 50.5096 43.9258 50.5096 56.8293C50.5096 61.6022 51.951 66.04 54.4092 69.7364C52.422 71.8751 50.4097 74.8943 48.658 78.2378C46.8991 81.6276 45.4399 85.2598 44.8869 88.6782C44.7049 89.8153 44.6193 90.9238 44.6193 91.9968C44.605 95.5684 45.6361 98.7943 47.4449 101.396C50.1564 105.324 54.345 107.805 58.9688 109.352C63.6104 110.892 68.7908 111.534 73.8963 111.537C80.7071 111.52 87.6428 110.422 93.262 107.474C96.0663 105.995 98.553 104.013 100.351 101.396C102.153 98.7943 103.184 95.572 103.177 91.9968C103.177 90.9203 103.091 89.8153 102.906 88.6782C102.356 85.2598 100.897 81.6312 99.1381 78.2378ZM61.905 44.849C64.984 41.7729 69.2011 39.8837 73.8963 39.8837C78.5879 39.8837 82.8121 41.7729 85.8875 44.849C88.9593 47.9252 90.8573 52.142 90.8573 56.8293C90.8538 61.5167 88.9629 65.7299 85.8875 68.8097C82.8085 71.8787 78.5879 73.7714 73.8927 73.7714C69.2011 73.7679 64.9804 71.8787 61.9015 68.8097C58.8261 65.7335 56.9316 61.5202 56.9316 56.8293C56.9352 52.142 58.8296 47.9252 61.905 44.849ZM95.0495 97.7713C93.4511 100.113 90.5719 102.006 86.7865 103.264C83.019 104.522 78.4558 105.121 73.8927 105.114C67.8168 105.132 61.7267 104.034 57.531 101.796C55.4296 100.691 53.817 99.3325 52.7431 97.7641C51.6727 96.1886 51.0555 94.3921 51.0448 92.0003C51.0448 91.2874 51.1055 90.5104 51.2339 89.6798C51.5871 87.3843 52.8108 84.1549 54.3557 81.2106C55.7364 78.5514 57.3883 76.1062 58.7155 74.5842C62.8005 78.0774 68.0987 80.1982 73.8963 80.1982C79.6974 80.1982 84.992 78.0774 89.0806 74.5877C90.4042 76.1098 92.0597 78.5514 93.4404 81.2141C94.9852 84.1584 96.209 87.3879 96.5586 89.6834C96.6906 90.5139 96.7513 91.2839 96.7513 92.0039C96.737 94.3921 96.1234 96.1886 95.0495 97.7713Z" fill="#666E6E"/>
             </svg>
         </div>
-        <div class="row d-flex flex-column align-items-center mt-5">
+
+        <div class="detail-con">
           <p class="detail-title">{{form.stuffs.kana}}</p>
           <p class="detail-content">{{form.stuffs.name}}</p>
         </div>
 
-        <div class="row mt-5">
-          <div class="col-12 d-flex justify-content-around">
-            <button type="button" class="btn btn-danger" @click="handleDeleteConfirmDoctor(0)">{{ modalInfo.delBtnTitle }}</button>
-            <button type="button" class="btn btn-primary" @click="handleShowEditStuff">{{ modalInfo.confirmBtnTitle }}</button>
-          </div>
+        <div class="btn-grp">
+          <button type="button" class="btn btn-danger" @click="handleDeleteConfirmDoctor(0)">{{ modalInfo.delBtnTitle }}</button>
+          <button type="button" class="btn btn-primary" @click="handleShowEditStuff">{{ modalInfo.confirmBtnTitle }}</button>
         </div>
       </div>
     </form-modal>
@@ -180,42 +173,29 @@
       @cancel="handleModalClose"
     >
       <div v-if="isInviteDoctor" class="main-modal">
-        <div class="">
-            <div class="row  my-3">
-              <div class="col-12">
-                <span class="font-500">{{ $t('招待したいドクターのIDを入力してください') }}</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-9">
-                <input class="form-control gray-ph-input" type="text" v-model="doctorId" placeholder="IDを入力してください"/>
-              </div>
-              <div class="col-3">
-                <button type="button" class="bootstrap-btn btn btn-secondary btn-secondary-2" @click="handleFindDoctor">検索</button>
-              </div>
-            </div>
-            <div v-if="failSearchResult" class="row my-1">
-              <div class="col-12">
-                <p class="find-doctor-warning-msg">このIDは存在しないかID名が間違っています<br>
-                  正しいID名を入力してください</p>
-              </div>
-            </div>
+        <div class="label">{{ $t('招待したいドクターのIDを入力してください') }}</div>
+        <div class="find-con">
+          <div class="find-con-input">
+            <input class="form-control" type="text" v-model="doctorId" placeholder="IDを入力してください"/>
+          </div>
+          <button type="button" class="bootstrap-btn btn btn-secondary btn-secondary-2" @click="handleFindDoctor">検索</button>
+        </div>
 
-            <div v-if="isEnableDoctor" class="row mt-5">
-              <div class="col-9">
-                <div class="d-flex align-items-center">
-                  <img v-if="doctor.photo" class="sm-doctor-avatar-img" :src="'/storage/' + doctor.photo" />
-                  <svg v-else width="50" height="50" viewBox="0 0 145 145" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="72.5" cy="72.5" r="72.5" fill="#F5F5F5"/>
-                  <path opacity="0.3" d="M99.1381 78.2378C97.3863 74.8907 95.3706 71.8751 93.3869 69.7364C95.8451 66.04 97.2864 61.6093 97.2864 56.8293C97.2829 43.9258 86.8115 33.464 73.8963 33.4604C60.981 33.464 50.5096 43.9258 50.5096 56.8293C50.5096 61.6022 51.951 66.04 54.4092 69.7364C52.422 71.8751 50.4097 74.8943 48.658 78.2378C46.8991 81.6276 45.4399 85.2598 44.8869 88.6782C44.7049 89.8153 44.6193 90.9238 44.6193 91.9968C44.605 95.5684 45.6361 98.7943 47.4449 101.396C50.1564 105.324 54.345 107.805 58.9688 109.352C63.6104 110.892 68.7908 111.534 73.8963 111.537C80.7071 111.52 87.6428 110.422 93.262 107.474C96.0663 105.995 98.553 104.013 100.351 101.396C102.153 98.7943 103.184 95.572 103.177 91.9968C103.177 90.9203 103.091 89.8153 102.906 88.6782C102.356 85.2598 100.897 81.6312 99.1381 78.2378ZM61.905 44.849C64.984 41.7729 69.2011 39.8837 73.8963 39.8837C78.5879 39.8837 82.8121 41.7729 85.8875 44.849C88.9593 47.9252 90.8573 52.142 90.8573 56.8293C90.8538 61.5167 88.9629 65.7299 85.8875 68.8097C82.8085 71.8787 78.5879 73.7714 73.8927 73.7714C69.2011 73.7679 64.9804 71.8787 61.9015 68.8097C58.8261 65.7335 56.9316 61.5202 56.9316 56.8293C56.9352 52.142 58.8296 47.9252 61.905 44.849ZM95.0495 97.7713C93.4511 100.113 90.5719 102.006 86.7865 103.264C83.019 104.522 78.4558 105.121 73.8927 105.114C67.8168 105.132 61.7267 104.034 57.531 101.796C55.4296 100.691 53.817 99.3325 52.7431 97.7641C51.6727 96.1886 51.0555 94.3921 51.0448 92.0003C51.0448 91.2874 51.1055 90.5104 51.2339 89.6798C51.5871 87.3843 52.8108 84.1549 54.3557 81.2106C55.7364 78.5514 57.3883 76.1062 58.7155 74.5842C62.8005 78.0774 68.0987 80.1982 73.8963 80.1982C79.6974 80.1982 84.992 78.0774 89.0806 74.5877C90.4042 76.1098 92.0597 78.5514 93.4404 81.2141C94.9852 84.1584 96.209 87.3879 96.5586 89.6834C96.6906 90.5139 96.7513 91.2839 96.7513 92.0039C96.737 94.3921 96.1234 96.1886 95.0495 97.7713Z" fill="#666E6E"/>
-                  </svg>
-                  <p class="ml-2">{{doctor.hira_name}}{{ doctor.kata_name }}</p>
-                </div>
-              </div>
-              <div class="col-3 d-flex align-items-center">
-                <button type="button" class="bootstrap-btn btn btn-primary btn-primary-2" @click="handleAddDoctor(doctor.doctor_id)">招待</button>
-              </div>
-            </div>
+        <div v-if="failSearchResult" class="find-doctor-warning-msg">
+          このIDは存在しないかID名が間違っています<br>
+          正しいID名を入力してください
+        </div>
+
+        <div v-if="isEnableDoctor" class="doctor-result-con">
+          <div class="d-flex align-items-center">
+            <img v-if="doctor.photo" class="sm-doctor-avatar-img" :src="'/storage/' + doctor.photo" />
+            <svg v-else width="50" height="50" viewBox="0 0 145 145" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="72.5" cy="72.5" r="72.5" fill="#F5F5F5"/>
+            <path opacity="0.3" d="M99.1381 78.2378C97.3863 74.8907 95.3706 71.8751 93.3869 69.7364C95.8451 66.04 97.2864 61.6093 97.2864 56.8293C97.2829 43.9258 86.8115 33.464 73.8963 33.4604C60.981 33.464 50.5096 43.9258 50.5096 56.8293C50.5096 61.6022 51.951 66.04 54.4092 69.7364C52.422 71.8751 50.4097 74.8943 48.658 78.2378C46.8991 81.6276 45.4399 85.2598 44.8869 88.6782C44.7049 89.8153 44.6193 90.9238 44.6193 91.9968C44.605 95.5684 45.6361 98.7943 47.4449 101.396C50.1564 105.324 54.345 107.805 58.9688 109.352C63.6104 110.892 68.7908 111.534 73.8963 111.537C80.7071 111.52 87.6428 110.422 93.262 107.474C96.0663 105.995 98.553 104.013 100.351 101.396C102.153 98.7943 103.184 95.572 103.177 91.9968C103.177 90.9203 103.091 89.8153 102.906 88.6782C102.356 85.2598 100.897 81.6312 99.1381 78.2378ZM61.905 44.849C64.984 41.7729 69.2011 39.8837 73.8963 39.8837C78.5879 39.8837 82.8121 41.7729 85.8875 44.849C88.9593 47.9252 90.8573 52.142 90.8573 56.8293C90.8538 61.5167 88.9629 65.7299 85.8875 68.8097C82.8085 71.8787 78.5879 73.7714 73.8927 73.7714C69.2011 73.7679 64.9804 71.8787 61.9015 68.8097C58.8261 65.7335 56.9316 61.5202 56.9316 56.8293C56.9352 52.142 58.8296 47.9252 61.905 44.849ZM95.0495 97.7713C93.4511 100.113 90.5719 102.006 86.7865 103.264C83.019 104.522 78.4558 105.121 73.8927 105.114C67.8168 105.132 61.7267 104.034 57.531 101.796C55.4296 100.691 53.817 99.3325 52.7431 97.7641C51.6727 96.1886 51.0555 94.3921 51.0448 92.0003C51.0448 91.2874 51.1055 90.5104 51.2339 89.6798C51.5871 87.3843 52.8108 84.1549 54.3557 81.2106C55.7364 78.5514 57.3883 76.1062 58.7155 74.5842C62.8005 78.0774 68.0987 80.1982 73.8963 80.1982C79.6974 80.1982 84.992 78.0774 89.0806 74.5877C90.4042 76.1098 92.0597 78.5514 93.4404 81.2141C94.9852 84.1584 96.209 87.3879 96.5586 89.6834C96.6906 90.5139 96.7513 91.2839 96.7513 92.0039C96.737 94.3921 96.1234 96.1886 95.0495 97.7713Z" fill="#666E6E"/>
+            </svg>
+            <p>{{doctor.hira_name}}{{ doctor.kata_name }}</p>
+          </div>
+          <button type="button" class="bootstrap-btn btn btn-primary btn-primary-2" @click="handleAddDoctor(doctor.doctor_id)">招待</button>
         </div>
       </div>
     </form-modal>
@@ -275,7 +255,7 @@
             <p class="detail-content">{{doctorItem.career}}</p>
           </div>
         </div>
-        <div class="row my-4">
+        <div class="row">
           <div class="col-12 d-flex justify-content-center">
             <button type="button" class="btn btn-danger" @click="handleDeleteConfirmDoctor(1)">{{ $t('ドクター情報を削除') }}</button>
           </div>
@@ -291,7 +271,7 @@
         <div class="main-modal">
           <div class="auth--wrapper">
             <div class="auth-form">
-              <h2 class="auth-title mb-4 mt-2" >
+              <h2 class="auth-title" >
                 <template v-if="cancel_status == 0">
                 {{ $t('スタッフ情報を削除しますか？') }}
                 </template>
@@ -299,7 +279,7 @@
                 {{ $t('ドクター情報を削除しますか？') }}
                 </template>
               </h2>
-              <span class="auth-title-tip">
+              <div class="auth-title-tip">
                 <template v-if="cancel_status == 0">
                   スタッフ情報を削除してよろしいでしょうか？<br>
                   削除すると復元することはできません。
@@ -308,14 +288,12 @@
                   ドクター情報を削除してよろしいでしょうか？<br>
                   削除すると復元することはできません。
                 </template>
-              </span>
-            </div>
-            <div class="row mt-4">
-              <div class="col-12 d-flex justify-content-around">
-                <button type="button" class="btn btn-cancel" @click="cancelModal()">{{ delModalInfo.confirmBtnTitle}}</button>
-                <!-- <button type="button" class="btn btn-danger" @click="handleDeleteDoctor(doctorItem.doctor_id)">{{ modalInfo.delBtnTitle }}</button> -->
-                <button type="button" class="btn btn-danger" @click="handleDelete">{{ delModalInfo.delBtnTitle }}</button>
               </div>
+            </div>
+            <div class="btn-grp">
+              <button type="button" class="btn btn-cancel" @click="cancelModal()">{{ delModalInfo.confirmBtnTitle}}</button>
+              <!-- <button type="button" class="btn btn-danger" @click="handleDeleteDoctor(doctorItem.doctor_id)">{{ modalInfo.delBtnTitle }}</button> -->
+              <button type="button" class="btn btn-danger" @click="handleDelete">{{ delModalInfo.delBtnTitle }}</button>
             </div>
           </div>
         </div>
@@ -731,11 +709,6 @@ export default {
     width: 100px;
     height: 100px;
   }
-  .new-btn-header{
-    display: flex;
-    float: right;
-    padding-right: 45px;
-  }
   * >>> #del-confirm-modal .form-modal-header{
     display: none !important;
     
@@ -748,12 +721,6 @@ export default {
   }
   #del-confirm-modal .main-modal{
     padding: 0;
-  }
-  .auth--wrapper .auth-form{
-    padding: 0;
-  }
-  .main-modal .auth--wrapper{
-    height: auto;
   }
   .vue-dropzone:hover {
     background-color: #fff !important; 

@@ -1,9 +1,9 @@
 <template>
-  <div class="bg-blue-gray auth-wrapper login-wrapper">
+  <div class="bg-blue-gray auth-wrapper login-wrapper auth">
     <div class="auth--wrapper">
-      <div class="auth-form">
+      <div class="auth--form">
         <form @submit.prevent="register" @keydown="form.onKeydown($event)">
-          <h2 class="auth-title">新規クリニックアカウントの作成</h2>
+          <h2 class="auth--title">新規クリニックアカウントの作成</h2>
           <!-- Name -->
           <!-- <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('クリニック名') }}</label>
@@ -25,7 +25,7 @@
           <!-- Password -->
           <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('パスワード') }}</label>
-            <div>
+            <div class="pw-wrap">
               <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" class="form-control" type="password" name="password" id="password" placeholder="6文字以上で入力してください">
               <i class="bi bi-eye-fill" id="togglePassword" @click="handleTogglePassword"></i>
               <has-error :form="form" field="password" />
@@ -41,7 +41,7 @@
             </div>
           </div> -->
 
-          <div class="auth-btn--wrapper register-wrapper">
+          <div class="auth--btnwrap register-btn">
             <v-button :loading="form.busy">{{ $t('アカウントを作成') }}</v-button>
           </div>
         </form>

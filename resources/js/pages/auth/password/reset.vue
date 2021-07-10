@@ -1,14 +1,14 @@
 <template>
-  <div class="bg-blue-gray auth-wrapper login-wrapper">
+  <div class="bg-blue-gray auth-wrapper login-wrapper auth">
     <div class="auth--wrapper">
-      <div class="auth-form newpass-form">
+      <div class="auth--form newpass-form">
         <form @submit.prevent="login" @keydown="form.onKeydown($event)">
-          <h2 class="auth-title">新しいパスワードを設定してください</h2>       
+          <h2 class="auth--title">新しいパスワードを設定してください</h2>       
           <!-- Email -->
           <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('新しいパスワード') }}</label>
-            <div>
-              <input v-model="form.password" :class="{ 'custom-pw-is-invalid-invalid': form.errors.has('password') }" class="custom-pw-form-control" type="password" name="password" id="password" placeholder="6文字以上で入力してください">
+            <div class="pw-wrap">
+              <input v-model="form.password" :class="{ 'custom-pw-is-invalid-invalid': form.errors.has('password') }" class="form-control" type="password" name="password" id="password" placeholder="6文字以上で入力してください">
               <i class="bi bi-eye-fill" id="togglePassword" @click="handleTogglePassword"></i>
               <has-error :form="form" field="password" />
             </div>
@@ -17,14 +17,14 @@
           <!-- Password -->
           <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('再入力してください') }}</label>
-            <div>
-              <input v-model="form.rePassword" :class="{ 'custom-pw-is-invalid-invalid': form.errors.has('rePassword') }" class="custom-pw-form-control" type="password" name="re-password" id="re-password" placeholder="6文字以上で入力してください">
+            <div class="pw-wrap">
+              <input v-model="form.rePassword" :class="{ 'custom-pw-is-invalid-invalid': form.errors.has('rePassword') }" class="form-control" type="password" name="re-password" id="re-password" placeholder="6文字以上で入力してください">
               <i class="bi bi-eye-fill" id="toggleRePassword" @click="handleReTogglePassword"></i>
               <has-error :form="form" field="rePassword" />
             </div>
           </div>
           
-          <div class="auth-btn--wrapper newpass-btn">
+          <div class="auth--btnwrap register-btn">
             <button class="btn btn-primary" @click="showModal">{{ $t('パスワードを変更') }}</button>
           </div>
         </form>

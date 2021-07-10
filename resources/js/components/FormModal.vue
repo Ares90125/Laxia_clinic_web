@@ -62,7 +62,6 @@ export default {
 	transition-duration: .2s;
 	z-index: 1000;
 	position: absolute;
-	top: 100px;
 	left: calc(50% - 425px);
 	height: 100vh;
 	display: flex;
@@ -102,7 +101,7 @@ export default {
 
 		.form-modal-header {
 			position: relative;
-			padding: 18px 0;
+			padding: 9px 0;
 			text-align: center;
 			background: #5CA3F6;
 			border-bottom: 1px solid #e5e5e5;
@@ -133,12 +132,12 @@ export default {
 			}
 		}
 		.form-modal-body {
-			padding: 45px 125px;
-			overflow: auto;
+			width: 100%;
+			margin-left: auto;
+			margin-right: auto;
 		}
 		.form-modal-footer {
 			text-align: center;
-			padding: 12px 0;
 			border-top: 1px solid #dee2e6;
 
 			.form-modal-actions {

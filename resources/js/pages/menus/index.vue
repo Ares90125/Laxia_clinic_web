@@ -1,17 +1,18 @@
 <template>
-  <div v-if="is_master_loaded" class="main-in">
-    <div class="main-content main-dev-content">
-      <div class="staff-header">
-        <p><a href="#" :class="{'active': query.status == 1}" @click="handleStatusChange(1)">{{ $t('掲載中') }}</a>
+  <div v-if="is_master_loaded" class="main-in pd-0">
+    <div class="main-content main-dev-content menues-content">
+      <div class="staff-header tab-con">
+        <p>
+          <a href="#" :class="{'active': query.status == 1}" @click="handleStatusChange(1)">{{ $t('掲載中') }}</a>
           <a href="#" :class="{'active': query.status == 0}" @click="handleStatusChange(0)">{{ $t('掲載停止') }}</a>
         </p>
       </div>
       <div class="staff-sub-header">
-          <select class="menu-sort my-1" @change="handleCategoryChange">
+          <select class="menu-sort form-control" v-model="m_category" :class="{'fulled-status' : m_category ? 'fulled-input': ''}" @change="handleCategoryChange">
             <option value="-1">{{ $t('部位でソート') }}</option>
             <option v-for="(name, id) in specialities" :key="id" :value="id">{{ name }}</option>
           </select>
-          <button class="btn btn-primary my-1" @click="handleNewMenu"><img src="/img/plus.svg" class="img_plus"> {{ $t('新規メニューを追加') }}</button>
+          <button class="btn btn-primary" @click="handleNewMenu"><img src="/img/plus.svg" class="img_plus"> {{ $t('新規メニューを追加') }}</button>
       </div>
       <div class="staff-content">
         <div class="menu-list col-12 px-0">
@@ -29,7 +30,7 @@
                 </template>
                 <!-- <p v-if="item.category" class="menu-cat">{{ item.category.name }}</p> -->
                 <p class="menu-ttl">{{ item.name }}</p>
-                <p class="menu-price">{{ item.price | currency }} <span style="font-size: 14px;">({{ $t('税込') }})</span ></p>
+                <p class="menu-price">{{ item.price | currency }} <span>({{ $t('税込') }})</span ></p>
               </div>
             </div>
           </div>
@@ -47,212 +48,214 @@
       :title="modalInfo.title"
       @cancel="handleModalClose"
       >
-      <div v-if="form" class="create-menu-content">
-        <div class="form-group">
-          <small>{{ $t('掲載ステータス') }}</small>
-          <div class="row mx-0">
-            <!-- <toggle-button
-              v-model="form.menus.status"
-              :sync="true"
-              :labels="{checked: '掲載', unchecked: '停止'}"
-              :color="{checked: '#5CA3F6'}"
-              :width="90"
-              :height="30"
-              :font-size="12" /> -->
-              <Toggle :defaultState="form.menus.status == 0 ? true:false" @change="triggerEvent"/>
-          </div>          
-        </div>
-        <div class="form-group row">
-          <div class="col-md-8">
-            <small>{{ $t('メニュー名') }}</small>
-            <input type="text" v-model="form.menus.name" :class="{'is-invalid' : errors && errors['menus.name']}" placeholder="例：二重切開">
-            <!-- <i v-if="errors && errors['menus.name']" class="i-text-invalid bi bi-exclamation-triangle-fill"></i>, 'is-valid' : errors && !errors['menus.name'] 
-            <i v-if="errors && !errors['menus.name']" class="i-text-valid bi bi-check-circle-fill"></i> -->
-            <div v-if="errors && errors['menus.name']" class="error invalid-feedback">{{ errors['menus.name'][0] }}</div>
+      <vue-custom-scrollbar class="scroll-modal-body" :settings="settings" @ps-scroll-y="scrollHanle">
+        <div v-if="form" class="create-menu-content">
+          <div class="form-group">
+            <small>{{ $t('掲載ステータス') }}</small>
+            <div class="row mx-0">
+              <!-- <toggle-button
+                v-model="form.menus.status"
+                :sync="true"
+                :labels="{checked: '掲載', unchecked: '停止'}"
+                :color="{checked: '#5CA3F6'}"
+                :width="90"
+                :height="30"
+                :font-size="12" /> -->
+                <Toggle :defaultState="form.menus.status == 0 ? true:false" @change="triggerEvent"/>
+            </div>          
           </div>
-          <div class="col-md-4">
-            <small>{{ $t('料金') }}</small>
-            <input type="number" v-model="form.menus.price" :class="{'is-invalid' : errors && errors['menus.price']}" placeholder="例：250000円">
-            <!-- <i v-if="errors && errors['menus.price']" class="i-text-invalid bi bi-exclamation-triangle-fill"></i> , 'is-valid' : errors && !errors['menus.price']
-            <i v-if="errors && !errors['menus.price']" class="i-text-valid bi bi-check-circle-fill"></i> -->
-            <div v-if="errors && errors['menus.price']" class="error invalid-feedback">{{ errors['menus.price'][0] }}</div>
+          <div class="form-group row m-row">
+            <div class="col-md-8">
+              <small>{{ $t('メニュー名') }}</small>
+              <input type="text" v-model="form.menus.name" class="form-control" :class="{'is-invalid' : errors && errors['menus.name'], 'fulled-status' : form.menus.name ? 'fulled-input': ''}" placeholder="例：二重切開">
+              <!-- <i v-if="errors && errors['menus.name']" class="i-text-invalid bi bi-exclamation-triangle-fill"></i>, 'is-valid' : errors && !errors['menus.name'] 
+              <i v-if="errors && !errors['menus.name']" class="i-text-valid bi bi-check-circle-fill"></i> -->
+              <div v-if="errors && errors['menus.name']" class="error invalid-feedback">{{ errors['menus.name'][0] }}</div>
+            </div>
+            <div class="col-md-4">
+              <small>{{ $t('料金') }}</small>
+              <input type="number" v-model="form.menus.price" class="form-control" :class="{'is-invalid' : errors && errors['menus.price'], 'fulled-status' : form.menus.price ? 'fulled-input': ''}" placeholder="例：250000円">
+              <!-- <i v-if="errors && errors['menus.price']" class="i-text-invalid bi bi-exclamation-triangle-fill"></i> , 'is-valid' : errors && !errors['menus.price']
+              <i v-if="errors && !errors['menus.price']" class="i-text-valid bi bi-check-circle-fill"></i> -->
+              <div v-if="errors && errors['menus.price']" class="error invalid-feedback">{{ errors['menus.price'][0] }}</div>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group row">
-          <div class="col-md-12">
-            <small>{{ $t('カテゴリー') }}</small>
-            <!-- v-model="selected_categories" -->
-            <multiselect
-                :options="category_options"
-                :multiple="false"
-                group-values="children"
-                group-label="group_name"
-                :group-select="true"
-                track-by="name"
-                label="name"
-                selectLabel=""
-                selectGroupLabel=""
-                placeholder=""
-                selectedLabel="選択済み"
-                deselectLabel="削除"
-                deselectGroupLabel="削除"
-                @select="handleCateChange"
-              ></multiselect>
-              <div v-if="errors && errors['categories']" class="error invalid-feedback d-block">{{ errors['categories'][0] }}</div>
-              <div class="view-cate-panel mt-2">
-                <template v-for="(item, idx) in selected_categories" :value="id">
-                  <p :key="idx">
-                    {{item.group}} / {{item.name}}
-                    <i class="bi bi-x" @click="removeCategory(idx)"></i>
-                  </p>
-                </template>
-              </div>
-            <!-- <select v-model="form.menus.category_id" :class="{'is-invalid' : errors && errors['menus.category_id'] }">
-              <option></option>
-              <optgroup v-for="(parent, id) in categories" :key="id" :label="parent.name">
-                <option v-for="(cate, j) in parent.all_children" :key="j" :value="cate.id">{{ cate.name }}</option>
-              </optgroup>
-            </select>
-            <div v-if="errors && errors['menus.category_id']" class="error invalid-feedback">{{ errors['menus.category_id'][0] }}</div> -->
+          <div class="form-group row">
+            <div class="col-md-12">
+              <small>{{ $t('カテゴリー') }}</small>
+              <!-- v-model="selected_categories" -->
+              <multiselect
+                  :options="category_options"
+                  :multiple="false"
+                  group-values="children"
+                  group-label="group_name"
+                  :group-select="true"
+                  track-by="name"
+                  label="name"
+                  selectLabel=""
+                  selectGroupLabel=""
+                  placeholder=""
+                  selectedLabel="選択済み"
+                  deselectLabel="削除"
+                  deselectGroupLabel="削除"
+                  @select="handleCateChange"
+                ></multiselect>
+                <div v-if="errors && errors['categories']" class="error invalid-feedback d-block">{{ errors['categories'][0] }}</div>
+                <div class="view-cate-panel mt-2">
+                  <template v-for="(item, idx) in selected_categories" :value="id">
+                    <p :key="idx">
+                      {{item.group}} / {{item.name}}
+                      <i class="bi bi-x" @click="removeCategory(idx)"></i>
+                    </p>
+                  </template>
+                </div>
+              <!-- <select v-model="form.menus.category_id" :class="{'is-invalid' : errors && errors['menus.category_id'] }">
+                <option></option>
+                <optgroup v-for="(parent, id) in categories" :key="id" :label="parent.name">
+                  <option v-for="(cate, j) in parent.all_children" :key="j" :value="cate.id">{{ cate.name }}</option>
+                </optgroup>
+              </select>
+              <div v-if="errors && errors['menus.category_id']" class="error invalid-feedback">{{ errors['menus.category_id'][0] }}</div> -->
+            </div>
           </div>
-        </div>
-        <div class="form-group row companu-content--edit menu-file-upload">
-          <div class="col-md-12">
-            <small>{{ $t('メニュー画像') }}</small>
-            <file-upload
-              ref="multiFilesUploadComponent"
-              uploadUrl="/api/clinic/menus/photoupload"
-              :maxFiles="10"
-              :autoStatus="true"
-              name="menu-images"
-              @file-upload-success="handleMultiFileSaved"
-              @file-removed="hanleMultiFileRemove"
-              @file-added="handleMultiFileAdded"
-              @queue-complete="handleMultiFilesQueueComplete"
-            />
-            <div v-if="form.menuPhotos.length" class="company-profile-img-list">
-              <div v-for="(img, index) in form.menuPhotos" class="company-image--edit" :key="index">
-                <span class="remove-btn" @click="handleRemoveFile(index)"><i class="bi bi-x-circle-fill"></i></span>
-                <div class="over-hidden">
-                  <img :src="'/storage/'+img" />
+          <div class="form-group row companu-content--edit menu-file-upload">
+            <div class="col-md-12">
+              <small>{{ $t('メニュー画像') }}</small>
+              <file-upload
+                ref="multiFilesUploadComponent"
+                uploadUrl="/api/clinic/menus/photoupload"
+                :maxFiles="10"
+                :autoStatus="true"
+                name="menu-images"
+                @file-upload-success="handleMultiFileSaved"
+                @file-removed="hanleMultiFileRemove"
+                @file-added="handleMultiFileAdded"
+                @queue-complete="handleMultiFilesQueueComplete"
+              />
+              <div v-if="form.menuPhotos.length" class="company-profile-img-list">
+                <div v-for="(img, index) in form.menuPhotos" class="company-image--edit" :key="index">
+                  <span class="remove-btn" @click="handleRemoveFile(index)"><i class="bi bi-x-circle-fill"></i></span>
+                  <div class="over-hidden">
+                    <img :src="'/storage/'+img" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <div class="create-menu-desc">
+            <small>{{ $t('メニューの説明') }}</small>
+            <textarea rows="5" v-model="form.menus.description" class="form-control" :class="{'is-invalid' : errors && errors['menus.description'], 'fulled-status' : form.menus.description ? 'fulled-input': '' }" placeholder="例：この施術は目頭を切る施術になります。"></textarea>
+            <div v-if="errors && errors['menus.description']" class="error invalid-feedback">{{ errors['menus.description'][0] }}</div>
+          </div>
+          <div class="create-menu-risk">
+            <small>{{ $t('副作用・リスク') }}</small>
+            <textarea rows="5" v-model="form.menus.risk" class="form-control" :class="{'is-invalid' : errors && errors['menus.risk'], 'fulled-status' : form.menus.risk ? 'fulled-input': '' }" placeholder="例：施術後一週間ほど腫れる場合があります。"></textarea>
+            <div v-if="errors && errors['menus.risk']" class="error invalid-feedback">{{ errors['menus.risk'][0] }}</div>
+          </div>
+          <div class="create-menu-gurantee">
+            <small>{{ $t('施術の保証') }}</small>
+            <textarea rows="5" v-model="form.menus.guarantee" class="form-control" :class="{'is-invalid' : errors && errors['menus.guarantee'], 'fulled-status' : form.menus.guarantee ? 'fulled-input': '' }" placeholder="例：何日間の保証があります。"></textarea>
+            <div v-if="errors && errors['menus.guarantee']" class="error invalid-feedback">{{ errors['menus.guarantee'][0] }}</div>
+          </div>
+          <div class="form-group row m-row">
+            <div class="col-6">
+                <small>{{ $t('施術時間') }}</small>
+                <select v-model="form.menus.treat_time" class="form-control" :class="{'fulled-status' : form.menus.treat_time ? 'fulled-input': ''}">
+                  <option></option>
+                  <option v-for="(item, key) in treat_time" :key="key" :value="key">{{ item }}</option>
+                </select>
+            </div>
+            <div class="col-6">
+                <small>{{ $t('抜糸') }}</small>
+                <select v-model="form.menus.basshi" class="form-control" :class="{'fulled-status' : form.menus.basshi ? 'fulled-input': ''}">
+                  <option></option>
+                  <option v-for="(item, key) in basshi" :key="key" :value="key">{{ item }}</option>
+                </select>
+            </div>
+          </div>
+          <div class="form-group row m-row">
+            <div class="col-6">
+                <small>{{ $t('施術後の通院') }}</small>
+                <select v-model="form.menus.hospital_visit" class="form-control" :class="{'fulled-status' : form.menus.hospital_visit ? 'fulled-input': ''}">
+                  <option></option>
+                  <option v-for="(item, key) in hospital_visit" :key="key" :value="key">{{ item }}</option>
+                </select>
+            </div>
+            <div class="col-6">
+                <small>{{ $t('腫れ') }}</small>
+                <select v-model="form.menus.hare" class="form-control" :class="{'fulled-status' : form.menus.hare ? 'fulled-input': ''}">
+                  <option></option>
+                  <option v-for="(item, key) in hare" :key="key" :value="key">{{ item }}</option>
+                </select>
+            </div>
+          </div>
+          <div class="form-group row m-row">
+            <div class="col-6">
+                <small>{{ $t('痛み') }}</small>
+                <select v-model="form.menus.pain" class="form-control" :class="{'fulled-status' : form.menus.pain ? 'fulled-input': ''}">
+                  <option></option>
+                  <option v-for="(item, key) in pain" :key="key" :value="key">{{ item }}</option>
+                </select>
+            </div>
+            <div class="col-6">
+                <small>{{ $t('内出血') }}</small>
+                <select v-model="form.menus.bleeding" class="form-control" :class="{'fulled-status' : form.menus.bleeding ? 'fulled-input': ''}">
+                  <option></option>
+                  <option v-for="(item, key) in bleeding" :key="key" :value="key">{{ item }}</option>
+                </select>
+            </div>
+          </div>
+          <div class="form-group row m-row">
+            <div class="col-6">
+                <small>{{ $t('入院の必要性') }}</small>
+                <select v-model="form.menus.hospital_need" class="form-control" :class="{'fulled-status' : form.menus.hospital_need ? 'fulled-input': ''}">
+                  <option></option>
+                  <option v-for="(item, key) in hospital_need" :key="key" :value="key">{{ item }}</option>
+                </select>
+            </div>
+            <div class="col-6">
+                <small>{{ $t('麻酔') }}</small>
+                <select v-model="form.menus.masui" class="form-control" :class="{'fulled-status' : form.menus.masui ? 'fulled-input': ''}">
+                  <option></option>
+                  <option v-for="(item, key) in masui" :key="key" :value="key">{{ item }}</option>
+                </select>
+            </div>
+          </div>
+          <div class="form-group row m-row">
+            <div class="col-6">
+                <small>{{ $t('メイク/洗顔') }}</small>
+                <select v-model="form.menus.makeup" class="form-control" :class="{'fulled-status' : form.menus.makeup ? 'fulled-input': ''}">
+                  <option></option>
+                  <option v-for="(item, key) in makeup" :key="key" :value="key">{{ item }}</option>
+                </select>
+            </div>
+            <div class="col-6">
+                <small>{{ $t('シャワー/洗髪/入浴') }}</small>
+                <select v-model="form.menus.shower" class="form-control" :class="{'fulled-status' : form.menus.shower ? 'fulled-input': ''}">
+                  <option></option>
+                  <option v-for="(item, key) in shower" :key="key" :value="key">{{ item }}</option>
+                </select>
+            </div>
+          </div>
+          <div class="form-group row m-row">
+            <div class="col-6">
+                <small>{{ $t('施術部のマッサージ') }}</small>
+                <select v-model="form.menus.massage" class="form-control" :class="{'fulled-status' : form.menus.massage ? 'fulled-input': ''}">
+                  <option></option>
+                  <option v-for="(item, key) in massage" :key="key" :value="key">{{ item }}</option>
+                </select>
+            </div>
+            <div class="col-6">
+                <small>{{ $t('激しいスポーツ') }}</small>
+                <select v-model="form.menus.sport_impossible" class="form-control" :class="{'fulled-status' : form.menus.sport_impossible ? 'fulled-input': ''}">
+                  <option></option>
+                  <option v-for="(item, key) in sport_impossible" :key="key" :value="key">{{ item }}</option>
+                </select>
+            </div>
+          </div>       
         </div>
-        <div class="create-menu-desc">
-          <small>{{ $t('メニューの説明') }}</small>
-          <textarea rows="5" v-model="form.menus.description" :class="{'is-invalid' : errors && errors['menus.description'] }" placeholder="例：この施術は目頭を切る施術になります。"></textarea>
-          <div v-if="errors && errors['menus.description']" class="error invalid-feedback">{{ errors['menus.description'][0] }}</div>
-        </div>
-        <div class="create-menu-risk">
-          <small>{{ $t('副作用・リスク') }}</small>
-          <textarea rows="5" v-model="form.menus.risk" :class="{'is-invalid' : errors && errors['menus.risk'] }" placeholder="例：施術後一週間ほど腫れる場合があります。"></textarea>
-          <div v-if="errors && errors['menus.risk']" class="error invalid-feedback">{{ errors['menus.risk'][0] }}</div>
-        </div>
-        <div class="create-menu-gurantee">
-          <small>{{ $t('施術の保証') }}</small>
-          <textarea rows="5" v-model="form.menus.guarantee" :class="{'is-invalid' : errors && errors['menus.guarantee'] }" placeholder="例：何日間の保証があります。"></textarea>
-          <div v-if="errors && errors['menus.guarantee']" class="error invalid-feedback">{{ errors['menus.guarantee'][0] }}</div>
-        </div>
-        <div class="form-group row">
-          <div class="col-6">
-              <small>{{ $t('施術時間') }}</small>
-              <select v-model="form.menus.treat_time">
-                <option></option>
-                <option v-for="(item, key) in treat_time" :key="key" :value="key">{{ item }}</option>
-              </select>
-          </div>
-          <div class="col-6">
-              <small>{{ $t('抜糸') }}</small>
-              <select v-model="form.menus.basshi">
-                <option></option>
-                <option v-for="(item, key) in basshi" :key="key" :value="key">{{ item }}</option>
-              </select>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-6">
-              <small>{{ $t('施術後の通院') }}</small>
-              <select v-model="form.menus.hospital_visit">
-                <option></option>
-                <option v-for="(item, key) in hospital_visit" :key="key" :value="key">{{ item }}</option>
-              </select>
-          </div>
-          <div class="col-6">
-              <small>{{ $t('腫れ') }}</small>
-              <select v-model="form.menus.hare">
-                <option></option>
-                <option v-for="(item, key) in hare" :key="key" :value="key">{{ item }}</option>
-              </select>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-6">
-              <small>{{ $t('痛み') }}</small>
-              <select v-model="form.menus.pain">
-                <option></option>
-                <option v-for="(item, key) in pain" :key="key" :value="key">{{ item }}</option>
-              </select>
-          </div>
-          <div class="col-6">
-              <small>{{ $t('内出血') }}</small>
-              <select v-model="form.menus.bleeding">
-                <option></option>
-                <option v-for="(item, key) in bleeding" :key="key" :value="key">{{ item }}</option>
-              </select>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-6">
-              <small>{{ $t('入院の必要性') }}</small>
-              <select v-model="form.menus.hospital_need">
-                <option></option>
-                <option v-for="(item, key) in hospital_need" :key="key" :value="key">{{ item }}</option>
-              </select>
-          </div>
-          <div class="col-6">
-              <small>{{ $t('麻酔') }}</small>
-              <select v-model="form.menus.masui">
-                <option></option>
-                <option v-for="(item, key) in masui" :key="key" :value="key">{{ item }}</option>
-              </select>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-6">
-              <small>{{ $t('メイク/洗顔') }}</small>
-              <select v-model="form.menus.makeup">
-                <option></option>
-                <option v-for="(item, key) in makeup" :key="key" :value="key">{{ item }}</option>
-              </select>
-          </div>
-          <div class="col-6">
-              <small>{{ $t('シャワー/洗髪/入浴') }}</small>
-              <select v-model="form.menus.shower">
-                <option></option>
-                <option v-for="(item, key) in shower" :key="key" :value="key">{{ item }}</option>
-              </select>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-6">
-              <small>{{ $t('施術部のマッサージ') }}</small>
-              <select v-model="form.menus.massage">
-                <option></option>
-                <option v-for="(item, key) in massage" :key="key" :value="key">{{ item }}</option>
-              </select>
-          </div>
-          <div class="col-6">
-              <small>{{ $t('激しいスポーツ') }}</small>
-              <select v-model="form.menus.sport_impossible">
-                <option></option>
-                <option v-for="(item, key) in sport_impossible" :key="key" :value="key">{{ item }}</option>
-              </select>
-          </div>
-        </div>       
-      </div>
+      </vue-custom-scrollbar>
       <template v-slot:footer>
         <button type="button" class="btn btn-primary btn-modal-footer" @click="handleUpdateMenu">{{ modalInfo.confirmBtnTitle }}</button>
       </template>
@@ -263,183 +266,186 @@
       id="menu-view-modal"
       :title="modalInfo.title"
       >
-      <div v-if="form" class="create-menu-content view-modal-content">
-        <div class="form-group row">
-          <div class="col">
-            <small>{{ $t('掲載ステータス') }}</small>
-            <p v-if="form.menus.status">{{ $t('掲載中') }}</p>
-            <p v-else>{{ $t('停止') }}</p>
+      <vue-custom-scrollbar class="scroll-modal-body" :settings="settings" @ps-scroll-y="scrollHanle">
+        <div v-if="form" class="create-menu-content view-modal-content">
+          <div class="form-group row">
+            <div class="col">
+              <small>{{ $t('掲載ステータス') }}</small>
+              <p v-if="form.menus.status">{{ $t('掲載中') }}</p>
+              <p v-else>{{ $t('停止') }}</p>
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-8">
-            <small>{{ $t('メニュー名') }}</small>
-            <p>{{form.menus.name}}埋没法ダブル</p>
+          <div class="form-group row">
+            <div class="col-8">
+              <small>{{ $t('メニュー名') }}</small>
+              <p>{{form.menus.name}}埋没法ダブル</p>
+            </div>
+            <div class="col-4">
+              <small>{{ $t('料金') }}</small>
+              <p>{{form.menus.price | currency}}</p>
+            </div>
           </div>
-          <div class="col-4">
-            <small>{{ $t('料金') }}</small>
-            <p>{{form.menus.price | currency}}</p>
+          <div class="form-group row">
+            <div class="col">
+              <small>{{ $t('カテゴリー') }}</small>
+              <div class="view-cate-panel">
+                <template v-for="(item, idx) in selected_categories" :value="id">
+                  <p :key="idx">
+                    {{item.name}}
+                  </p>
+                </template>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <div class="col">
-            <small>{{ $t('カテゴリー') }}</small>
-            <div class="view-cate-panel">
-              <template v-for="(item, idx) in selected_categories" :value="id">
-                <p :key="idx">
-                  {{item.name}}
+          <div class="form-group row">
+            <div class="col">
+              <small>{{ $t('メニュー画像') }}</small>
+              <div class="companu-content--edit">
+                  <div v-if="form.menuPhotos.length" class="company-profile-img-list">
+                    <div v-for="(img, index) in form.menuPhotos" class="company-image--edit" :key="index">
+                      <div class="over-hidden">
+                        <img :src="'/storage/'+img" />
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col">
+              <small>{{ $t('メニューの説明') }}</small>
+              <p>{{form.menus.description}}</p>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col">
+              <small>{{ $t('副作用・リスク') }}</small>
+              <p>{{form.menus.risk}}</p>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col">
+              <small>{{ $t('施術の保証') }}</small>
+              <p>{{form.menus.guarantee}}</p>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col">
+              <small>{{ $t('施術時間') }}</small>
+              <template v-for="(item, key) in treat_time" :value="key">
+                <p v-if="form.menus.treat_time == key" :key="key">
+                  {{item}}
+                </p>
+              </template>
+            </div>
+            <div class="col">
+              <small>{{ $t('抜糸') }}</small>
+              <template v-for="(item, key) in basshi" :value="key">
+                <p v-if="form.menus.basshi == key" :key="key">
+                  {{item}}
+                </p>
+              </template>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col">
+              <small>{{ $t('施術後の通院') }}</small>
+              <template v-for="(item, key) in hospital_visit" :value="key">
+                <p v-if="form.menus.hospital_visit == key" :key="key">
+                  {{item}}
+                </p>
+              </template>
+            </div>
+            <div class="col">
+              <small>{{ $t('腫れ') }}</small>
+              <template v-for="(item, key) in hare" :value="key">
+                <p v-if="form.menus.hare == key" :key="key">
+                  {{item}}
+                </p>
+              </template>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col">
+              <small>{{ $t('痛み') }}</small>
+              <template v-for="(item, key) in pain" :value="key">
+                <p v-if="form.menus.pain == key" :key="key">
+                  {{item}}
+                </p>
+              </template>
+            </div>
+            <div class="col">
+              <small>{{ $t('内出血') }}</small>
+              <template v-for="(item, key) in bleeding" :value="key">
+                <p v-if="form.menus.bleeding == key" :key="key">
+                  {{item}}
+                </p>
+              </template>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col">
+              <small>{{ $t('入院の必要性') }}</small>
+              <template v-for="(item, key) in hospital_need" :value="key">
+                <p v-if="form.menus.hospital_need == key" :key="key">
+                  {{item}}
+                </p>
+              </template>
+            </div>
+            <div class="col">
+              <small>{{ $t('麻酔') }}</small>
+              <template v-for="(item, key) in masui" :value="key">
+                <p v-if="form.menus.masui == key" :key="key">
+                  {{item}}
+                </p>
+              </template>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col">
+              <small>{{ $t('メイク/洗顔') }}</small>
+              <template v-for="(item, key) in makeup" :value="key">
+                <p v-if="form.menus.makeup == key" :key="key">
+                  {{item}}
+                </p>
+              </template>
+            </div>
+            <div class="col">
+              <small>{{ $t('シャワー/洗髪/入浴') }}</small>
+              <template v-for="(item, key) in shower" :value="key">
+                <p v-if="form.menus.shower == key" :key="key">
+                  {{item}}
+                </p>
+              </template>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col">
+              <small>{{ $t('施術部のマッサージ') }}</small>
+              <template v-for="(item, key) in massage" :value="key">
+                <p v-if="form.menus.massage == key" :key="key">
+                  {{item}}
+                </p>
+              </template>
+            </div>
+            <div class="col">
+              <small>{{ $t('激しいスポーツ') }}</small>
+              <template v-for="(item, key) in sport_impossible" :value="key">
+                <p v-if="form.menus.sport_impossible == key" :key="key">
+                  {{item}}
                 </p>
               </template>
             </div>
           </div>
         </div>
-        <div class="form-group row">
-          <div class="col">
-            <small>{{ $t('メニュー画像') }}</small>
-            <div class="companu-content--edit">
-                <div v-if="form.menuPhotos.length" class="company-profile-img-list">
-                  <div v-for="(img, index) in form.menuPhotos" class="company-image--edit" :key="index">
-                    <div class="over-hidden">
-                      <img :src="'/storage/'+img" />
-                    </div>
-                  </div>
-                </div>
-            </div>
+      </vue-custom-scrollbar>
+      <template v-slot:footer>
+          <div class="view-modal-footer">
+            <button type="button" class="btn btn-danger btn-modal-footer" @click="handleDeleteMenu">{{ modalInfo.delBtnTitle }}</button>
+            <button type="button" class="btn btn-primary btn-modal-footer ml-4"  @click="handleShowEditMenu">{{ modalInfo.confirmBtnTitle }}</button>
           </div>
-        </div>
-
-        <div class="form-group row">
-          <div class="col">
-            <small>{{ $t('メニューの説明') }}</small>
-            <p>{{form.menus.description}}</p>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col">
-            <small>{{ $t('副作用・リスク') }}</small>
-            <p>{{form.menus.risk}}</p>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col">
-            <small>{{ $t('施術の保証') }}</small>
-            <p>{{form.menus.guarantee}}</p>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col">
-            <small>{{ $t('施術時間') }}</small>
-            <template v-for="(item, key) in treat_time" :value="key">
-              <p v-if="form.menus.treat_time == key" :key="key">
-                {{item}}
-              </p>
-            </template>
-          </div>
-          <div class="col">
-            <small>{{ $t('抜糸') }}</small>
-            <template v-for="(item, key) in basshi" :value="key">
-              <p v-if="form.menus.basshi == key" :key="key">
-                {{item}}
-              </p>
-            </template>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col">
-            <small>{{ $t('施術後の通院') }}</small>
-            <template v-for="(item, key) in hospital_visit" :value="key">
-              <p v-if="form.menus.hospital_visit == key" :key="key">
-                {{item}}
-              </p>
-            </template>
-          </div>
-          <div class="col">
-            <small>{{ $t('腫れ') }}</small>
-            <template v-for="(item, key) in hare" :value="key">
-              <p v-if="form.menus.hare == key" :key="key">
-                {{item}}
-              </p>
-            </template>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col">
-            <small>{{ $t('痛み') }}</small>
-            <template v-for="(item, key) in pain" :value="key">
-              <p v-if="form.menus.pain == key" :key="key">
-                {{item}}
-              </p>
-            </template>
-          </div>
-          <div class="col">
-            <small>{{ $t('内出血') }}</small>
-            <template v-for="(item, key) in bleeding" :value="key">
-              <p v-if="form.menus.bleeding == key" :key="key">
-                {{item}}
-              </p>
-            </template>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col">
-            <small>{{ $t('入院の必要性') }}</small>
-            <template v-for="(item, key) in hospital_need" :value="key">
-              <p v-if="form.menus.hospital_need == key" :key="key">
-                {{item}}
-              </p>
-            </template>
-          </div>
-          <div class="col">
-            <small>{{ $t('麻酔') }}</small>
-            <template v-for="(item, key) in masui" :value="key">
-              <p v-if="form.menus.masui == key" :key="key">
-                {{item}}
-              </p>
-            </template>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col">
-            <small>{{ $t('メイク/洗顔') }}</small>
-            <template v-for="(item, key) in makeup" :value="key">
-              <p v-if="form.menus.makeup == key" :key="key">
-                {{item}}
-              </p>
-            </template>
-          </div>
-          <div class="col">
-            <small>{{ $t('シャワー/洗髪/入浴') }}</small>
-            <template v-for="(item, key) in shower" :value="key">
-              <p v-if="form.menus.shower == key" :key="key">
-                {{item}}
-              </p>
-            </template>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col">
-            <small>{{ $t('施術部のマッサージ') }}</small>
-            <template v-for="(item, key) in massage" :value="key">
-              <p v-if="form.menus.massage == key" :key="key">
-                {{item}}
-              </p>
-            </template>
-          </div>
-          <div class="col">
-            <small>{{ $t('激しいスポーツ') }}</small>
-            <template v-for="(item, key) in sport_impossible" :value="key">
-              <p v-if="form.menus.sport_impossible == key" :key="key">
-                {{item}}
-              </p>
-            </template>
-          </div>
-        </div>
-        <div class="view-modal-footer">
-          <button type="button" class="btn btn-danger btn-modal-footer" @click="handleDeleteMenu">{{ modalInfo.delBtnTitle }}</button>
-          <button type="button" class="btn btn-primary btn-modal-footer ml-4"  @click="handleShowEditMenu">{{ modalInfo.confirmBtnTitle }}</button>
-        </div>
-
-      </div>
+      </template>
     </form-modal>
   </div>
 </template>
@@ -447,9 +453,15 @@
 <script>
 import axios from 'axios'
 import { mapGetters } from 'vuex'
+import vueCustomScrollbar from 'vue-custom-scrollbar'
+import "vue-custom-scrollbar/dist/vueScrollbar.css"
 
 export default {
   middleware: 'auth',
+
+  components: {
+    vueCustomScrollbar
+  },
 
   data() {
     return {
@@ -494,6 +506,12 @@ export default {
       },
       pageInfo: undefined,
       selected_categories: [],
+      m_category: '',
+      settings: {
+        suppressScrollY: false,
+        suppressScrollX: true,
+        wheelPropagation: false
+      }
     }
   },
 
@@ -838,7 +856,10 @@ export default {
         this.form.menus.status = 0;
       else
         this.form.menus.status = 1;
-    }
+    },
+    scrollHanle(evt) {
+      // console.log(evt)
+    },
   }
 }
 </script>
@@ -848,8 +869,8 @@ export default {
   vertical-align: initial;
   margin-right: 5px;
 }
-.form-group input, .form-group select{
-  min-height: 40px;
+.form-group input, .form-group select {
+  height: 50px;
   padding: 3px 12px;
   width: 100%;
 }
@@ -859,18 +880,17 @@ input::placeholder {
   font-weight: 500;
 }
 div.create-menu-content{
-  padding: 0 4rem;
+  padding: 0;
+  margin-top: 45px;
 }
 .btn-modal-footer{
-  padding: 8px 24px !important;
   font-weight: 500;
 }
-* >>> .vue-dropzone>.dz-preview .dz-image{
+* >>> .vue-dropzone>.dz-preview .dz-image {
   width: 170px;
 }
 
 .view-modal-footer{
-  margin-top: 4rem;
   display: flex;
   justify-content: center;
 }

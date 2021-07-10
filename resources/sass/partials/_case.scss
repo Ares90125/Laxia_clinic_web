@@ -1,0 +1,83 @@
+.main-in {
+    
+    .main-content.case-content.main-dev-content {
+        padding: 20px 30px 35px;
+
+        .staff-header {
+            align-items: flex-end;
+
+            button {
+                padding: 10px 30px;
+            }
+        }
+
+        .staff-content {
+            padding: 30px 30px 40px;
+
+            .case-list {
+                justify-content: space-between;
+
+                .case-one {
+                    width: 260px;
+                    height: 240px;
+                    margin: 0 0 15px;
+
+                    .case-one-in {
+                        height: 240px;
+                        border: none;
+
+                        .case-info {
+
+                            .case-cat {
+
+                                &.empty-cat {
+                                    border: none;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #case-modal {
+
+        .form-modal-content {
+
+            .form-modal-body {
+                padding: 35px 0 0;
+
+                .scroll-modal-body {
+                    padding: 0 125px;
+
+                    .case-file-upload {
+
+                        .dropzone-wrapper {
+                            max-width: 225px;
+                            margin: auto;
+                        }
+
+                        .btn-file-upload {
+                            width: auto;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #case-view-modal {
+
+        .form-modal-content {
+
+            .form-modal-body {
+                padding: 0;
+
+                .scroll-modal-body {
+                    padding: 0 125px;
+                }
+            }
+        }
+    }
+}

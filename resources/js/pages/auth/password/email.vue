@@ -1,11 +1,11 @@
 <template>
-  <div class="bg-blue-gray auth-wrapper login-wrapper">
+  <div class="bg-blue-gray auth-wrapper login-wrapper auth">
     <div class="auth--wrapper">
-      <div class="auth-form">
+      <div class="auth--form">
         <form @submit.prevent="send" @keydown="form.onKeydown($event)">
-          <h2 class="auth-title reset-title" >パスワードをリセット</h2>
+          <h2 class="auth--title reset-title" >パスワードをリセット</h2>
           <!-- Email -->
-          <span class="auth-title-tip">登録したメールアドレスを入力してください。</span>
+          <span class="auth--title__tip">登録したメールアドレスを入力してください。</span>
           <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('メールアドレス') }}</label>
             <div>
@@ -14,7 +14,7 @@
             </div>
           </div>
 
-          <div class="auth-btn--wrapper reset-btn">
+          <div class="auth--btnwrap reset-btn">
             <router-link :to="{name: 'password.sent'}">
               <v-button :loading="form.busy">{{ $t('パスワードリセットのメールを送信') }}</v-button>
             </router-link>

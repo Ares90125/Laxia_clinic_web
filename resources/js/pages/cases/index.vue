@@ -1,16 +1,16 @@
 <template>
-  <div v-if="is_master_loaded" class="main-in">
+  <div v-if="is_master_loaded" class="main-in pd-0">
     <div class="main-content case-content main-dev-content">
       <div class="staff-header case-header">
-          <select class="menu-sort my-1" @change="handleCategoryChange">
+          <select class="menu-sort form-control" @change="handleCategoryChange">
             <option value="-1">{{ $t('部位でソート') }}</option>
             <option v-for="(name, id) in specialities" :key="id" :value="id">{{ name }}</option>
           </select>
-          <!-- <select class="staff-sort" @change="handleStuffChange">
+          <!-- <select class="staff-sort form-control" @change="handleStuffChange">
             <option value="-1">{{ $t('担当者でソート') }}</option>
             <option v-for="(name, id) in stuffs" :key="id" :value="id">{{ name }}</option>
           </select> -->
-          <button class="btn btn-primary my-1" @click="handleNewCase"><img src="/img/plus.svg" class="img_plus"> {{ $t('新規症例を追加') }}</button>
+          <button class="btn btn-primary" @click="handleNewCase"><img src="/img/plus.svg" class="img_plus"> {{ $t('新規症例を追加') }}</button>
       </div>
       <div class="staff-content case-sub-content">
         <div class="case-list">
@@ -33,7 +33,8 @@
                 </p>
               </div> 
               <div class="case-info">
-                 <template v-for="(item, key) in item.categories" :value="key">
+                <p class="case-cat empty-cat" v-if="item.categories.length === 0"></p>
+                <template v-for="(item, key) in item.categories" :value="key">
                   <p class="case-cat" v-if="key <= 3" :key="key">
                     {{ item.name }}
                   </p>
@@ -58,19 +59,20 @@
       :title="modalInfo.title"
       @cancel="handleModalClose"
       >
-      <div v-if="form">
-        <div class="create-case-content">
+      <vue-custom-scrollbar class="scroll-modal-body" :settings="settings" @ps-scroll-y="scrollHanle">
+        <div v-if="form">
+          <div class="create-case-content">
           <div class="form-group row mt-0">
             <div class="col-12">
               <small>{{ $t('タイトル') }}</small>
-              <input type="text" id="case_name" v-model="form.cases.name" placeholder="例：奥二重の方の二重切開" :class="{'is-invalid' : errors && errors['cases.name'], 'is-valid' : errors && !errors['cases.name'] && showstatus }"  @keyup="inputValid" />
+              <input type="text" id="case_name" v-model="form.cases.name" placeholder="例：奥二重の方の二重切開" class="form-control" :class="{'is-invalid' : errors && errors['cases.name'], 'is-valid' : errors && !errors['cases.name'] && showstatus }"  @keyup="inputValid" />
               <i v-if="errors && errors['cases.name'] && showstatus" class="i-text-invalid bi bi-exclamation-triangle-fill"></i>
               <i v-if="errors && !errors['cases.name'] && showstatus" class="i-text-valid bi bi-check-circle-fill"></i>
               <div v-if="errors && errors['cases.name']" class="error invalid-feedback">{{ errors['cases.name'][0] }}</div>
             </div>
           </div>
           <div class="form-group row justify-content-center case-file-upload">
-            <div class="col-4">
+            <div class="col-6">
               <small class="text-center">{{ $t('Before画像') }}</small>
               <file-upload
                 ref="beforeFileUploadComponent"
@@ -85,7 +87,7 @@
               />
 
             </div>
-            <div class="col-4">
+            <div class="col-6">
               <small class="text-center">{{ $t('After画像') }}</small>
               <file-upload
                 ref="afterFileUploadComponent"
@@ -127,7 +129,7 @@
           <div class="form-group row mt-2">
             <div class="col-12">
               <small>{{ $t('メニュー') }}</small>
-              <select v-model="form.cases.menu_id" :class="{'is-invalid' : errors && errors['cases.menu_id'] }" @change="handleMenuChange($event)">
+              <select v-model="form.cases.menu_id" class="form-control" :class="{'is-invalid' : errors && errors['cases.menu_id'] }" @change="handleMenuChange($event)">
                 <option></option>
                 <option v-for="(name, id) in menus" :key="id" :value="id" >{{ name }}</option>
               </select>
@@ -195,7 +197,7 @@
           <div class="form-group row">
             <div class="col-6">
                 <small>{{ $t('年齢') }}</small>
-                <select v-model="form.cases.patient_age" :class="{'is-invalid' : errors && errors['cases.patient_age'] }">
+                <select v-model="form.cases.patient_age" class="form-control" :class="{'is-invalid' : errors && errors['cases.patient_age'] }">
                   <option></option>
                   <option v-for="i in 7" :key="i" :value="i * 10">{{ i * 10 }}{{ $t('才') }}</option>
                 </select>
@@ -203,7 +205,7 @@
             </div>
             <div class="col-6">
               <small>{{ $t('性別') }}</small>
-              <select v-model="form.cases.patient_gender" :class="{'is-invalid' : errors && errors['cases.patient_gender'] }">
+              <select v-model="form.cases.patient_gender" class="form-control" :class="{'is-invalid' : errors && errors['cases.patient_gender'] }">
                 <!-- <option></option> -->
                 <option v-for="(name, id) in genders" :key="id" :value="id">{{ name }}</option>
               </select>
@@ -213,21 +215,22 @@
 
           <div class="create-case-text">
             <small>{{ $t('施術の解説') }}</small>
-            <textarea v-model="form.cases.case_description" :class="{'is-invalid' : errors && errors['cases.case_description'] }" placeholder="例：この施術は目頭を切る施術になります。"></textarea>
+            <textarea v-model="form.cases.case_description" class="form-control" :class="{'is-invalid' : errors && errors['cases.case_description'] }" placeholder="例：この施術は目頭を切る施術になります。"></textarea>
             <div v-if="errors && errors['cases.case_description']" class="error invalid-feedback">{{ errors['cases.case_description'][0] }}</div>
           </div>
           <div class="create-case-text">
             <small>{{ $t('副作用・リスク') }}</small>
-            <textarea v-model="form.cases.treat_risk" :class="{'is-invalid' : errors && errors['cases.treat_risk'] }" placeholder="例：施術後一週間ほど腫れる場合があります。"></textarea>
+            <textarea v-model="form.cases.treat_risk" class="form-control" :class="{'is-invalid' : errors && errors['cases.treat_risk'] }" placeholder="例：施術後一週間ほど腫れる場合があります。"></textarea>
             <div v-if="errors && errors['cases.treat_risk']" class="error invalid-feedback">{{ errors['cases.treat_risk'][0] }}</div>
           </div>
           <div class="create-case-text">
             <small>{{ $t('担当ドクターからのコメント') }}</small>
-            <textarea v-model="form.cases.doctor_opinion" placeholder="例：この施術は〇〇な方に向いているかと思います。"></textarea>
+            <textarea v-model="form.cases.doctor_opinion" class="form-control" placeholder="例：この施術は〇〇な方に向いているかと思います。"></textarea>
             <!-- <div v-if="errors && errors['cases.treat_risk']" class="error invalid-feedback">{{ errors['cases.treat_risk'][0] }}</div> -->
           </div>
-        </div>        
-      </div>
+          </div>     
+        </div>
+      </vue-custom-scrollbar>
       <template v-slot:footer>
         <button type="button" class="btn btn-primary" @click="handleUpdateCase">{{ modalInfo.confirmBtnTitle }}</button>
       </template>
@@ -238,6 +241,7 @@
       id="case-view-modal"
       :title="modalInfo.title"
       >
+      <vue-custom-scrollbar class="scroll-modal-body" :settings="settings" @ps-scroll-y="scrollHanle">
       <div v-if="form" class="create-menu-content view-modal-content">
         <div class="form-group row">
           <div class="col">
@@ -330,9 +334,10 @@
           </div>
         </div>
       </div>
-      <div class="view-modal-footer">
+      </vue-custom-scrollbar>
+      <template v-slot:footer>
         <button type="button" class="btn btn-primary" @click="handleShowEditMenu">{{ modalInfo.confirmBtnTitle }}</button>
-      </div>
+      </template>
     </form-modal>
   </div>
 </template>
@@ -341,9 +346,15 @@
 import axios from 'axios'
 import { mapGetters } from 'vuex'
 import Multiselect from 'vue-multiselect'
+import vueCustomScrollbar from 'vue-custom-scrollbar'
+import "vue-custom-scrollbar/dist/vueScrollbar.css"
 
 export default {
   middleware: 'auth',
+
+  components: {
+    vueCustomScrollbar
+  },
 
   data() {
     return {
@@ -384,6 +395,11 @@ export default {
       selected_categories: [],
       selected_menu_details: [],
       showstatus: false,
+      settings: {
+        suppressScrollY: false,
+        suppressScrollX: true,
+        wheelPropagation: false
+      }
     }
   },
 
@@ -741,33 +757,32 @@ export default {
       this.query.stuff_id = e.target.value
       this.getData()
     },
+    scrollHanle(evt) {
+      // console.log(evt)
+    },
   }
 }
 </script>
 
 <style scoped>
-.case-content{
+.case-content {
   padding: 0px 30px;
 }
-.case-header{
+.case-header {
       border-bottom: 0px;
 }
-.form-group{
+.form-group {
   margin-top: 1.5rem;
 }
-.form-group input, .form-group select{
+.form-group input, .form-group select {
   min-height: 40px;
   padding: 3px 12px;
   width: 100%;
 }
-.create-case-content{
-  padding: 0 5rem;
+div.create-menu-content {
+  padding: 0;
 }
-div.create-menu-content{
-  padding: 0 4rem;
-}
-.view-modal-footer{
-  margin-top: 4rem;
+.view-modal-footer {
   display: flex;
   justify-content: center;
 }

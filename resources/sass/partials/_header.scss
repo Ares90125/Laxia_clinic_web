@@ -1,3 +1,9 @@
+.main-in {
+
+    &.pd-0 {
+        padding: 0;
+    }
+}
 ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color: rgba(19, 19, 64, 0.3) !important;
     opacity: 1 !important;
@@ -23,16 +29,61 @@
     opacity: 1 !important;
 }
 
-.form-control {
+input.form-control {
     border-color: #C9D6DF;
     border-radius: 5px;
     height: 52px;
     padding: 10px 15px;
     font-size: 18px;
 
+    &.fulled-status {
+        border-color: #8C9FAB;
+    }
+
+    &:hover {
+        border-color: #8C9FAB;
+    }
+
     &:focus {
-        box-shadow: unset;
-        border-color: #C9D6DF;
+        box-shadow: 0px 0px 8px rgba(92, 163, 246, 0.4);
+        border-color: #5CA3F6;
+    }
+}
+
+textarea.form-control {
+    border-color: #C9D6DF;
+    border-radius: 5px;
+
+    &.fulled-status {
+        border-color: #8C9FAB;
+    }
+
+    &:hover {
+        border-color: #8C9FAB;
+    }
+
+    &:focus {
+        box-shadow: 0px 0px 8px rgba(92, 163, 246, 0.4);
+        border-color: #5CA3F6;
+    }
+}
+
+select.form-control {
+    border-color: #C9D6DF;
+    border-radius: 5px;
+    height: 52px;
+    
+    &.fulled-status {
+        border-color: #8C9FAB;
+    }
+
+    &:hover {
+        border-color: #8C9FAB;
+    }
+
+    &:focus {
+        box-shadow: 0px 0px 8px rgba(92, 163, 246, 0.4);
+        border-color: #5CA3F6;
     }
 }
 
@@ -56,7 +107,139 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-size: 18px;
     line-height: 1.75;
     letter-spacing: 0.1em;
+    padding: 5px 30px;
 }
 .btn:focus, .btn.focus {
     box-shadow: unset;
+}
+.form-modal-wrapper {
+    top: 50px;
+    
+    .form-modal-content {
+
+        .form-modal-body {
+            padding: 45px 125px;
+            overflow: auto;
+
+            .scroll-modal-body {
+                height: calc(100vh - 280px);
+                width: unset;
+                position: relative;
+                min-height: 400px;
+                padding: 0 10px;
+            }
+        }
+        
+        .form-modal-footer {
+            padding: 20px 0 30px;
+
+            button {
+                padding: 5px 30px;
+            }
+        }
+    }
+}
+
+.header {
+    padding: 7px 50px 7px 40px;
+
+    .header-left {
+        margin: 0;
+        padding: 7px 15px;
+
+        input {
+            padding: 0;
+            min-height: unset;
+            line-height: 22px;
+        }
+    }
+
+    .header-right {
+
+        .news-alert {
+            margin-right: 55px;
+        }
+
+        .login-info {
+
+            .nav-link {
+                padding: 0 25px 0 0;
+                font-size: 14px;
+                color: #414141;
+                font-weight: 500;
+
+                & .profile-photo {
+                    width: 40px;
+                    height: 40px;
+                    margin: 0 9px 0 0;
+                }
+
+                &.dropdown-toggle {
+                    position: relative;
+
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        width: 10px;
+                        height: 5px;
+                        background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23757296' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
+                        top: 17px;
+                        right: 0;
+                        border: none;
+                        background-size: cover;
+                        background-position: center;
+                    }
+                }
+            }
+
+            
+            
+        }
+    }
+}
+
+.tab-con {
+    p{
+    
+        a {
+            padding: 5px 10px;
+    
+            &:hover {
+                background-color: #DDD;
+            }
+        }
+    }
+}
+
+.header-menu {
+    width: 200px;
+    border-radius: 10px;
+    filter: drop-shadow(rgba(0, 0, 0, 0.25) 0px 0px 7px);
+
+    a {
+        padding: 7px 15px 11px;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 1.75;
+
+        &:hover {
+            background: #F5F5F5;
+        }
+
+        &:first-child {
+            border: none;
+
+            &:hover {
+                border-radius: 5px 5px 0 0;
+            }
+        }
+
+        &:last-child {
+
+            &:hover {
+                border-radius: 0 0 5px 5px;
+            }
+        }
+
+    }
 }

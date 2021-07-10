@@ -1,9 +1,9 @@
 <template>
-  <div class="bg-blue-gray auth-wrapper login-wrapper">
+  <div class="bg-blue-gray auth-wrapper login-wrapper auth">
     <div class="auth--wrapper">
-      <div class="auth-form">
+      <div class="auth--form">
         <form @submit.prevent="login" @keydown="form.onKeydown($event)">
-          <h2 class="auth-title">クリニックアカウントにログイン</h2>
+          <h2 class="auth--title">クリニックアカウントにログイン</h2>
           <!-- Email -->
           <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('メールアドレスもしくはID名') }}</label>
@@ -17,23 +17,21 @@
           <!-- Password -->
           <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('パスワード') }}</label>
-            <div>
-              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password'), 'is-login-valid': Object.keys(form.errors.errors).length > 0 && !form.errors.has('password') }" class="custom-pw-form-control" type="password" name="password" id="password" placeholder="6文字以上で入力してください">
+            <div class="pw-wrap">
+              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password'), 'is-login-valid': Object.keys(form.errors.errors).length > 0 && !form.errors.has('password') }" class="form-control" type="password" name="password" id="password" placeholder="6文字以上で入力してください">
               <i class="bi bi-eye-fill" id="togglePassword" @click="handleTogglePassword"></i>
               <i v-if="form.errors && form.errors.has('password')" class="i-login-invalid passwd-invalid bi bi-exclamation-triangle-fill"></i>
               <i v-if="Object.keys(form.errors.errors).length > 0 && !form.errors.has('password')" class="i-login-valid passwd-valid bi bi-check-circle-fill"></i>
               <has-error :form="form" field="password" />
             </div>
           </div>
-          <div class="row">
-            <div class="col-12 d-flex justify-content-end auth-forgot">
+          <div class="auth--forget">            
               <router-link :to="{ name: 'password.request' }">
                 パスワードを忘れた場合
               </router-link>
-            </div>
           </div>
 
-          <div class="auth-btn--wrapper">
+          <div class="auth--btnwrap login-btn">
             <v-button :loading="form.busy">{{ $t('ログイン') }}</v-button>
           </div>
         </form>

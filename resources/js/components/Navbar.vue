@@ -6,8 +6,10 @@
         <input type="text" v-model="search_name" name="name" placeholder="名前・電話番号・予約IDで検索" @keyup='add_todo_keyup' @focus="focusSearch" @blur="unfocusSearch" />
         <button v-if="search_name" class="b-colse" @click="handleClose"><i class="bi bi-x"></i></button>
         <button  :class="{ focus_btn: focus_search }" @click="goPatient" >
-          <!-- <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.16667 14.8333C11.8486 14.8333 14.8333 11.8486 14.8333 8.16667C14.8333 4.48477 11.8486 1.5 8.16667 1.5C4.48477 1.5 1.5 4.48477 1.5 8.16667C1.5 11.8486 4.48477 14.8333 8.16667 14.8333Z" stroke="#CBCBDE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.5 16.5L12.875 12.875" stroke="#CBCBDE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> -->          
-          <i class="bi bi-search"></i>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8.25 14.25C11.5637 14.25 14.25 11.5637 14.25 8.25C14.25 4.93629 11.5637 2.25 8.25 2.25C4.93629 2.25 2.25 4.93629 2.25 8.25C2.25 11.5637 4.93629 14.25 8.25 14.25Z" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15.7498 15.7498L12.4873 12.4873" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </button>
       <!-- </form> -->
     </div>
@@ -57,10 +59,10 @@
         </div>
       </div>
       <div class="login-info">
-        <a class="nav-link dropdown-toggle text-dark"
+        <a class="nav-link dropdown-toggle"
           href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
         >
-          <img :src="user.photo_url" class="rounded-circle profile-photo mr-1">
+          <img :src="user.photo_url || '/img/avatar-img.png'" class="rounded-circle profile-photo mr-1">
           {{ user.name }}
         </a>
         <div class="header-menu dropdown-menu">

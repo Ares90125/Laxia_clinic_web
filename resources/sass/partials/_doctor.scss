@@ -27,9 +27,25 @@
         .staff-list {
             margin-top: 65px;
             width: 100%;
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(6, 250px);
+            align-content: space-around;
             justify-content: space-between;
+            @media screen and (max-width: 1920px) {
+                grid-template-columns: repeat(5, 250px);
+            }
+            @media screen and (max-width: 1600px) {
+                grid-template-columns: repeat(4, 250px);
+            }
+            @media screen and (max-width: 1400px) {
+                grid-template-columns: repeat(3, 250px);
+            }
+            @media screen and (max-width: 900px) {
+                grid-template-columns: repeat(2, 250px);
+            }
+            @media screen and (max-width: 600px) {
+                grid-template-columns: repeat(1, 250px);
+            }
 
             .staff-one {
                 width: 250px;
@@ -58,6 +74,10 @@
                     p {
                         line-height: 1.75;
                         margin: 0;
+                        padding: 0 10px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
                 }
 
@@ -240,4 +260,7 @@
             }
         }
     }
+}
+@media only screen and (max-width: 1200px) {
+    
 }

@@ -48,7 +48,10 @@
 
     .main-content.main-dev-content.menues-content {
         padding: 30px 30px 35px;
-
+        .menu-cat {
+            line-height: 18px;
+            height: 18px;
+        }
         .staff-header > p > a {
             margin-right: 40px;
         }
@@ -82,14 +85,14 @@
                     div.menu-img {
                         width: 155px;
                         height: auto;
-                        max-height: 135px;
+                        max-height: 125px;
                         object-fit: cover;
                     }
 
                     .menu-info {
                         width: calc(100% - 155px);
                         padding: 10px 10px 5px;
-
+                        height: 125px;
                         .menu-ttl {
                             margin: 8px 0 2px;
                         }

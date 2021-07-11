@@ -47,12 +47,26 @@
                         border: none;
 
                         .case-info {
+                            position: relative;
+                            min-height: calc(100% - 130px);
 
                             .case-cat {
 
                                 &.empty-cat {
                                     border: none;
                                 }
+                            }
+
+                            .case-ttl {
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                            }
+
+                            .case-name {
+                                margin: 0;
+                                position: absolute;
+                                bottom: 5px;
                             }
                         }
                     }

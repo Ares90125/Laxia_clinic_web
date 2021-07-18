@@ -40,7 +40,7 @@ class StuffController extends Controller
         $params = $request->all();
         $params['clinic_id'] = auth()->guard('clinic')->user()->clinic->id;
         $stuffs = $this->service->getList($params);
-        $cnt_g = $this->service->getMemberCount($params['clinic_id']);
+        $cnt_g = $this->service->getMemberCount($params['clinic_id'], $params);
         return response()->json([
             'stuffs' => $stuffs,
             'cnt_mg' => $cnt_g
@@ -61,7 +61,7 @@ class StuffController extends Controller
             \Log::error($e->getMessage());
 
             return response()->json([
-                'message' => 'スタッフを登録できません。'
+                'message' => $e
             ], 500);
         }
         return response()->json([

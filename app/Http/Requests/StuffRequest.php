@@ -32,11 +32,11 @@ class StuffRequest extends FormRequest
             'stuffs' => ['required', 'array'],
             'stuffs.name' => 'required|string|max:255',
             'stuffs.kana' => 'required|string|max:255',
-            'stuffs.duty' => 'required|string|max:255',
-            'stuffs.job_id' => 'required|integer|exists:mtb_jobs,id',
-            'stuffs.experience_year' => 'required|integer',
-            'stuffs.career' => 'required',
-            'stuffs.profile' => 'required',
+            // 'stuffs.duty' => 'required|string|max:255',
+            // 'stuffs.job_id' => 'required|integer|exists:mtb_jobs,id',
+            // 'stuffs.experience_year' => 'required|integer',
+            // 'stuffs.career' => 'required',
+            // 'stuffs.profile' => 'required',
             'specialities' => ['required', 'array'],
         ];
     }

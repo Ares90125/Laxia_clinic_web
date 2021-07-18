@@ -48,11 +48,18 @@ class ClinicDoctorsRelationService
     return $query;
   }
 
-  public function getMemberCount($clinic_id) {
+  public function getMemberCount($clinic_id, $request = array()) {
     $query = ClinicDoctorsRelation::where('clinic_id', $clinic_id)
-      ->join('doctors', 'doctors.doctor_id', '=', 'clinic_doctors_relation.doctor_id')
-      ->get()->count();
-    return $query;
+      ->join('doctors', 'doctors.doctor_id', '=', 'clinic_doctors_relation.doctor_id');
+
+    if(isset($request['q'])) {
+      $query->where('doctors.kata_name', 'LIKE', "%{$request['q']}%")
+        ->orWhere('doctors.hira_name', 'LIKE', "%{$request['q']}%");
+    }
+
+    $result = $query->get()->count();
+
+    return $result;
   }
 
   public function delete($clinic_id, $doctor_id) {

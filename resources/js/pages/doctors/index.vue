@@ -23,7 +23,7 @@
         </div>
       </div>
       <div class="staff-list">
-        <div v-if="doctors.length && (query.status == 0 || query.status == 1)" v-for="(item, index) in doctors" :key="index" class="staff-one" @click="handleShowDoctor(item.doctor_id)">
+        <div v-if="doctors.length && (query.status == 0 || query.status == 1)" v-for="(item, index) in doctors" :key="'doctor'+index" class="staff-one" @click="handleShowDoctor(item.doctor_id)">
           <div v-if="item.photo" class="photo-item">
             <p class="staff-img">
               <img :src="'/storage/' + item.photo" />
@@ -41,7 +41,7 @@
           </div>
         </div>
       
-        <div v-if="stuff_datas.length && (query.status == 0 || query.status == 2)" v-for="(item, index) in stuff_datas" :key="index" class="staff-one" @click="handleShowStuff(item.id)">
+        <div v-if="stuff_datas.length && (query.status == 0 || query.status == 2)" v-for="(item, index) in stuff_datas" :key="'stuff'+index" class="staff-one" @click="handleShowStuff(item.id)">
           <div v-if="item.photo" class="photo-item">
             <p class="staff-img">
               <img :src="'/storage/' + item.photo" />
@@ -333,11 +333,11 @@ export default {
         stuffs: {
           name: '',
           kana: '',
-          duty: 'aaa',
-          job_id: '2',
-          experience_year: '0',
-          career: 'aaa',
-          profile: 'aaa',
+          duty: '',
+          job_id: '',
+          experience_year: '',
+          career: '',
+          profile: '',
           photo: '',
         },
         specialities: {
@@ -503,7 +503,7 @@ export default {
         title: 'スタッフ情報を変更',
         confirmBtnTitle: '編集を保存'
       }
-      this.isEditing = true
+      this.isEditing = true;
       this.$refs.stuffViewModal.hide();
       this.$refs.modal.show();
     },
@@ -573,7 +573,7 @@ export default {
             return ele.doctor_id !== doctorId;
           })
           this.doctorDetailModal = false;
-          this.$refs.doctorDetailModal.hide()
+          this.$refs.doctorDetailModal.hide();
 
           this.$swal({
             toast: true,
@@ -582,7 +582,9 @@ export default {
             timer: 3000,
             title: '削除。',
             icon: 'success',
-          })
+          });
+
+          this.doctor_cnt --;
         })
         .catch(error => {
           this.$store.dispatch('state/removeIsLoading')
@@ -702,12 +704,6 @@ export default {
     object-fit: cover;
     width: 50px;
     height: 50px;
-  }
-  .md-doctor-avatar-img{
-    border-radius: 50%;
-    object-fit: cover;
-    width: 100px;
-    height: 100px;
   }
   * >>> #del-confirm-modal .form-modal-header{
     display: none !important;

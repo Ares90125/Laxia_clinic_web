@@ -40,8 +40,18 @@ class StuffService
     return $query->get();
   }
 
-  public function getMemberCount($clinic_id){
+  public function getMemberCount($clinic_id, $request = array()){
     $query = Stuff::query();
+
+    if (isset($request['clinic_id'])) {
+      $query->where('clinic_id', $request['clinic_id']);
+    }
+
+    if (isset($request['q'])) {
+      $query->where('name', 'LIKE', "%{$request['q']}%")
+            ->orWhere('kana', 'LIKE', "%{$request['q']}%");
+    }
+    
     return $query->get()->count();
   }
 

@@ -142,6 +142,7 @@
     }
 
     #stuff-modal {
+        position: fixed;
 
         .form-modal-content {
 
@@ -171,6 +172,14 @@
                             border-radius: 50%;
                             padding: 0;
                         }
+
+                        &.dz-complete {
+                            display: none;
+
+                            &.dz-success, &.mal-preview {
+                                display: block;
+                            }
+                        }
                     }
                 }
 
@@ -195,6 +204,7 @@
     }
 
     #doctor-detail-modal {
+        position: fixed;
         
         .form-modal-content {
 
@@ -205,6 +215,7 @@
     }
 
     #del-confirm-modal {
+        position: fixed;
 
         .form-modal-content {
             width: 600px;
@@ -237,6 +248,7 @@
     }
 
     #stuff-view-modal {
+        position: fixed;
 
         .form-modal-body {
             padding: 70px 90px 50px;
@@ -257,6 +269,13 @@
             .btn-grp {
                 display: flex;
                 justify-content: space-between;
+            }
+
+            .md-doctor-avatar-img{
+                border-radius: 50%;
+                object-fit: cover;
+                width: 145px;
+                height: 145px;
             }
         }
     }

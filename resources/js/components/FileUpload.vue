@@ -134,6 +134,8 @@
             filename: 'menu.png',
             type: "image/png"
           }, this.photo);
+
+          document.querySelector(".dz-preview").classList.add('mal-preview'); 
         }
       },
 

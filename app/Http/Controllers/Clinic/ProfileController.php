@@ -146,16 +146,17 @@ class ProfileController extends Controller
     protected function passwordValidator(array $data)
     {
         return Validator::make($data, [
-            'current_password' => 'required|min:6',
+            // 'current_password' => 'required|min:6',
+            'current_password' => 'required',
             'new_password' => 'required|min:6',
-            'new_password_confirmation' => 'confirmed',
+            'new_password_confirmation' => 'required|min:6|same:new_password',
         ],
         [
             'current_password.required' => '必須項目です',
-            'current_password.min' => '6文字以上で設定してください',
+            // 'current_password.min' => '6文字以上で設定してください',
             'new_password.required' => '必須項目です',
             'new_password.min' => '6文字以上で設定してください',
-            'new_password_confirmation.confirmed' => 'パスワードが一致しません'
+            'new_password_confirmation.same' => 'パスワードが一致しません'
         ]);
     }
 

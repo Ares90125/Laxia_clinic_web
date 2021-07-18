@@ -265,19 +265,6 @@ export default {
   .profile-dialog-container{
     padding: 0 30px;
   }
-
-  .invalid-feedback-custom{
-    width: 100%;
-    margin-top: 0.25rem;
-    font-size: 80%;
-    color: #dc3545;
-  }
-  .resetpw-content{
-    height: 87vh;
-    background: #fff;
-    padding: 40px 50px;
-    border-radius: 7px;
-  }
   .main-modal i {
     width: 20px;
     height: 13px;

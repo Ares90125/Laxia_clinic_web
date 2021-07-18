@@ -9,8 +9,8 @@
       </div>
       <div class="staff-sub-header">
           <select class="menu-sort form-control" v-model="m_category" :class="{'fulled-status' : m_category ? 'fulled-input': ''}" @change="handleCategoryChange">
-            <option value="-1">{{ $t('部位でソート') }}</option>
-            <option v-for="(name, id) in specialities" :key="id" :value="id">{{ name }}</option>
+            <option value="-1">{{ $t('施術で絞り込む') }}</option>
+            <option v-for="item in search_categories" :key="item.id" :value="item.id">{{ item.name }}</option>
           </select>
           <button class="btn btn-primary" @click="handleNewMenu"><img src="/img/plus.svg" class="img_plus"> {{ $t('新規メニューを追加') }}</button>
       </div>
@@ -135,10 +135,16 @@
               />
               <div v-if="form.menuPhotos.length" class="company-profile-img-list">
                 <div v-for="(img, index) in form.menuPhotos" class="company-image--edit" :key="index">
-                  <span class="remove-btn" @click="handleRemoveFile(index)"><i class="bi bi-x-circle-fill"></i></span>
                   <div class="over-hidden">
                     <img :src="'/storage/'+img" />
                   </div>
+                  <span class="remove-btn" @click="handleRemoveFile(index)">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="6" cy="6" r="6" fill="#5F6377"/>
+                      <path d="M8 4L4 8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M4 4L8 8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
                 </div>
               </div>
             </div>
@@ -511,7 +517,8 @@ export default {
         suppressScrollY: false,
         suppressScrollX: true,
         wheelPropagation: false
-      }
+      },
+      mtb_categories: undefined
     }
   },
 
@@ -534,6 +541,7 @@ export default {
       hare: 'constant/hare',
       treat_time: 'constant/treat_time',
     }),
+
     category_options() {
       return this.categories.map(el => {
         return {
@@ -547,13 +555,29 @@ export default {
         };
       });
     },
+
     menu_data(){
       return this.form.menuPhotos;
-    }
+    },
+
+    search_categories() {
+      let tc = [];
+      
+      this.categories.map(el => {
+        el.all_children.map(item => {
+          tc.push({
+            id: item.id,
+            name: item.name,
+          });
+        });
+      });
+
+      return tc;
+    },
   },
 
   mounted() {
-    this.getData()
+    this.getData();
   },
 
   methods: {
@@ -573,7 +597,6 @@ export default {
             }
           })
         })
-      console.log(this.selected_categories);
     },
     removeCategory(idx) {
       this.selected_categories.splice(idx, 1);
@@ -584,7 +607,7 @@ export default {
       axios.get(`/api/clinic/menus?${qs}`)
         .then(res => {
           this.menus = res.data.menus.data;
-          console.log(this.menus);
+          
           this.query = {
             ...this.query,
             per_page: res.data.menus.per_page
@@ -593,6 +616,7 @@ export default {
             last_page: res.data.menus.last_page,
           }
           this.$store.dispatch('state/removeIsLoading')
+          console.log(this.search_categories);
         })
         .catch(error => {
           this.$store.dispatch('state/removeIsLoading')
@@ -858,7 +882,7 @@ export default {
         this.form.menus.status = 1;
     },
     scrollHanle(evt) {
-      // console.log(evt)
+      
     },
   }
 }
@@ -893,12 +917,6 @@ div.create-menu-content{
 .view-modal-footer{
   display: flex;
   justify-content: center;
-}
-.company-profile-img-list{
-  margin: 20px 0 0 0;
-}
-.company-profile-img-list > div{
-      padding: 10px 5px;
 }
 .vue-dropzone:hover {
   background-color: #fff !important; 

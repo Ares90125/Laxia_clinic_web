@@ -47,10 +47,13 @@ class MenuService
     // }
 
     if (isset($search['category_id']) && $search['category_id'] != '-1') {
-      $query->where('category_id', $search['category_id']);
+      // $query->where('category_id', $search['category_id']);
+      $query->join('menu_categories as mc', 'menus.id', '=', 'mc.menu_id')
+            ->where('mc.category_id', $search['category_id']);
     }
 
     $query->orderby('created_at', 'desc');
+
     return $query->paginate($per_page);
   }
 

@@ -616,7 +616,6 @@ export default {
             last_page: res.data.menus.last_page,
           }
           this.$store.dispatch('state/removeIsLoading')
-          console.log(this.search_categories);
         })
         .catch(error => {
           this.$store.dispatch('state/removeIsLoading')

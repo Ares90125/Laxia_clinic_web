@@ -28,10 +28,13 @@ class CaseService
     }
 
     if (isset($search['category_id']) && $search['category_id'] != '-1') {
-      $query->where('category_id', $search['category_id']);
+      // $query->where('category_id', $search['category_id']);
+      $query->join('case_categories as cc', 'cases.id', '=', 'cc.case_id')
+            ->where('cc.category_id', $search['category_id']);
     }
     
     $query->orderby('created_at', 'desc');
+
     return $query->paginate($per_page);
   }
 

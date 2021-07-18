@@ -96,6 +96,38 @@
                             width: auto;
                         }
                     }
+
+                    .case-photo-content {
+                        
+                        .company-profile-img-list {
+                            margin: 10px 0 0;
+                            display: block;
+
+                            .company-image--edit {
+                                display: inline-block;
+                                max-width: unset;
+                                width: 140px;
+                                height: 100px;
+                                padding: 0;
+                                margin: 0 10px 10px 0;
+
+                                .over-hidden {
+                                    img {
+                                        width: 140px;
+                                        height: 100px;
+                                        object-fit: cover;
+                                    }
+                                }
+
+                                .remove-btn {
+                                    position: absolute;
+                                    top: -15px;
+                                    right: -6px;
+                                    cursor: pointer;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -110,6 +142,22 @@
 
                 .scroll-modal-body {
                     padding: 0 125px;
+
+                    .view-img-panel {
+
+                        img {
+                            width: 140px;
+                            height: 100px;
+                            object-fit: cover;
+                            border-radius: 5px;
+                            margin: 0 10px 10px 0;
+                        }
+                    }
+
+                    .col-6 {
+                        padding-left: 15px;
+                        padding-right: 15px;
+                    }
                 }
             }
         }

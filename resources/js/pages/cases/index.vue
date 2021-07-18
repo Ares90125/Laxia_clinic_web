@@ -3,8 +3,8 @@
     <div class="main-content case-content main-dev-content">
       <div class="staff-header case-header">
           <select class="menu-sort form-control" @change="handleCategoryChange">
-            <option value="-1">{{ $t('部位でソート') }}</option>
-            <option v-for="(name, id) in specialities" :key="id" :value="id">{{ name }}</option>
+            <option value="-1">{{ $t('施術で絞り込む') }}</option>
+            <option v-for="item in search_categories" :key="item.id" :value="item.id">{{ item.name }}</option>
           </select>
           <!-- <select class="staff-sort form-control" @change="handleStuffChange">
             <option value="-1">{{ $t('担当者でソート') }}</option>
@@ -107,10 +107,14 @@
               <small v-if="form.beforePhotos.length" class="mb-0">{{ $t('Before画像') }}</small>
               <div v-if="form.beforePhotos.length" class="company-profile-img-list">
                 <div v-for="(img, index) in form.beforePhotos" class="company-image--edit" :key="index">
-                  <span class="remove-btn" @click="handleBeforeRemoveFile(index)"><i class="bi bi-x-circle-fill"></i></span>
                   <div class="over-hidden">
                     <img :src="'/storage/'+img" />
                   </div>
+                  <span class="remove-btn" @click="handleBeforeRemoveFile(index)">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6.49998 0.25C3.04826 0.25 0.25 3.04835 0.25 6.50008C0.25 9.9518 3.04826 12.75 6.49998 12.75C9.9518 12.75 12.7501 9.9518 12.7501 6.50008C12.7501 3.04835 9.9518 0.25 6.49998 0.25ZM9.39685 8.38102L8.38131 9.39685L6.49998 7.51551L4.61882 9.39685L3.60321 8.38102L5.48445 6.49969L3.60321 4.61872L4.61875 3.60309L6.49998 5.48445L8.38124 3.60309L9.39685 4.61853L7.51551 6.49969L9.39685 8.38102Z" fill="#131340"/>
+                    </svg>
+                  </span>
                 </div>
               </div>
             </div>
@@ -118,10 +122,14 @@
               <small v-if="form.afterPhotos.length" class="mb-0">{{ $t('After画像') }}</small>
               <div v-if="form.afterPhotos.length" class="company-profile-img-list">
                 <div v-for="(img, index) in form.afterPhotos" class="company-image--edit" :key="index">
-                  <span class="remove-btn" @click="handleAfterRemoveFile(index)"><i class="bi bi-x-circle-fill"></i></span>
                   <div class="over-hidden">
                     <img :src="'/storage/'+img" />
                   </div>
+                  <span class="remove-btn" @click="handleAfterRemoveFile(index)">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6.49998 0.25C3.04826 0.25 0.25 3.04835 0.25 6.50008C0.25 9.9518 3.04826 12.75 6.49998 12.75C9.9518 12.75 12.7501 9.9518 12.7501 6.50008C12.7501 3.04835 9.9518 0.25 6.49998 0.25ZM9.39685 8.38102L8.38131 9.39685L6.49998 7.51551L4.61882 9.39685L3.60321 8.38102L5.48445 6.49969L3.60321 4.61872L4.61875 3.60309L6.49998 5.48445L8.38124 3.60309L9.39685 4.61853L7.51551 6.49969L9.39685 8.38102Z" fill="#131340"/>
+                    </svg>
+                  </span>
                 </div>
               </div>
             </div>
@@ -299,20 +307,18 @@
             </div>
           </div>
         </div>
-        <div class="form-group">
-          <div class="row">
-            <div class="col-6">
-              <small>{{ $t('年齢') }}</small>
-              <p>{{form.cases.patient_age}}{{ $t('才') }}</p>
-            </div>
-            <div class="col-6">
-              <small>{{ $t('性別') }}</small>
-              <template v-for="(name, id) in genders" :value="id">
-                <p v-if="form.cases.patient_gender == id" :key="id">
-                  {{name}}
-                </p>
-              </template>
-            </div>
+        <div class="form-group row">
+          <div class="col-6">
+            <small>{{ $t('年齢') }}</small>
+            <p>{{form.cases.patient_age}}{{ $t('才') }}</p>
+          </div>
+          <div class="col-6">
+            <small>{{ $t('性別') }}</small>
+            <template v-for="(name, id) in genders" :value="id">
+              <p v-if="form.cases.patient_gender == id" :key="id">
+                {{name}}
+              </p>
+            </template>
           </div>
         </div>
         <div class="form-group row">
@@ -428,6 +434,20 @@ export default {
     },
     menu_detail_data() {
       return this.$store.state.data.selected_menus;
+    },
+    search_categories() {
+      let tc = [];
+      
+      this.categories.map(el => {
+        el.all_children.map(item => {
+          tc.push({
+            id: item.id,
+            name: item.name,
+          });
+        });
+      });
+
+      return tc;
     },
   },
 

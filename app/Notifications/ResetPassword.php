@@ -20,7 +20,11 @@ class ResetPassword extends Notification
         //     ->action('Reset Password', url(config('app.url').'/password/reset/'.$this->token).'?email='.urlencode($notifiable->email))
         //     ->line('If you did not request a password reset, no further action is required.');
         
+        $template_data = array(
+            'link'=> url(config('app.url').'/password/reset/'.$this->token).'?email='.urlencode($notifiable->email)
+        );
+
         return (new MailMessage)
-            ->view('mails.user.reset');
+            ->view('mails.user.reset', $template_data);
     }
 }

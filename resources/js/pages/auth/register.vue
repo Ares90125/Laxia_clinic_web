@@ -66,10 +66,10 @@ export default {
 
   data: () => ({
     form: new Form({
-      name: '',
+      // name: '',
       email: '',
       password: '',
-      password_confirmation: '',
+      // password_confirmation: '',
     }),
     mustVerifyEmail: false
   }),
@@ -84,8 +84,8 @@ export default {
     },
     async register () {
       // Register the user.
-      const { data } = await this.form.post('/api/clinic/register')
-
+      const { data } = await this.form.post('/api/clinic/register');
+      
       // Must verify email fist.
       if (data.status) {
         this.mustVerifyEmail = true

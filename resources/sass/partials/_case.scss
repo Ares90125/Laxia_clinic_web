@@ -67,6 +67,10 @@
                                 margin: 0;
                                 position: absolute;
                                 bottom: 5px;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                max-width: 250px;
                             }
                         }
                     }

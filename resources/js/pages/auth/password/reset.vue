@@ -108,24 +108,15 @@ export default {
     },
     hideModal() {
       this.$refs.confirmPassword.hide();
+      this.$router.push({ name: 'login' });
     },
 
     async reset () {
       // Submit the form.
       const { data } = await this.form.post('/api/user/password/reset')
-
       console.log(data);
-      // // Save the token.
-      // this.$store.dispatch('auth/saveToken', {
-      //   token: data.token,
-      //   remember: this.remember
-      // })
 
-      // // Fetch the user.
-      // await this.$store.dispatch('auth/fetchUser')
-
-      // // Redirect home.
-      // this.$router.push({ name: 'reservations' })
+      if(data.reset_flag == 'successed') showModal();
     }
   }
 }

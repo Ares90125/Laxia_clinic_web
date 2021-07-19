@@ -7,8 +7,8 @@
           <!-- Email -->
           <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('メールアドレスもしくはID名') }}</label>
-            <div>
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email'), 'is-login-valid': Object.keys(form.errors.errors).length > 0 && !form.errors.has('email')}" class="form-control" type="email" name="email" placeholder="例：XXX@example.com or ID">
+            <div class="pw-wrap">
+              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email'), 'is-login-valid': Object.keys(form.errors.errors).length > 0 && !form.errors.has('email')}" class="form-control" type="text" name="email" placeholder="例：XXX@example.com or ID">
               <i v-if="form.errors && form.errors.has('email')" class="i-login-invalid bi bi-exclamation-triangle-fill"></i>
               <i v-if="Object.keys(form.errors.errors).length > 0 && !form.errors.has('email')" class="i-login-valid bi bi-check-circle-fill"></i>
               <has-error :form="form" field="email" />
@@ -18,10 +18,9 @@
           <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('パスワード') }}</label>
             <div class="pw-wrap">
-              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password'), 'is-login-valid': Object.keys(form.errors.errors).length > 0 && !form.errors.has('password') }" class="form-control" type="password" name="password" id="password" placeholder="6文字以上で入力してください">
+              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('email'), 'is-login-valid': Object.keys(form.errors.errors).length > 0 && !form.errors.has('email') }" class="form-control" type="password" name="password" id="password" placeholder="6文字以上で入力してください">
               <i class="bi bi-eye-fill" id="togglePassword" @click="handleTogglePassword"></i>
               <i v-if="form.errors && form.errors.has('password')" class="i-login-invalid passwd-invalid bi bi-exclamation-triangle-fill"></i>
-              <i v-if="Object.keys(form.errors.errors).length > 0 && !form.errors.has('password')" class="i-login-valid passwd-valid bi bi-check-circle-fill"></i>
               <has-error :form="form" field="password" />
             </div>
           </div>

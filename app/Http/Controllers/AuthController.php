@@ -112,16 +112,19 @@ class AuthController extends Controller
 
         if ($this->guardName == 'clinic') {
             throw ValidationException::withMessages([
-                $this->username() => [trans('auth.failed')],
+                // $this->username() => [trans('auth.failed')],
+                $this->username() => ['ログイン情報が登録されていません。'],
             ]);
         } else if ($this->guardName == 'doctor') {
             throw ValidationException::withMessages([
-                $this->username() => [trans('auth.failed')],
+                // $this->username() => [trans('auth.failed')],
+                $this->username() => ['ログイン情報が登録されていません。'],
             ]);
         } else {
             return response()->json([
                 'status' => 0,
-                'message' => trans('auth.failed'),
+                // 'message' => trans('auth.failed'),
+                'message' => 'ログイン情報が登録されていません。',
             ]);
         }
     }

@@ -17,6 +17,10 @@
         &.sent-form {
             max-width: 500px;
         }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
     }
     &--title {
         font-size: 24px;
@@ -55,8 +59,12 @@
             position: absolute;
             top: 11px;
             right: 14px;
-            font-size: 22px;
+            font-size: 18px;
             line-height: 1.0;
+        }
+
+        .form-control {
+            margin: 0;
         }
     }
     & .form-control {

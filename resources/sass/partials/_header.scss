@@ -29,6 +29,12 @@
     opacity: 1 !important;
 }
 
+a {
+    &:hover {
+        color: unset;
+    }
+}
+
 input.form-control {
     border-color: #C9D6DF;
     border-radius: 5px;

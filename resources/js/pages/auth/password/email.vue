@@ -49,8 +49,10 @@ export default {
     async send () {
       const { data } = await this.form.post('/api/user/password/email');
       console.log('data=>', data);
-      this.status = data.status
-      this.form.reset()
+      // this.status = data.status
+      // this.form.reset()
+
+      if(data.send_flag == 'successed') router.push({name: 'password.sent'})
     }
   }
 }

@@ -8,7 +8,7 @@
           <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('新しいパスワード') }}</label>
             <div class="pw-wrap">
-              <input v-model="form.password" :class="{ 'custom-pw-is-invalid-invalid': form.errors.has('password') }" class="form-control" type="password" name="password" id="password" placeholder="6文字以上で入力してください">
+              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" class="form-control" type="password" name="password" id="password" placeholder="6文字以上で入力してください">
               <i class="bi bi-eye-fill" id="togglePassword" @click="handleTogglePassword"></i>
               <has-error :form="form" field="password" />
             </div>
@@ -18,7 +18,7 @@
           <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('再入力してください') }}</label>
             <div class="pw-wrap">
-              <input v-model="form.repassword" :class="{ 'custom-pw-is-invalid-invalid': form.errors.has('repassword') }" class="form-control" type="password" name="repassword" id="repassword" placeholder="6文字以上で入力してください">
+              <input v-model="form.repassword" :class="{ 'is-invalid': form.errors.has('repassword') }" class="form-control" type="password" name="repassword" id="repassword" placeholder="6文字以上で入力してください">
               <i class="bi bi-eye-fill" id="toggleRePassword" @click="handleReTogglePassword"></i>
               <has-error :form="form" field="repassword" />
             </div>
@@ -112,27 +112,19 @@ export default {
     },
 
     async reset () {
-      // Submit the form.
-      const { data } = await this.form.post('/api/user/password/reset')
-      console.log(data);
+      try{
+        const { data } = await this.form.post('/api/user/password/reset')
+        console.log(data);
 
-      if(data.reset_flag == 'successed') this.$refs.confirmPassword.show();
+        if(data.reset_flag == 'successed') this.$refs.confirmPassword.show();
+      } catch(e) {
+        if(e.response.status === 400) {
+          alert(e.response.data.email);
+        } else if(e.response.status !== 422) {
+          alert('操作が失敗しました。');
+        }
+      }
     }
   }
 }
 </script>
-<style scoped>
-  /* .modal{
-    align-items: center;
-    top: 0;
-  }
-  * >>> .form-modal-header{
-    display: none !important;
-  }
-  * >>> .form-modal-body{
-    padding: 0 !important;
-  }
-  * >>> .form-modal-body .auth--wrapper {
-    height: 404px;
-  } */
-</style>>

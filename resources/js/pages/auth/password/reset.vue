@@ -34,16 +34,16 @@
         ref="confirmPassword"
         id="password-modal"
         title=""
-        class="modal"
+        class="modal reset-success-modal"
       >
         <div class="main-modal">
           <div class="auth--wrapper">
             <div class="auth-form">
               <h2 class="auth-title pass-changed">パスワードを更新しました！</h2>
-              <span class="auth-title-tip">
+              <div class="auth-title-tip">
                 正常にあなたのパスワードが更新されました。<br>
                 下のボタンからログイン画面に移動してログインしてください。
-              </span>
+              </div>
             </div>
             <div class="auth-btn--wrapper pass-changed">
               <button class="btn btn-primary" @click="hideModal">{{ $t('ログイン画面からログインする') }}</button>
@@ -118,7 +118,7 @@ export default {
 }
 </script>
 <style scoped>
-  .modal{
+  /* .modal{
     align-items: center;
     top: 0;
   }
@@ -130,5 +130,5 @@ export default {
   }
   * >>> .form-modal-body .auth--wrapper {
     height: 404px;
-  }
+  } */
 </style>>

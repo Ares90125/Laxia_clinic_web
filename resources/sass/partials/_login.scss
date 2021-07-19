@@ -149,5 +149,52 @@
             }
         }
     }
+}
 
+#password-modal {
+
+    &.reset-success-modal {
+        height: unset;
+        left: 0;
+        top: 100px;
+
+        .form-modal-content {
+            width: 800px;
+            height: 400px;
+
+            .form-modal-header{
+                display: none;
+            }
+            
+            .form-modal-body {
+                padding: 0;
+    
+                .auth--wrapper {
+                    max-width: 800px;
+                    min-height: 400px;
+                    display: block;
+
+                    .auth-form {
+                        padding: 0;
+                        max-width: 470px;
+
+                        .auth-title {
+                            color: #131340;
+                            margin-bottom: 55px;
+                        }
+
+                        .auth-title-tip {
+                            font-size: 18px;
+                            line-height: 1.75;
+                        }
+                    }
+
+                    .auth-btn--wrapper {
+                        text-align: center;
+                        margin-top: 55px;
+                    }
+                }
+            }
+        }
+    }
 }

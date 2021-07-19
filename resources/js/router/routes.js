@@ -14,7 +14,7 @@ export default [
   { path: '/email/verify/:id', name: 'verification.verify', component: page('auth/verification/verify.vue') },
   { path: '/email/resend', name: 'verification.resend', component: page('auth/verification/resend.vue') },
 
-  { path: '/password/reset-sent', name: 'password.sent', component: page('auth/password/email-sent.vue') },
+  { path: '/password/reset-sent/:mail', name: 'password.sent', component: page('auth/password/email-sent.vue') },
   { path: '/password/newset', name: 'password.newset', component: page('auth/password/reset.vue') },
   { path: '/password/letter-sent', name: 'letter.sent', component: page('auth/password/letter-sent.vue') },
 

@@ -15,9 +15,7 @@
           </div>
 
           <div class="auth--btnwrap reset-btn">
-            <!-- <router-link :to="{name: 'password.sent'}"> -->
-              <v-button :loading="form.busy">{{ $t('パスワードリセットのメールを送信') }}</v-button>
-            <!-- </router-link> -->
+            <v-button :loading="form.busy">{{ $t('パスワードリセットのメールを送信') }}</v-button>
           </div>
         </form>
       </div>
@@ -39,10 +37,8 @@ export default {
 
   data: () => ({
     form: new Form({
-      email: '',
-      password: ''
-    }),
-    remember: false
+      email: ''
+    })
   }),
 
   methods: {
@@ -53,7 +49,7 @@ export default {
       // this.form.reset()
 
       if(data.send_flag == 'successed')
-		    this.$router.push({name: 'password.sent'});
+		    this.$router.push({name: 'password.sent', params: { mail: this.form.email }});
     }
   }
 }

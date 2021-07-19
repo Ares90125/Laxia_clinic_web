@@ -5,7 +5,7 @@
           <h2 class="auth--title sent-title" >メールを送信しました</h2>
           <!-- Email -->
           <span class="auth--title__tip sent-tip">
-            <strong>xxx@example.com</strong> にメールを送信しましたので、新しいパスワードを設定してください。
+            <strong>{{ mail_address }}</strong> にメールを送信しましたので、新しいパスワードを設定してください。
               <br>メールが届かない場合は、入力したアドレスに間違いがあるか、登録したメールアドレスが違う可能性があります。
           </span>
         </div>
@@ -26,6 +26,16 @@ export default {
 
   metaInfo () {
     return { title: this.$t('パスワード再設定') }
+  },
+
+  data(){
+   return{
+     mail_address: null
+    };
+  },
+  
+  mounted(){
+    this.mail_address=this.$route.params.mail;
   },
 
   methods: {

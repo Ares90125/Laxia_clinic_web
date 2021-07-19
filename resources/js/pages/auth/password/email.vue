@@ -48,12 +48,12 @@ export default {
   methods: {
     async send () {
       const { data } = await this.form.post('/api/user/password/email');
-      console.log('data_new=>', data);
+      console.log('data=>', data);
       // this.status = data.status
       // this.form.reset()
 
       if(data.send_flag == 'successed')
-		this.$router.push({name: 'password.sent'});
+		    this.$router.push({name: 'password.sent'});
     }
   }
 }

@@ -45,6 +45,9 @@
         &.reset-title {
             margin-bottom: 82px;
         }
+        &.new-pass-title {
+            margin-left: -20px;
+        }
     }
     & .col-form-label {
         font-size: 16px;
@@ -57,7 +60,7 @@
         position: relative;
         & i {
             position: absolute;
-            top: 11px;
+            top: 14px;
             right: 14px;
             font-size: 18px;
             line-height: 1.0;

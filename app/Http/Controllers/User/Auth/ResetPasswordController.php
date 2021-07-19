@@ -43,4 +43,19 @@ class ResetPasswordController extends Controller
     {
         return response()->json(['email' => trans($response)], 400);
     }
+
+    /**
+     * Get the password reset validation rules.
+     *
+     * @return array
+     */
+    protected function rules()
+    {
+        return [
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+            'repassword' => 'required|same:password',
+        ];
+    }
 }

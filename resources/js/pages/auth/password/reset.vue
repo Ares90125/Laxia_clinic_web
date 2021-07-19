@@ -2,8 +2,8 @@
   <div class="bg-blue-gray auth-wrapper login-wrapper auth">
     <div class="auth--wrapper">
       <div class="auth--form newpass-form">
-        <form @submit.prevent="login" @keydown="form.onKeydown($event)">
-          <h2 class="auth--title">新しいパスワードを設定してください</h2>       
+        <form @submit.prevent="reset" @keydown="form.onKeydown($event)">
+          <h2 class="auth--title new-pass-title">新しいパスワードを設定してください</h2>       
           <!-- Email -->
           <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('新しいパスワード') }}</label>
@@ -18,14 +18,18 @@
           <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('再入力してください') }}</label>
             <div class="pw-wrap">
-              <input v-model="form.rePassword" :class="{ 'custom-pw-is-invalid-invalid': form.errors.has('rePassword') }" class="form-control" type="password" name="re-password" id="re-password" placeholder="6文字以上で入力してください">
+              <input v-model="form.repassword" :class="{ 'custom-pw-is-invalid-invalid': form.errors.has('repassword') }" class="form-control" type="password" name="repassword" id="repassword" placeholder="6文字以上で入力してください">
               <i class="bi bi-eye-fill" id="toggleRePassword" @click="handleReTogglePassword"></i>
-              <has-error :form="form" field="rePassword" />
+              <has-error :form="form" field="repassword" />
             </div>
           </div>
           
+          <input v-model="form.email" type="hidden" name="email">
+          <input v-model="form.token" type="hidden" name="token">
+
           <div class="auth--btnwrap register-btn">
-            <button class="btn btn-primary" @click="showModal">{{ $t('パスワードを変更') }}</button>
+            <!-- <button class="btn btn-primary" @click="showModal">{{ $t('パスワードを変更') }}</button> -->
+            <v-button :loading="form.busy">{{ $t('パスワードを変更') }}</v-button>
           </div>
         </form>
       </div>
@@ -72,10 +76,17 @@ export default {
   data: () => ({
     form: new Form({
       password: '',
-      rePassword : ''
+      repassword : '',
+      email : '',
+      token : '',
     }),
-    remember: false
+    remember: false,
   }),
+
+  mounted(){
+    this.form.token=this.$route.params.token;
+    this.form.email=this.$route.query.email;
+  },
 
   methods: {
     handleTogglePassword(){
@@ -87,9 +98,9 @@ export default {
     },
     handleReTogglePassword(){
       const toggleRePassword = document.querySelector('#toggleRePassword');
-      const rePassword = document.querySelector('#re-password');
-      const type = rePassword.getAttribute('type') === 'password' ? 'text' : 'password';
-      rePassword.setAttribute('type', type);
+      const repassword = document.querySelector('#repassword');
+      const type = repassword.getAttribute('type') === 'password' ? 'text' : 'password';
+      repassword.setAttribute('type', type);
       toggleRePassword.classList.toggle('bi-eye-slash');  
     },
     showModal() {
@@ -98,21 +109,23 @@ export default {
     hideModal() {
       this.$refs.confirmPassword.hide();
     },
-    async login () {
+
+    async reset () {
       // Submit the form.
-      const { data } = await this.form.post('/api/clinic/login')
+      const { data } = await this.form.post('/api/user/password/reset')
 
-      // Save the token.
-      this.$store.dispatch('auth/saveToken', {
-        token: data.token,
-        remember: this.remember
-      })
+      console.log(data);
+      // // Save the token.
+      // this.$store.dispatch('auth/saveToken', {
+      //   token: data.token,
+      //   remember: this.remember
+      // })
 
-      // Fetch the user.
-      await this.$store.dispatch('auth/fetchUser')
+      // // Fetch the user.
+      // await this.$store.dispatch('auth/fetchUser')
 
-      // Redirect home.
-      this.$router.push({ name: 'reservations' })
+      // // Redirect home.
+      // this.$router.push({ name: 'reservations' })
     }
   }
 }

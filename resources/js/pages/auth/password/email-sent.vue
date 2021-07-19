@@ -33,8 +33,7 @@ export default {
         this.$router.push({ name: 'login' })
     },
     goBack(){
-        // this.$router.push({ name: 'register' })
-        this.$router.push({ name: 'letter.sent' })
+        this.$router.push({ name: 'password.request' })
     }
   }
 }

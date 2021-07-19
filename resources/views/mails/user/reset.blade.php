@@ -10,7 +10,7 @@
             <p style="font-size: 22px; margin: 20px 0;"><b>リクエストを受け取りました</b></p>
             <p style="font-size: 16px; padding: 0; margin: 0; line-height: 1.75;">今すぐパスワードをリセットできます。</p>
             
-            <a href="{{ $viewData->link }}" style="margin: 30px 0; color:#FFF; background: red; padding: 10px 20px; border-radius: 30px; font-weight: bold; text-decoration: none; font-size: 16px; display: inline-block;">
+            <a href="{{ $link }}" style="margin: 30px 0; color:#FFF; background: red; padding: 10px 20px; border-radius: 30px; font-weight: bold; text-decoration: none; font-size: 16px; display: inline-block;">
                 パスワードをリセットする
             </a>
             

@@ -116,7 +116,7 @@ export default {
       const { data } = await this.form.post('/api/user/password/reset')
       console.log(data);
 
-      if(data.reset_flag == 'successed') showModal();
+      if(data.reset_flag == 'successed') this.$refs.confirmPassword.show();
     }
   }
 }

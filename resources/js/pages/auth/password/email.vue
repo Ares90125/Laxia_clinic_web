@@ -9,15 +9,15 @@
           <div class="form-group">
             <label class="col-form-label text-md-right">{{ $t('メールアドレス') }}</label>
             <div>
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" type="text" name="email" placeholder="例：XXX@example.com or ID">
+              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control mb-0" type="text" name="email" placeholder="例：XXX@example.com or ID">
               <has-error :form="form" field="email" />
             </div>
           </div>
 
           <div class="auth--btnwrap reset-btn">
-            <router-link :to="{name: 'password.sent'}">
+            <!-- <router-link :to="{name: 'password.sent'}"> -->
               <v-button :loading="form.busy">{{ $t('パスワードリセットのメールを送信') }}</v-button>
-            </router-link>
+            <!-- </router-link> -->
           </div>
         </form>
       </div>
@@ -47,7 +47,8 @@ export default {
 
   methods: {
     async send () {
-      const { data } = await this.form.post('/api/password/email')
+      const { data } = await this.form.post('/api/user/password/email');
+      console.log('data=>', data);
       this.status = data.status
       this.form.reset()
     }

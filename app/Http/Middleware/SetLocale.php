@@ -15,10 +15,10 @@ class SetLocale
      */
     public function handle($request, Closure $next)
     {
-        if ($locale = $this->parseLocale($request)) {
-            app()->setLocale($locale);
-        }
-
+        // if ($locale = $this->parseLocale($request)) {
+        //     app()->setLocale($locale);
+        // }
+        app()->setLocale('ja');
         return $next($request);
     }
 

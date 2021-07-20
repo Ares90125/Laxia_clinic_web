@@ -36,7 +36,8 @@
               </svg>
           </div>
           <div class="job-item">
-            <p class="staff-hira">{{ item.hira_name }} {{ item.kata_name }}</p>
+            <!-- <p class="staff-hira">{{ item.hira_name }} {{ item.kata_name }}</p> -->
+            <p class="staff-hira">{{ item.hira_name }}</p>
             <p class="staff-name">{{ item.job && item.job_name }}{{ $t('ドクター') }}</p>
           </div>
         </div>
@@ -54,7 +55,8 @@
               </svg>
           </div>
           <div class="job-item">
-            <p class="staff-hira">{{ item.name }} {{ item.kana }}</p>
+            <!-- <p class="staff-hira">{{ item.name }} {{ item.kana }}</p> -->
+            <p class="staff-hira">{{ item.name }}</p>
             <p class="staff-name">{{ item.job && item.job_name }}</p>
           </div>
         </div>
@@ -334,7 +336,7 @@ export default {
           name: '',
           kana: '',
           duty: '',
-          job_id: '',
+          job_id: 2,
           experience_year: '',
           career: '',
           profile: '',

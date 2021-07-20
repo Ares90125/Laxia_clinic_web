@@ -48,7 +48,8 @@
       :title="modalInfo.title"
       @cancel="handleModalClose"
       >
-      <vue-custom-scrollbar class="scroll-modal-body" :settings="settings" @ps-scroll-y="scrollHanle">
+      <!-- <vue-custom-scrollbar class="scroll-modal-body" :settings="settings" @ps-scroll-y="scrollHanle"> -->
+      <div class="scroll-modal-body">
         <div v-if="form" class="create-menu-content">
           <div class="form-group">
             <small>{{ $t('掲載ステータス') }}</small>
@@ -261,7 +262,8 @@
             </div>
           </div>       
         </div>
-      </vue-custom-scrollbar>
+      </div>  
+      <!-- </vue-custom-scrollbar> -->
       <template v-slot:footer>
         <button type="button" class="btn btn-primary btn-modal-footer" @click="handleUpdateMenu">{{ modalInfo.confirmBtnTitle }}</button>
       </template>
@@ -272,7 +274,8 @@
       id="menu-view-modal"
       :title="modalInfo.title"
       >
-      <vue-custom-scrollbar class="scroll-modal-body" :settings="settings" @ps-scroll-y="scrollHanle">
+      <!-- <vue-custom-scrollbar class="scroll-modal-body" :settings="settings" @ps-scroll-y="scrollHanle"> -->
+      <div class="scroll-modal-body">
         <div v-if="form" class="create-menu-content view-modal-content">
           <div class="form-group row">
             <div class="col">
@@ -445,7 +448,8 @@
             </div>
           </div>
         </div>
-      </vue-custom-scrollbar>
+      </div>  
+      <!-- </vue-custom-scrollbar> -->
       <template v-slot:footer>
           <div class="view-modal-footer">
             <button type="button" class="btn btn-danger btn-modal-footer" @click="handleDeleteMenu">{{ modalInfo.delBtnTitle }}</button>

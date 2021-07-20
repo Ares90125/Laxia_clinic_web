@@ -324,18 +324,18 @@
         <div class="form-group row">
           <div class="col">
             <small>{{ $t('施術の解説') }}</small>
-            <p>{{form.cases.case_description}}</p>
+            <p class="pre-wrap">{{form.cases.case_description}}</p>
           </div>
         </div>
         <div class="form-group row">
           <div class="col">
             <small>{{ $t('副作用・リスク') }}</small>
-            <p>{{form.cases.treat_risk}}</p>
+            <p class="pre-wrap">{{form.cases.treat_risk}}</p>
           </div>
         </div>
         <div class="form-group row">
           <div class="col">
-            <small>{{ $t('担当ドクターからのコメント') }}</small>
+            <small class="pre-wrap">{{ $t('担当ドクターからのコメント') }}</small>
             <p>{{form.cases.doctor_opinion}}</p>
           </div>
         </div>

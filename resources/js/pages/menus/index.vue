@@ -321,19 +321,19 @@
           <div class="form-group row">
             <div class="col">
               <small>{{ $t('メニューの説明') }}</small>
-              <p>{{form.menus.description}}</p>
+              <p class="pre-wrap">{{form.menus.description}}</p>
             </div>
           </div>
           <div class="form-group row">
             <div class="col">
               <small>{{ $t('副作用・リスク') }}</small>
-              <p>{{form.menus.risk}}</p>
+              <p class="pre-wrap">{{form.menus.risk}}</p>
             </div>
           </div>
           <div class="form-group row">
             <div class="col">
               <small>{{ $t('施術の保証') }}</small>
-              <p>{{form.menus.guarantee}}</p>
+              <p class="pre-wrap">{{form.menus.guarantee}}</p>
             </div>
           </div>
           <div class="form-group row">

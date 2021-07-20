@@ -2,7 +2,7 @@
   <div v-if="is_master_loaded" class="main-in pd-0">
     <div class="main-content case-content main-dev-content">
       <div class="staff-header case-header">
-          <select class="menu-sort form-control" @change="handleCategoryChange">
+          <select class="menu-sort" @change="handleCategoryChange">
             <option value="-1">{{ $t('施術で絞り込む') }}</option>
             <option v-for="item in search_categories" :key="item.id" :value="item.id">{{ item.name }}</option>
           </select>

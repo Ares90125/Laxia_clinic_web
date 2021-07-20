@@ -24,8 +24,26 @@
             // margin-right: 25px;
         }
 
+        .search-staff-doctor {
+            text-align: right;
+
+            .search-input {
+                padding-left: 30px;
+                background-image: url("data:image/svg+xml,%3Csvg width='15' height='15' viewBox='0 0 15 15' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M14.7186 13.4067L11.414 10.0786C12.2811 8.93015 12.7499 7.45359 12.6327 5.88327C12.4218 2.78952 9.93739 0.258274 6.84364 0.000461057C2.95302 -0.280789 -0.28136 2.95359 0.0233277 6.84421C0.257703 9.93796 2.78895 12.4458 5.90614 12.6333C7.47645 12.727 8.92958 12.2583 10.1015 11.4145L13.4061 14.7192C13.7811 15.0942 14.3671 15.0942 14.7421 14.7192C15.0936 14.3677 15.0936 13.7583 14.7186 13.4067ZM6.32802 10.7817C3.86708 10.7817 1.87489 8.78952 1.87489 6.32859C1.87489 3.86765 3.86708 1.87546 6.32802 1.87546C8.78895 1.87546 10.7811 3.86765 10.7811 6.32859C10.7811 8.78952 8.78895 10.7817 6.32802 10.7817Z' fill='%23131340' fill-opacity='0.3'/%3E%3C/svg%3E%0A");
+                background-repeat: no-repeat;
+                background-position-x: 10px;
+                background-position-y: 13px;
+                border-radius: 3px;
+                border: none;
+                width: 255px;
+                outline: none;
+                font-size: 16px;
+                letter-spacing: 0.1em;
+            }
+        }
+
         .staff-list {
-            margin-top: 65px;
+            margin-top: 25px;
             width: 100%;
             display: grid;
             grid-template-columns: repeat(6, 250px);

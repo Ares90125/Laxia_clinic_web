@@ -7,20 +7,13 @@
       </div>
       <div class="staff-header staff-doctor-header tab-con mb-2">
         <p>
-          <!-- <select class="staff-sort" class="form-control">
-            <option>{{ $t('職種でソート') }}</option>
-            <option v-for="(name, id) in jobs" :key="id" :value="id">{{ name }}</option>
-          </select> -->
           <a href="#" :class="{'active': query.status == 0}" @click="handleStatusChange(0)">{{ $t('すべて') }}</a>
           <a href="#" :class="{'active': query.status == 1}" @click="handleStatusChange(1)" >{{ $t('ドクター') }} ({{doctor_cnt}})</a> 
           <a href="#" :class="{'active': query.status == 2}" @click="handleStatusChange(2)" >{{ $t('スタッフ') }} ({{staff_cnt}})</a> 
         </p>
       </div>
-      <div class="search-content" >
-        <div class="search-panel">
-          <span><i class="bi bi-search"></i></span>
-          <input type="text" placeholder="メンバーの名前を検索" @keyup='add_todo_keyup' />
-        </div>
+      <div class="search-staff-doctor">
+        <input type="text" class="search-input" placeholder="メンバーの名前を検索" @keyup='add_todo_keyup' />
       </div>
       <div class="staff-list">
         <div v-if="doctors.length && (query.status == 0 || query.status == 1)" v-for="(item, index) in doctors" :key="'doctor'+index" class="staff-one" @click="handleShowDoctor(item.doctor_id)">

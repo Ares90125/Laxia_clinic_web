@@ -20,10 +20,8 @@ class PatientInfoService
 
     $query = PatientInfo::query();
     if (isset($search['q'])) {
-      $query->where('name01', 'LIKE', "%{$search['q']}%")
-            ->orWhere('name02', 'LIKE', "%{$search['q']}%")
-            ->orWhere('kana01', 'LIKE', "%{$search['q']}%")
-            ->orWhere('kana02', 'LIKE', "%{$search['q']}%")
+      $query->where(\DB::raw("CONCAT(`name01`, ' ', `name02`)"), 'LIKE', "%{$search['q']}%")
+            ->orwhere(\DB::raw("CONCAT(`kana01`, ' ', `kana02`)"), 'LIKE', "%{$search['q']}%")
             ->orWhere('phone_number', 'LIKE', "%{$search['q']}%");
     }
     

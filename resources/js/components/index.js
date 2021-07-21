@@ -8,6 +8,7 @@ import FormModal from './FormModal'
 import FileUpload from './FileUpload'
 import MenuDetail from './MenuDetail'
 import Toggle from './Toggle'
+import HeaderSearchBox from './HeaderSearchBox'
 import { HasError, AlertError, AlertSuccess } from 'vform'
 
 // Components that are registered globaly.
@@ -24,6 +25,7 @@ import { HasError, AlertError, AlertSuccess } from 'vform'
   FileUpload,
   MenuDetail,
   Toggle,
+  HeaderSearchBox,
 ].forEach(Component => {
   Vue.component(Component.name, Component)
 })

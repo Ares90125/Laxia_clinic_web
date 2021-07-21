@@ -163,35 +163,8 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .header {
     padding: 7px 50px 7px 20px;
 
-    .header-left {
-        margin: 0;
-        padding: 7px 15px;
-
-        input {
-            padding: 0;
-            min-height: unset;
-            line-height: 22px;
-        }
-
-        &:hover {
-            background: #E7E7E7;
-
-            input {
-                background: #E7E7E7;
-            }
-        }
-
-        &.focus-border {
-            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.15);
-        }
-
-        button.b-colse {
-            right: 0;
-
-            i {
-                display: inherit;
-            }
-        }
+    .header-left-con {
+        width: 100%;
     }
 
     .header-right {

@@ -30,18 +30,18 @@ class ClinicDoctorsRelationService
 
   public function get($search, $clinic_id) {
     if(isset($search['status']) && $search['status'] != 0){
-      $query = ClinicDoctorsRelation::where('clinic_id', $clinic_id)        
+      $query = ClinicDoctorsRelation::where('clinic_doctors_relation.clinic_id', $clinic_id)        
       ->join('doctors', 'doctors.doctor_id', '=', 'clinic_doctors_relation.doctor_id')
       ->where('doctors.job_id', '=', $search['status'])
       ->get();
     }else if(isset($search['q'])) {
-      $query = ClinicDoctorsRelation::where('clinic_id', $clinic_id)        
+      $query = ClinicDoctorsRelation::where('clinic_doctors_relation.clinic_id', $clinic_id)        
         ->join('doctors', 'doctors.doctor_id', '=', 'clinic_doctors_relation.doctor_id')
         ->where('doctors.kata_name', 'LIKE', "%{$search['q']}%")
         ->orWhere('doctors.hira_name', 'LIKE', "%{$search['q']}%")
         ->get();
     }else{
-      $query = ClinicDoctorsRelation::where('clinic_id', $clinic_id)
+      $query = ClinicDoctorsRelation::where('clinic_doctors_relation.clinic_id', $clinic_id)
         ->join('doctors', 'doctors.doctor_id', '=', 'clinic_doctors_relation.doctor_id')
         ->get();
     }
@@ -49,7 +49,7 @@ class ClinicDoctorsRelationService
   }
 
   public function getMemberCount($clinic_id, $request = array()) {
-    $query = ClinicDoctorsRelation::where('clinic_id', $clinic_id)
+    $query = ClinicDoctorsRelation::where('clinic_doctors_relation.clinic_id', $clinic_id)
       ->join('doctors', 'doctors.doctor_id', '=', 'clinic_doctors_relation.doctor_id');
 
     if(isset($request['q'])) {

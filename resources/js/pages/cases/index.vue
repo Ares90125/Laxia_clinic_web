@@ -19,14 +19,14 @@
               <div class="case-img">
                 <p class="before">
                   <template v-for="(item, key) in item.images" :value="key">
-                    <img v-if="item.img_type == 0" :src="'/storage/'+item.path" :key="key">
+                    <img v-if="item.img_type == 0" :src="item.path" :key="key">
                   </template>
                   <!-- <img v-else :src="'/img/menu-img.png'"> -->
                 </p>
                 <p class="after">
                   <!-- <img v-if="tmp.afterPhotos.length" :src="'/storage/'+tmp.afterPhotos[0]"> -->
                    <template v-for="(item, key) in item.images" :value="key">
-                    <img v-if="item.img_type == 1" :src="'/storage/'+item.path" :key="key">
+                    <img v-if="item.img_type == 1" :src="item.path" :key="key">
                   </template>
                   <!-- <img v-else :src="'/img/menu-img.png'"> -->
                   <!-- <img v-else class="menu-blank-img"> -->
@@ -109,7 +109,7 @@
               <div v-if="form.beforePhotos.length" class="company-profile-img-list">
                 <div v-for="(img, index) in form.beforePhotos" class="company-image--edit" :key="index">
                   <div class="over-hidden">
-                    <img :src="'/storage/'+img" />
+                    <img :src="img" />
                   </div>
                   <span class="remove-btn" @click="handleBeforeRemoveFile(index)">
                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -124,7 +124,7 @@
               <div v-if="form.afterPhotos.length" class="company-profile-img-list">
                 <div v-for="(img, index) in form.afterPhotos" class="company-image--edit" :key="index">
                   <div class="over-hidden">
-                    <img :src="'/storage/'+img" />
+                    <img :src="img" />
                   </div>
                   <span class="remove-btn" @click="handleAfterRemoveFile(index)">
                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -265,7 +265,7 @@
             <small>{{ $t('Before画像') }}</small>
             <div class="view-img-panel">
               <template v-for="(item, id) in form.beforePhotos" :value="id">
-                <img :src="'/storage/'+item" :key="id">
+                <img :src="item" :key="id">
               </template>
             </div>
           </div>
@@ -275,7 +275,7 @@
             <small>{{ $t('After画像') }}</small>
             <div class="view-img-panel">
               <template v-for="(item, id) in form.afterPhotos" :value="id">
-                <img :src="'/storage/'+item" :key="id">
+                <img :src="item" :key="id">
               </template>
             </div>
           </div>

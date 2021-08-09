@@ -19,7 +19,7 @@
           <div v-for="(item, index) in menus" :key="index" class="menu-one col-md-6 col-12">
             <div class="menu-one-in" @click="handleShowMenu(item.id)">
               <div class="menu-img">
-                <img v-if="item.images.length" :src="'/storage/'+item.images[0].path">
+                <img v-if="item.images.length" :src="item.images[0].path">
                 <!-- <img v-else :src="'/img/menu-img.png'"> -->
               </div>
               <div class="menu-info">
@@ -137,7 +137,7 @@
               <div v-if="form.menuPhotos.length" class="company-profile-img-list">
                 <div v-for="(img, index) in form.menuPhotos" class="company-image--edit" :key="index">
                   <div class="over-hidden">
-                    <img :src="'/storage/'+img" />
+                    <img :src="img" />
                   </div>
                   <span class="remove-btn" @click="handleRemoveFile(index)">
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -313,7 +313,7 @@
                   <div v-if="form.menuPhotos.length" class="company-profile-img-list">
                     <div v-for="(img, index) in form.menuPhotos" class="company-image--edit" :key="index">
                       <div class="over-hidden">
-                        <img :src="'/storage/'+img" />
+                        <img :src="img" />
                       </div>
                     </div>
                   </div>

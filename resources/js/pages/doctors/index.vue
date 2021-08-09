@@ -19,7 +19,7 @@
         <div v-if="doctors.length && (query.status == 0 || query.status == 1)" v-for="(item, index) in doctors" :key="'doctor'+index" class="staff-one" @click="handleShowDoctor(item.doctor_id)">
           <div v-if="item.photo" class="photo-item">
             <p class="staff-img">
-              <img :src="'/storage/' + item.photo" />
+              <img :src="item.photo" />
               </p>
           </div>
           <div v-else class="photo-svg-item">
@@ -38,7 +38,7 @@
         <div v-if="stuff_datas.length && (query.status == 0 || query.status == 2)" v-for="(item, index) in stuff_datas" :key="'stuff'+index" class="staff-one" @click="handleShowStuff(item.id)">
           <div v-if="item.photo" class="photo-item">
             <p class="staff-img">
-              <img :src="'/storage/' + item.photo" />
+              <img :src="item.photo" />
               </p>
           </div>
           <div v-else class="photo-svg-item">

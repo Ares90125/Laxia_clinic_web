@@ -87,28 +87,30 @@ class MenuController extends Controller
         ], 200);
     }
 
-    // public function uploadPhoto(Request $request)
-    // {
-    //     $path = $this->mediaUploadWithThumb('/clinic/menus', $request->file, 150);        
-    //     return response()->json([
-    //         'photo' => $path[1]
-    //     ], 200);
-    // }
     public function uploadPhoto(Request $request)
-    {    
-        $uploadedFile = $request->file;
-        // $request->validate([
-        //     'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        // ]);
-        $disk = 'public';
-        $filename = null;
-        $name = !is_null($filename) ? $filename : Str::random(25);
-        $file = $uploadedFile->storeAs('/clinic/menus', $name.'.'.$uploadedFile->getClientOriginalExtension(), $disk);
-
-       return response()->json([
-           'photo' => $file,
-       ], 200);
+    {
+        $path = $this->mediaUploadWithThumb('/clinic/menus', $request->file, 300);        
+        return response()->json([
+            'photo' => $path[1]
+        ], 200);
     }
+
+    // public function uploadPhoto(Request $request)
+    // {    
+    //     $uploadedFile = $request->file;
+    //     // $request->validate([
+    //     //     'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    //     // ]);
+    //     $disk = 'public';
+    //     $filename = null;
+    //     $name = !is_null($filename) ? $filename : Str::random(25);
+    //     $file = $uploadedFile->storeAs('/clinic/menus', $name.'.'.$uploadedFile->getClientOriginalExtension(), $disk);
+
+    //    return response()->json([
+    //        'photo' => $file,
+    //    ], 200);
+    // }
+
     public function delete($id) {
         $menu = Menu::where('id', $id)->firstOrFail();
         $menu->images()->delete();

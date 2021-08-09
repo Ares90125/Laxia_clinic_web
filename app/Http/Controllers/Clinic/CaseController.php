@@ -75,47 +75,64 @@ class CaseController extends Controller
         ], 200);
     }
 
+//     public function uploadBeforePhoto(Request $request)
+//     {
+//         // dd($request->file);
+//         // var_dump("asdff");
+// //        $path = $this->mediaUploadWithThumb('/clinic/cases', $request->file, 150);
+// //        var_dump($path);
+// //        return response()->json([
+// //            'photo' => $path[1]
+// //        ], 200);
+    
+//         $uploadedFile = $request->file;
+//         // $request->validate([
+//         //     'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+//         // ]);
+
+//         $disk = 'public';
+//         $filename = null;
+//         $name = !is_null($filename) ? $filename : Str::random(25);
+//         $file = $uploadedFile->storeAs('/clinic/cases/before', $name.'.'.$uploadedFile->getClientOriginalExtension(), $disk);
+
+//        return response()->json([
+//            'status' => 1,
+//            'photo' => $file,
+//        ]);
+//     }
+
     public function uploadBeforePhoto(Request $request)
     {
-        // dd($request->file);
-        // var_dump("asdff");
-//        $path = $this->mediaUploadWithThumb('/clinic/cases', $request->file, 150);
-//        var_dump($path);
-//        return response()->json([
-//            'photo' => $path[1]
-//        ], 200);
-    
-        $uploadedFile = $request->file;
-        // $request->validate([
-        //     'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        // ]);
-
-        $disk = 'public';
-        $filename = null;
-        $name = !is_null($filename) ? $filename : Str::random(25);
-        $file = $uploadedFile->storeAs('/clinic/cases/before', $name.'.'.$uploadedFile->getClientOriginalExtension(), $disk);
-
-       return response()->json([
-           'status' => 1,
-           'photo' => $file,
-       ]);
+        $path = $this->mediaUploadWithThumb('/clinic/cases/before', $request->file, 250);        
+        return response()->json([
+            'status' => 1,
+            'photo' => $path[1]
+        ], 200);
     }
+
+    // public function uploadAfterPhoto(Request $request)
+    // {    
+    //     $uploadedFile = $request->file;
+    //     // $request->validate([
+    //     //     'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    //     // ]);
+    //     $disk = 'public';
+    //     $filename = null;
+    //     $name = !is_null($filename) ? $filename : Str::random(25);
+    //     $file = $uploadedFile->storeAs('/clinic/cases/after', $name.'.'.$uploadedFile->getClientOriginalExtension(), $disk);
+
+    //    return response()->json([
+    //        'status' => 1,
+    //        'photo' => $file,
+    //    ]);
+    // }
 
     public function uploadAfterPhoto(Request $request)
-    {    
-        $uploadedFile = $request->file;
-        // $request->validate([
-        //     'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        // ]);
-        $disk = 'public';
-        $filename = null;
-        $name = !is_null($filename) ? $filename : Str::random(25);
-        $file = $uploadedFile->storeAs('/clinic/cases/after', $name.'.'.$uploadedFile->getClientOriginalExtension(), $disk);
-
-       return response()->json([
-           'status' => 1,
-           'photo' => $file,
-       ]);
+    {
+        $path = $this->mediaUploadWithThumb('/clinic/cases/after', $request->file, 250);        
+        return response()->json([
+            'status' => 1,
+            'photo' => $path[1]
+        ], 200);
     }
-
 }

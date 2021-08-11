@@ -297,6 +297,16 @@
             }
         }
     }
+
+    #doctor-detail-modal {
+        
+        .md-doctor-avatar-img{
+            border-radius: 50%;
+            object-fit: cover;
+            width: 145px;
+            height: 145px;
+        }
+    }
 }
 @media only screen and (max-width: 1200px) {
     

@@ -186,8 +186,8 @@
           </div>
           <div class="col-md-8 col-6 d-flex align-items-center">
             <div class="ml-5">
-              <p class="detail-title">{{doctorItem.hira_name}}</p>
-              <p class="detail-content">{{doctorItem.kata_name}}</p>
+              <p class="detail-title">{{doctorItem.kata_name}}</p>
+              <p class="detail-content">{{doctorItem.hira_name}}</p>
             </div>
           </div>
         </div>

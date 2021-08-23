@@ -96,7 +96,13 @@ class ClinicDoctorsRelation extends Model
   public function getSpec0NameAttribute()
   {
     $speciality = $this->speciality0()->where('id', $this->spec0)->first();
-    return $speciality ? $speciality->name : null;
+    
+    if(empty($speciality)) return null;
+
+    $parent = Speciality::where('id', $speciality->parent_id)->first();
+    $parent_name = empty($parent) ? '' : $parent->name . ' / ';
+
+    return $speciality ? $parent_name . $speciality->name : null;
   }
 
   public function speciality1()
@@ -107,7 +113,13 @@ class ClinicDoctorsRelation extends Model
   public function getSpec1NameAttribute()
   {
     $speciality = $this->speciality1()->where('id', $this->spec1)->first();
-    return $speciality ? $speciality->name : null;
+    
+    if(empty($speciality)) return null;
+
+    $parent = Speciality::where('id', $speciality->parent_id)->first();
+    $parent_name = empty($parent) ? '' : $parent->name . ' / ';
+
+    return $speciality ? $parent_name . $speciality->name : null;
   }
 
   public function speciality2()
@@ -118,6 +130,12 @@ class ClinicDoctorsRelation extends Model
   public function getSpec2NameAttribute()
   {
     $speciality = $this->speciality2()->where('id', $this->spec2)->first();
-    return $speciality ? $speciality->name : null;
+    
+    if(empty($speciality)) return null;
+
+    $parent = Speciality::where('id', $speciality->parent_id)->first();
+    $parent_name = empty($parent) ? '' : $parent->name . ' / ';
+
+    return $speciality ? $parent_name . $speciality->name : null;
   }
 }

@@ -208,7 +208,7 @@
         <div class="row my-4">
           <div class="col-12">
             <p class="detail-title">{{ $t('得意分野') }}</p>
-            <p class="detail-content"><span>{{doctorItem.spec0}}</span> <span>{{doctorItem.spec1}}</span> <span>{{doctorItem.spec2}}</span></p>
+            <p class="detail-content"><span>{{doctorItem.spec0_name}}</span> <span>{{doctorItem.spec1_name}}</span> <span>{{doctorItem.spec2_name}}</span></p>
           </div>
         </div>
         <div class="row my-4">

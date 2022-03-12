@@ -375,7 +375,7 @@
             </div>
             <div>
               <small>{{ $t('施術時間 75分') }}</small>
-              <small>{{ $t('施術の工程') }}</small>
+              <span>{{ $t('施術の工程') }}</span>
               <p>{{ $t('10分') }}</p>
             </div>
           </div>          

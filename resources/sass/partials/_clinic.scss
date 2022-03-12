@@ -1773,6 +1773,12 @@ span.switcher.switcher-1 input:not(:checked) + label {
 .result-menu-flow{
 	justify-content: space-between;
 }
+.result-menu-flow small{
+	color: #131340;
+}
+.result-menu-flow span{
+	color: #5F6377;
+}
 .result-menu-flow>div>div>p{
 	margin-left: 40px;
 	margin-top: 10px;

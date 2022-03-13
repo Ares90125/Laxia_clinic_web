@@ -948,10 +948,10 @@ button:focus {
 	font-weight: bold;
 	margin-top: 5px;
 	line-height: 26px;
-	margin-bottom: 28px;
+	margin-bottom: 10px;
 }
 .chat-user-profile>ul>li{
-	margin-bottom: 16px;
+	margin-bottom: 10px;
 }
 .chat-user-profile>ul>li>p{
 	margin-bottom: 4px;
@@ -962,6 +962,21 @@ button:focus {
 .chat-user-profile>ul>li>p>span{
 	color: #728396;
 }
+.chat-user-profile .btn{
+	font-size: 14px;
+	padding: 5px 25px;
+	width: 175px;
+	margin-top: 20px;
+}
+.btn-chat-confirm{
+	font-size: 14px;
+	padding: 5px 25px;
+	background: #5CA3F6;
+	width: 175px;
+}
+.item-center{
+	text-align: center;
+}
 .chat-content{
 	height: 100%;
 }
@@ -969,7 +984,7 @@ button:focus {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	height: calc(100% - 85px);
+	height: calc(100% - 175px);
 	.chat-main {
 		padding: 0 34px 10px;
 		margin-top: 40px;
@@ -978,15 +993,20 @@ button:focus {
 	}
 }
 .chat-input{
-	border-top: 1px solid #E1E1F1;
-	display: flex;
-	padding: 20px 40px;
+	// border-top: 1px solid #E1E1F1;
+	padding: 5px 15px;
 }
 .chat-input button{
 	border: none;
-	outline: none;
-	background-color: #fff;
-	margin-left: 15px;
+	padding: 5px 30px;
+	float: right;
+	background: #5CA3F6;
+	border-radius: 3px;
+	color: #FFFFFF;
+	font-size: 16px;
+}
+.chat-input .more-add-image-clicker{
+	padding-left: 10px;
 }
 .chat-input textarea{
 	border:none;
@@ -995,6 +1015,8 @@ button:focus {
 	line-height: 19px;
 	width: 100%;
 	resize: none;
+	background-color: #F5F5F5;
+	height: 116px;
 }
 .chat-date{
 	text-align: center;
@@ -2406,6 +2428,14 @@ i.i-login-valid{
 }
 .multi-files-uploader .dropzone-wrapper .dropzone-in > div div{
 	// margin-top: 45px;
+}
+.chat-input .multi-files-uploader.dropzone{
+	min-height: initial !important;
+	height: 25px !important;
+	width: 25px;
+	position: absolute;
+	background-color: #F5F5F5;
+	bottom: 85px;
 }
 .multi-files-uploader.dropzone{
 	min-height: 190px !important;

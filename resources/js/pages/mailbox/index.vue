@@ -21,25 +21,24 @@
               </div>
             </template>
           </div>
-          <div class="chat-attachment--wrapper">
-            <file-upload
-              v-if="mailboxId"
-              ref="messageFileUploadComponent"
-              id="attachment-dropzone"
-              :maxFiles="5"
-              :uploadUrl="`/api/clinic/mailboxes/${this.mailboxId}/fileupload`"
-              @file-upload-success="handleFileSaved"
-              @queue-complete="handleMultiFilesQueueComplete"
-            />
-          </div>
         </div>
         <div class="chat-input">
+          <file-upload
+            v-if="mailboxId"
+            ref="messageFileUploadComponent"
+            id="attachment-dropzone"
+            :maxFiles="5"
+            :uploadUrl="`/api/clinic/mailboxes/${this.mailboxId}/fileupload`"
+            :chat="true"
+            @file-upload-success="handleFileSaved"
+            @queue-complete="handleMultiFilesQueueComplete"
+          />
           <textarea
             v-if="reservation"
             :placeholder="`${reservation.patient_info.name01}さんにメッセージを書く`"
             v-model="newMessage" ></textarea>
-          <button class="add-file" @click="handleFileInput"><img src="/img/addFile.svg"></button>
-          <button class="message-send" @click="handleSendMessage"><img src="/img/send.svg"></button>
+          <!-- <button class="add-file" @click="handleFileInput"><img src="/img/addFile.svg"></button> -->
+          <button class="message-send" @click="handleSendMessage">{{ $t('送信') }}</button>
         </div>
       </div>
       <div v-if="reservation" class="chat-user">
@@ -99,11 +98,18 @@
               <p>2021年5月22日(水) 13:30</p>
             </li>            
           </ul>
+          <div class="item-center">
+            <button class="btn  btn-chat-confirm">日時を確定</button>
+          </div>
+          <div class="item-center"> 
+            <button class="btn btn-danger">予約をキャンセル</button>
+          </div>
+          
         </div>
-        <div class="btn-wrapper">
+        <!-- <div class="btn-wrapper">
           <button v-if="reservation.status == 5 || reservation.status == 10" class="btn2" @click="handleChangeStatus(15)">{{ $t('調整中') }}</button>
           <button v-if="reservation.status == 15" class="btn" @click="handleChangeStatus(20)">{{ $t('調整完了') }}</button>
-        </div>
+        </div> -->
       </div>
     </div>
     <VueEasyLightbox
